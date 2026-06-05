@@ -98,7 +98,7 @@ def prove_determinism(
 def _make_distribution(counts: dict, noise_factor: float, seed: int) -> QuantumDistribution:
     """Build a synthetic QuantumDistribution with given counts."""
     return QuantumDistribution(
-        encoded_bits="10",
+        encoded_bits="11",  # correct encoding for NODE_READY (sha256 hash mod 4 = 3 = "11")
         transmission_mode="entangled",
         noise_factor=noise_factor,
         shots=sum(counts.values()),
@@ -126,10 +126,11 @@ def prove_convergence(message: str = "NODE_READY") -> dict:
         "explanation":   str,
     }
     """
-    # Distribution A: 920/1024 on the correct bitstring
-    dist_A = _make_distribution({"10": 920, "00": 40, "01": 34, "11": 30}, noise_factor=0.05, seed=1)
-    # Distribution B: 760/1024 on the correct bitstring — more noise
-    dist_B = _make_distribution({"10": 760, "00": 100, "01": 90, "11": 74}, noise_factor=0.30, seed=2)
+    # Both distributions peak on "11" (the correct encoding for NODE_READY).
+    # Distribution A: 920/1024 — high confidence, low noise
+    dist_A = _make_distribution({"11": 920, "00": 40, "01": 34, "10": 30}, noise_factor=0.05, seed=1)
+    # Distribution B: 760/1024 — lower confidence, more noise (still above threshold)
+    dist_B = _make_distribution({"11": 760, "00": 100, "01": 90, "10": 74}, noise_factor=0.30, seed=2)
 
     def _identity(dist: QuantumDistribution) -> ContractIdentity:
         try:

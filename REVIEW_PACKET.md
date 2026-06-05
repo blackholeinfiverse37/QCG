@@ -228,12 +228,13 @@ VERDICT: PASS
 **Live output:**
 ```
 passed        : True
-identity_A    : REJECTED:REJECTED:1.0.0
-identity_B    : REJECTED:REJECTED:1.0.0
+identity_A    : OK:NODE_READY:1.0.0   (confidence=0.8984, noise=0.05)
+identity_B    : OK:NODE_READY:1.0.0   (confidence=0.7422, noise=0.30)
 same_contract : True
 explanation   : Contract doctrine absorbed bounded variance: both distributions mapped to the same operational identity.
 VERDICT: PASS
 ```
+Different variance (89.8% vs 74.2% confidence, low vs moderate noise) — same contract.
 
 ### Proof 3 — Anti-Authority
 **File:** `authority_boundary_test.py`
