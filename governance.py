@@ -234,7 +234,7 @@ class GovernanceLayer:
                 ),
             )
             violations.append(v)
-            self.violations.append(v)
+            self._violations.append(v)
             self._log_violation(v)
 
         return result, violations
