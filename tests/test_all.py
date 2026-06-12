@@ -1241,3 +1241,308 @@ class TestIPCTopology:
         summary = run_pipeline(crash_stage=None)
         pids = list(summary["pids"].values())
         assert len(set(pids)) == 3, f"Expected 3 distinct PIDs, got {pids}"
+
+
+# =============================================================================
+# Phase 4 — Trust-Aware Communication Tests
+# =============================================================================
+
+class TestProducerRegistry:
+    def _signer(self, node_id="REG_PROD", role="QUANTUM_PRODUCER"):
+        from node_identity import NodeSigner
+        return NodeSigner(node_id, role)
+
+    def test_register_and_lookup(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer()
+        reg.register(s.identity)
+        assert reg.is_registered(s.identity.node_id)
+
+    def test_unregistered_returns_false(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        assert not reg.is_registered("NOBODY")
+
+    def test_public_key_returned(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer()
+        reg.register(s.identity)
+        assert reg.public_key(s.identity.node_id) == s.identity.public_key
+
+    def test_public_key_none_for_unknown(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        assert reg.public_key("NOBODY") is None
+
+    def test_quantum_role_infers_quantum_type(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer(role="QUANTUM_PRODUCER")
+        reg.register(s.identity)
+        assert "QUANTUM" in reg.allowed_types(s.identity.node_id)
+        assert "CLASSICAL" not in reg.allowed_types(s.identity.node_id)
+
+    def test_classical_role_infers_classical_type(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer(role="CLASSICAL_PRODUCER")
+        reg.register(s.identity)
+        assert "CLASSICAL" in reg.allowed_types(s.identity.node_id)
+        assert "QUANTUM" not in reg.allowed_types(s.identity.node_id)
+
+    def test_hybrid_role_allows_all_types(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer(role="HYBRID_PRODUCER")
+        reg.register(s.identity)
+        allowed = reg.allowed_types(s.identity.node_id)
+        assert {"HYBRID", "QUANTUM", "CLASSICAL"}.issubset(allowed)
+
+    def test_explicit_allowed_types_override(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        s = self._signer(role="QUANTUM_PRODUCER")
+        reg.register(s.identity, allowed_types={"QUANTUM", "HYBRID"})
+        assert "HYBRID" in reg.allowed_types(s.identity.node_id)
+
+    def test_allowed_types_empty_for_unknown(self):
+        from producer_verification import ProducerRegistry
+        reg = ProducerRegistry()
+        assert reg.allowed_types("NOBODY") == frozenset()
+
+
+class TestProducerVerificationLayer:
+    def _setup(self, role="QUANTUM_PRODUCER", producer_type="QUANTUM"):
+        from node_identity import NodeSigner
+        from execution_contract import ComputationExecutionContract
+        from provenance import sign_contract
+        from producer_verification import ProducerRegistry, ProducerVerificationLayer
+
+        producer = NodeSigner("VP_PROD_01", role)
+        base = ComputationExecutionContract(
+            producer_type=producer_type,
+            payload={"data": "verify_test"},
+            confidence=0.95,
+            trace_id="vp-trace-001",
+            contract_version="2.0.0",
+        )
+        signed = sign_contract(base, producer)
+
+        registry = ProducerRegistry()
+        registry.register(producer.identity)
+        verifier = ProducerVerificationLayer(registry)
+        return verifier, signed, producer
+
+    def test_valid_producer_passes(self):
+        verifier, signed, _ = self._setup()
+        result = verifier.verify(signed)
+        assert result.passed is True
+        assert result.failure_mode == ""
+        assert result.is_trusted is True
+
+    def test_valid_producer_halt_signal_empty(self):
+        verifier, signed, _ = self._setup()
+        result = verifier.verify(signed)
+        assert result.halt_signal() == ""
+
+    def test_missing_producer_id_returns_unverified(self):
+        from execution_contract import ComputationExecutionContract
+        from producer_verification import ProducerRegistry, ProducerVerificationLayer, VerificationFailure
+        reg = ProducerRegistry()
+        verifier = ProducerVerificationLayer(reg)
+        contract = ComputationExecutionContract(
+            producer_type="QUANTUM",
+            payload={"x": 1},
+            confidence=0.9,
+            trace_id="no-id",
+            contract_version="2.0.0",
+        )
+        result = verifier.verify(contract)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.UNVERIFIED_PRODUCER
+
+    def test_unregistered_producer_returns_unverified(self):
+        from node_identity import NodeSigner
+        from execution_contract import ComputationExecutionContract
+        from provenance import sign_contract
+        from producer_verification import ProducerRegistry, ProducerVerificationLayer, VerificationFailure
+
+        stranger = NodeSigner("STRANGER_99", "QUANTUM_PRODUCER")
+        base = ComputationExecutionContract(
+            producer_type="QUANTUM",
+            payload={"x": 1},
+            confidence=0.9,
+            trace_id="stranger-trace",
+            contract_version="2.0.0",
+        )
+        signed = sign_contract(base, stranger)
+
+        reg = ProducerRegistry()  # stranger NOT registered
+        verifier = ProducerVerificationLayer(reg)
+        result = verifier.verify(signed)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.UNVERIFIED_PRODUCER
+
+    def test_tampered_payload_returns_invalid_signature(self):
+        import hashlib, json
+        from execution_contract import ComputationExecutionContract
+        from producer_verification import VerificationFailure
+        verifier, signed, _ = self._setup()
+
+        d = signed.to_dict()
+        d["payload"] = {"data": "INJECTED"}
+        d["payload_hash"] = hashlib.sha256(
+            json.dumps(d["payload"], sort_keys=True).encode()
+        ).hexdigest()
+        tampered = ComputationExecutionContract(**d)
+
+        result = verifier.verify(tampered)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.INVALID_SIGNATURE
+
+    def test_forged_contract_signature_returns_invalid_signature(self):
+        from execution_contract import ComputationExecutionContract
+        from producer_verification import VerificationFailure
+        verifier, signed, _ = self._setup()
+
+        d = signed.to_dict()
+        d["contract_signature"] = "badc0de1" * 18
+        forged = ComputationExecutionContract(**d)
+
+        result = verifier.verify(forged)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.INVALID_SIGNATURE
+
+    def test_missing_signature_returns_invalid_signature(self):
+        from execution_contract import ComputationExecutionContract
+        from producer_verification import VerificationFailure
+        verifier, signed, _ = self._setup()
+
+        d = signed.to_dict()
+        d["contract_signature"] = ""
+        no_sig = ComputationExecutionContract(**d)
+
+        result = verifier.verify(no_sig)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.INVALID_SIGNATURE
+
+    def test_type_mismatch_returns_trust_failure(self):
+        from node_identity import NodeSigner
+        from execution_contract import ComputationExecutionContract
+        from provenance import sign_contract
+        from producer_verification import ProducerRegistry, ProducerVerificationLayer, VerificationFailure
+
+        producer = NodeSigner("TYPE_MISMATCH_01", "QUANTUM_PRODUCER")
+        # Sign a CLASSICAL contract with a QUANTUM producer
+        base = ComputationExecutionContract(
+            producer_type="CLASSICAL",
+            payload={"x": 1},
+            confidence=0.9,
+            trace_id="type-mismatch-trace",
+            contract_version="2.0.0",
+        )
+        signed = sign_contract(base, producer)
+
+        reg = ProducerRegistry()
+        reg.register(producer.identity)  # inferred allowed: {"QUANTUM"} only
+        verifier = ProducerVerificationLayer(reg)
+
+        result = verifier.verify(signed)
+        assert result.passed is False
+        assert result.failure_mode == VerificationFailure.TRUST_FAILURE
+
+    def test_halt_signal_contains_failure_mode(self):
+        from execution_contract import ComputationExecutionContract
+        from producer_verification import ProducerRegistry, ProducerVerificationLayer, VerificationFailure
+        reg = ProducerRegistry()
+        verifier = ProducerVerificationLayer(reg)
+        contract = ComputationExecutionContract(
+            producer_type="QUANTUM",
+            payload={"x": 1},
+            confidence=0.9,
+            trace_id="halt-signal-test",
+            contract_version="2.0.0",
+        )
+        result = verifier.verify(contract)
+        sig = result.halt_signal()
+        assert sig.startswith("HALT:")
+        assert VerificationFailure.UNVERIFIED_PRODUCER in sig
+
+    def test_verification_result_frozen(self):
+        from producer_verification import VerificationResult
+        r = VerificationResult(
+            passed=True, failure_mode="", producer_id="X",
+            producer_type="QUANTUM", reason=""
+        )
+        with pytest.raises((AttributeError, TypeError)):
+            r.passed = False
+
+
+class TestVerificationFailureModes:
+    """Explicit coverage of all three failure mode constants."""
+
+    def test_unverified_producer_constant(self):
+        from producer_verification import VerificationFailure
+        assert VerificationFailure.UNVERIFIED_PRODUCER == "UNVERIFIED_PRODUCER"
+
+    def test_invalid_signature_constant(self):
+        from producer_verification import VerificationFailure
+        assert VerificationFailure.INVALID_SIGNATURE == "INVALID_SIGNATURE"
+
+    def test_trust_failure_constant(self):
+        from producer_verification import VerificationFailure
+        assert VerificationFailure.TRUST_FAILURE == "TRUST_FAILURE"
+
+    def test_all_three_modes_are_distinct(self):
+        from producer_verification import VerificationFailure
+        modes = {
+            VerificationFailure.UNVERIFIED_PRODUCER,
+            VerificationFailure.INVALID_SIGNATURE,
+            VerificationFailure.TRUST_FAILURE,
+        }
+        assert len(modes) == 3
+
+
+class TestTrustValidationProof:
+    def test_full_proof_passes(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["passed"] is True
+
+    def test_all_cases_pass(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        for case, passed in result["cases"].items():
+            assert passed is True, f"Trust proof case failed: {case}"
+
+    def test_valid_producer_accepted(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["valid_producer_accepted"] is True
+
+    def test_tampered_payload_rejected(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["tampered_payload_rejected"] is True
+
+    def test_forged_signature_rejected(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["forged_signature_rejected"] is True
+
+    def test_unregistered_producer_rejected(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["unregistered_producer_rejected"] is True
+
+    def test_type_mismatch_rejected(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["type_mismatch_rejected"] is True
+
+    def test_missing_producer_id_rejected(self):
+        from trust_validation_proof import run_proof
+        result = run_proof(verbose=False)
+        assert result["cases"]["missing_producer_id_rejected"] is True

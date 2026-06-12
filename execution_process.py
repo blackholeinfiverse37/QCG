@@ -29,12 +29,15 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
 
     from execution_contract import ComputationExecutionContract
     from runtime_core import RuntimeCore
-    from provenance import verify_contract_provenance, ProvenanceStatus
     from replay_enforcer import ReplayEnforcer
+    from producer_verification import ProducerRegistry, ProducerVerificationLayer
     import config
 
     runtime = RuntimeCore()
     enforcer = ReplayEnforcer(ttl_seconds=config.REPLAY_TTL_SECONDS)
+    # Trust layer: registry is populated from producer_public_key in each IPC message
+    _trust_registry = ProducerRegistry()
+    verifier = ProducerVerificationLayer(_trust_registry)
 
     while True:
         msg = queue_in.get()
@@ -81,13 +84,27 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
             })
             continue
 
-        # Provenance check
-        prov = verify_contract_provenance(contract, pub_key)
-        if prov != ProvenanceStatus.VERIFIED:
-            _log(pid, "EXECUTION", "provenance_failed", trace_id=contract.trace_id, prov=str(prov))
+        # Trust verification: register producer on-the-fly from IPC-supplied public key
+        # then verify identity, signature, and type in one call.
+        from node_identity import NodeIdentity
+        if not _trust_registry.is_registered(contract.producer_id):
+            identity = NodeIdentity(
+                node_id=contract.producer_id,
+                public_key=pub_key,
+                node_role="PRODUCER",
+                version="1.0.0",
+            )
+            _trust_registry.register(identity, allowed_types={contract.producer_type})
+
+        trust_result = verifier.verify(contract)
+        if not trust_result.passed:
+            _log(pid, "EXECUTION", "trust_verification_failed",
+                 message_id=contract.trace_id,
+                 status=trust_result.failure_mode,
+                 reason=trust_result.reason)
             queue_out.put({
                 "type": "EXECUTION_RESULT",
-                "result": {"ack": f"HALT:PROVENANCE_FAILED:{prov}", "trace_id": contract.trace_id},
+                "result": {"ack": trust_result.halt_signal(), "trace_id": contract.trace_id},
                 "issued_at": time.time(),
             })
             continue
