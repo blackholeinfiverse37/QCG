@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "bhiv://capability-registry/schema/1.0.0",
+  "title": "BHIV Capability Registry Schema",
+  "description": "Schema for a single capability record in the BHIV capability registry. A capability is a reusable, scope-bounded function with declared inputs, outputs, and authority limits. It is not a product, team, or authority.",
+  "version": "1.0.0",
+  "type": "object",
+  "required": [
+    "capability_id",
+    "capability_name",
+    "owner",
+    "version",
+    "status",
+    "scope",
+    "dependencies",
+    "attachment_rules",
+    "authority_limits",
+    "inputs",
+    "outputs",
+    "consumers",
+    "documentation_reference"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "capability_id": {
+      "type": "string",
+      "description": "Globally unique identifier for this capability. Format: UUID-5 derived from capability_name + owner + version. Immutable after ACTIVE status.",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+      "examples": ["a3b4c5d6-e7f8-5a9b-8c0d-1e2f3a4b5c6d"]
+    },
+    "capability_name": {
+      "type": "string",
+      "description": "Human-readable name for the capability. Must be unique within the registry. Use SCREAMING_SNAKE_CASE.",
+      "pattern": "^[A-Z][A-Z0-9_]+$",
+      "examples": ["REPLAY_ENFORCEMENT", "CONSENSUS_VERIFICATION", "AUDIT_TRAIL"]
+    },
+    "owner": {
+      "type": "object",
+      "description": "Declares who owns this capability. Ownership is a declared structural field, not an authority grant.",
+      "required": ["team", "contact"],
+      "additionalProperties": false,
+      "properties": {
+        "team": {
+          "type": "string",
+          "description": "Name of the owning team."
+        },
+        "contact": {
+          "type": "string",
+          "description": "Contact reference (email, Slack channel, or on-call alias)."
+        }
+      }
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of this capability record. Incrementing produces a new record; old record moves to DEPRECATED.",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$",
+      "examples": ["1.0.0", "2.1.0"]
+    },
+    "status": {
+      "type": "string",
+      "description": "Lifecycle state of this capability.",
+      "enum": ["DRAFT", "ACTIVE", "DEPRECATED", "RETIRED"],
+      "default": "DRAFT"
+    },
+    "scope": {
+      "type": "string",
+      "description": "Availability boundary of this capability across the BHIV ecosystem.",
+      "enum": ["SYSTEM", "DOMAIN", "PRODUCT", "EXPERIMENTAL"]
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "List of other capability_ids that this capability requires to function. Empty array means no dependencies.",
+      "items": {
+        "type": "string",
+        "description": "capability_id of a required capability.",
+        "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-5[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+      },
+      "uniqueItems": true,
+      "default": []
+    },
+    "attachment_rules": {
+      "type": "object",
+      "description": "Defines how a consumer may attach to this capability. See ATTACHMENT_MODEL.md for full attachment type definitions.",
+      "required": ["attachment_type", "protocol"],
+      "additionalProperties": false,
+      "properties": {
+        "attachment_type": {
+          "type": "string",
+          "description": "How the capability is integrated into a consumer system.",
+          "enum": ["embedded", "api_linked", "sidecar", "bounded_participant", "optional_extension"]
+        },
+        "protocol": {
+          "type": "string",
+          "description": "Transport or invocation protocol.",
+          "enum": ["in_process", "http_rest", "grpc", "queue", "socket", "import"]
+        },
+        "endpoint": {
+          "type": "string",
+          "description": "Optional. Entry point for api_linked or sidecar attachment types."
+        },
+        "idempotent": {
+          "type": "boolean",
+          "description": "Whether repeated invocations with identical inputs produce identical outputs.",
+          "default": false
+        }
+      }
+    },
+    "authority_limits": {
+      "type": "object",
+      "description": "Declares what this capability owns and does not own. Mirrors the AuthorityDeclaration pattern from governance_authority.py. The capability itself is not an authority — authority_limits describes the boundary.",
+      "required": ["owns", "does_not_own"],
+      "additionalProperties": false,
+      "properties": {
+        "owns": {
+          "type": "array",
+          "description": "Explicit list of responsibilities this capability controls.",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "does_not_own": {
+          "type": "array",
+          "description": "Explicit list of responsibilities this capability delegates or explicitly excludes.",
+          "items": { "type": "string" },
+          "minItems": 1
+        },
+        "requires_governance_approval": {
+          "type": "boolean",
+          "description": "Whether attaching this capability requires approval from a governance authority.",
+          "default": false
+        }
+      }
+    },
+    "inputs": {
+      "type": "array",
+      "description": "Declared input parameters this capability accepts.",
+      "items": {
+        "type": "object",
+        "required": ["name", "type", "required"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["string", "integer", "float", "boolean", "object", "array", "uuid"]
+          },
+          "required": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      },
+      "default": []
+    },
+    "outputs": {
+      "type": "array",
+      "description": "Declared output fields this capability produces.",
+      "items": {
+        "type": "object",
+        "required": ["name", "type"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["string", "integer", "float", "boolean", "object", "array", "uuid"]
+          },
+          "description": { "type": "string" }
+        }
+      },
+      "default": []
+    },
+    "consumers": {
+      "type": "array",
+      "description": "Known systems or products that consume this capability. Informational — not an enforcement list.",
+      "items": {
+        "type": "object",
+        "required": ["consumer_id", "consumer_name"],
+        "additionalProperties": false,
+        "properties": {
+          "consumer_id": {
+            "type": "string",
+            "description": "Unique identifier for the consuming system."
+          },
+          "consumer_name": {
+            "type": "string",
+            "description": "Human-readable name of the consuming system."
+          },
+          "attachment_type": {
+            "type": "string",
+            "enum": ["embedded", "api_linked", "sidecar", "bounded_participant", "optional_extension"]
+          }
+        }
+      },
+      "default": []
+    },
+    "documentation_reference": {
+      "type": "object",
+      "description": "Pointers to authoritative documentation for this capability.",
+      "required": ["primary"],
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "type": "string",
+          "description": "Path or URL to the primary documentation file."
+        },
+        "schema_file": {
+          "type": "string",
+          "description": "Optional. Path to a JSON Schema or contract definition file."
+        },
+        "source_file": {
+          "type": "string",
+          "description": "Optional. Path to the primary source file implementing this capability."
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "capability_id": "a1b2c3d4-e5f6-5a7b-8c9d-0e1f2a3b4c5d",
+      "capability_name": "REPLAY_ENFORCEMENT",
+      "owner": {
+        "team": "Execution Infrastructure",
+        "contact": "execution-team@bhiv.internal"
+      },
+      "version": "1.0.0",
+      "status": "ACTIVE",
+      "scope": "SYSTEM",
+      "dependencies": [],
+      "attachment_rules": {
+        "attachment_type": "embedded",
+        "protocol": "in_process",
+        "idempotent": true
+      },
+      "authority_limits": {
+        "owns": [
+          "sequence_id assignment",
+          "TTL enforcement",
+          "duplicate and stale detection"
+        ],
+        "does_not_own": [
+          "contract validation",
+          "execution logic",
+          "governance policy"
+        ],
+        "requires_governance_approval": false
+      },
+      "inputs": [
+        { "name": "artifact_id", "type": "uuid", "required": true, "description": "Unique ID of the artifact to check" },
+        { "name": "issued_at", "type": "string", "required": true, "description": "ISO-8601 timestamp from the contract" }
+      ],
+      "outputs": [
+        { "name": "status", "type": "string", "description": "ACCEPTED | REJECTED_DUPLICATE | REJECTED_STALE" },
+        { "name": "sequence_id", "type": "integer", "description": "Monotonic sequence number assigned on ACCEPTED" }
+      ],
+      "consumers": [
+        { "consumer_id": "execution-process-001", "consumer_name": "ExecutionProcess", "attachment_type": "embedded" }
+      ],
+      "documentation_reference": {
+        "primary": "REPLAY_ENFORCEMENT.md",
+        "source_file": "replay_enforcer.py"
+      }
+    }
+  ]
+}
