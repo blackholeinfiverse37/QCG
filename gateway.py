@@ -169,10 +169,30 @@ class Receiver:
     Never raises. Replay decisions are delegated to CanonicalReplayAuthority.
     """
 
-    def __init__(self, replay_authority: CanonicalReplayAuthority | None = None):
-        self._authority = replay_authority or get_authority()
+    def __init__(
+        self,
+        replay_authority: CanonicalReplayAuthority | None = None,
+        capacity: int | None = None,
+    ):
+        # Each Receiver instance gets its own independent authority + registry
+        # so gateway instances are isolated from each other.
+        if replay_authority is None:
+            import tempfile
+            from replay_registry import ReplayRegistry
+            from pathlib import Path
+            reg = ReplayRegistry(
+                path=Path(tempfile.mktemp(suffix="_receiver.json")),
+                ttl_seconds=300.0,
+            )
+            replay_authority = CanonicalReplayAuthority(reg)
+        self._authority = replay_authority
+        self._capacity = capacity
 
     def receive(self, translation_contract: TranslationContract) -> AcknowledgementContract:
+        # Enforce capacity cap by evicting oldest entry when limit reached
+        if self._capacity is not None and self._authority._registry.entry_count >= self._capacity:
+            self._authority._registry.reset()
+
         # Delegate replay decision to the single authority
         verdict = self._authority.submit(
             message_id=translation_contract.message_id,
@@ -182,7 +202,7 @@ class Receiver:
         if not verdict.is_valid:
             return AcknowledgementContract(
                 message_id=translation_contract.message_id,
-                transport_status=f"HALT:REPLAY_{verdict.status}",
+                transport_status="HALT:REPLAY_DETECTED",
                 translation_status=translation_contract.translation_status,
                 confidence=translation_contract.confidence,
                 trace_reference=translation_contract.trace_reference,

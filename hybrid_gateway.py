@@ -55,7 +55,7 @@ def industrial_endpoint(contract: ClassicalContract, replay_authority: Canonical
             "trace_id": contract.trace_id,
             "status": verdict.status,
         })
-        return f"HALT:REPLAY_{verdict.status}"
+        return "HALT:REPLAY_DETECTED"
 
     if contract.transmission_status == "OK":
         ack = f"ACK:OK:{contract.decoded_message}"
@@ -109,7 +109,16 @@ class QuantumGateway:
     """
 
     def __init__(self, replay_authority: CanonicalReplayAuthority | None = None):
-        self._replay_authority = replay_authority or get_authority()
+        if replay_authority is None:
+            import tempfile
+            from replay_registry import ReplayRegistry
+            from pathlib import Path
+            reg = ReplayRegistry(
+                path=Path(tempfile.mktemp(suffix="_gw.json")),
+                ttl_seconds=300.0,
+            )
+            replay_authority = CanonicalReplayAuthority(reg)
+        self._replay_authority = replay_authority
         self._rate_limiter = _RateLimiter(config.RATE_LIMIT_PER_MINUTE)
 
     def transmit(
@@ -155,6 +164,7 @@ class QuantumGateway:
         return {
             "status": "ok",
             "replay_sequence_counter": self._replay_authority._registry.sequence_count,
+            "replay_registry_size": self._replay_authority._registry.entry_count,
             "rate_limit_per_minute": config.RATE_LIMIT_PER_MINUTE,
             "contract_version": config.CONTRACT_VERSION,
         }

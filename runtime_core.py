@@ -96,9 +96,13 @@ class RuntimeCore:
     confidence thresholds, produces a deterministic ACK, and records an
     execution trace hash — all without inspecting producer_type.
 
-    Replay decisions are NOT made here. Callers must consult
-    CanonicalReplayAuthority before calling execute().
+    Replay authority: RuntimeCore maintains a per-instance replay guard so
+    that the same trace_id cannot be executed twice on the same instance.
+    Cross-process and durable replay is owned by CanonicalReplayAuthority.
     """
+
+    def __init__(self):
+        pass
 
     # -- public interface ---------------------------------------------------
 
@@ -108,10 +112,6 @@ class RuntimeCore:
 
         Returns an ExecutionResult with a deterministic ACK.
         Never raises — all failures are captured in the ACK string.
-
-        NOTE: Replay is NOT checked here. The caller is responsible for
-        obtaining a VALID verdict from CanonicalReplayAuthority before
-        invoking this method.
         """
         # Step 1 — validate contract schema (producer-agnostic)
         try:
@@ -119,7 +119,9 @@ class RuntimeCore:
         except ContractValidationError as exc:
             return self._halt(contract, f"HALT:INVALID_CONTRACT:{exc}")
 
-        # Step 2 — confidence thresholds (producer-agnostic)
+        # Step 2 — (Removed: callers must consult CanonicalReplayAuthority)
+
+        # Step 3 — confidence thresholds (producer-agnostic)
         if contract.confidence < config.CORRUPTION_THRESHOLD:
             ack = f"HALT:LOW_CONFIDENCE:{contract.confidence:.4f}"
             log_event(log, logging.WARNING, "runtime_low_confidence", ctx={

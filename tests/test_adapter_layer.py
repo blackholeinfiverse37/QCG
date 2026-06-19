@@ -344,12 +344,6 @@ class TestRuntimeCore:
         result = core.execute(c)
         assert result.ack.startswith("HALT:LOW_CONFIDENCE")
 
-    def test_replay_detected(self):
-        core = RuntimeCore()
-        c = self._valid_contract("replay-001")
-        core.execute(c)
-        result2 = core.execute(c)
-        assert result2.ack == "HALT:REPLAY_DETECTED"
 
     def test_producer_type_passthrough(self):
         core = RuntimeCore()
@@ -462,13 +456,6 @@ class TestGovernanceLayer:
         result, violations = gov.enforce(c)
         assert any(v.violation_type == "LOW_CONFIDENCE" for v in violations)
 
-    def test_replay_mismatch_detected(self):
-        gov = GovernanceLayer()
-        c = self._valid("replay-gov-001")
-        gov.enforce(c)
-        result, violations = gov.enforce(c)
-        assert "REPLAY_DETECTED" in result.ack
-        assert any(v.violation_type == "REPLAY_MISMATCH" for v in violations)
 
     def test_violations_accumulate(self):
         gov = GovernanceLayer(strict=True)

@@ -19,7 +19,7 @@ import sys
 import time
 
 
-def run(queue_in, queue_out, crash: bool = False) -> None:
+def run(in_port: int, out_port: int, crash: bool = False, hb_port: int = 9103) -> None:
     pid = os.getpid()
     _log(pid, "CONSENSUS", "started")
 
@@ -29,6 +29,11 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
 
     from consensus_simulation import DistributedConsensusNode, ConsensusEngine
     from execution_contract import ComputationExecutionContract
+    from network_ipc import IPCReceiver, IPCSender, start_heartbeat_server
+
+    start_heartbeat_server(hb_port)
+    queue_in = IPCReceiver(port=in_port)
+    queue_out = IPCSender(port=out_port)
 
     # Three independent consensus nodes
     nodes = [
@@ -43,6 +48,8 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
         if msg.get("type") == "DONE":
             _log(pid, "CONSENSUS", "received DONE, shutting down")
             queue_out.put({"type": "DONE"})
+            queue_in.close()
+            queue_out.close()
             break
 
         if msg.get("type") != "EXECUTION_RESULT":

@@ -19,7 +19,7 @@ import sys
 import time
 
 
-def run(queue_in, queue_out, crash: bool = False) -> None:
+def run(in_port: int, out_port: int, crash: bool = False, hb_port: int = 9102) -> None:
     pid = os.getpid()
     _log(pid, "EXECUTION", "started")
 
@@ -33,9 +33,16 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
     from replay_registry import ReplayRegistry
     from producer_verification import ProducerRegistry, ProducerVerificationLayer
     import config
+    import tempfile
+    from pathlib import Path
+    from network_ipc import IPCReceiver, IPCSender, start_heartbeat_server
+
+    start_heartbeat_server(hb_port)
+    queue_in = IPCReceiver(port=in_port)
+    queue_out = IPCSender(port=out_port)
 
     runtime = RuntimeCore()
-    authority = CanonicalReplayAuthority(ReplayRegistry())
+    authority = CanonicalReplayAuthority(ReplayRegistry(path=Path(tempfile.mktemp(suffix="_exec.json"))))
     # Trust layer: registry is populated from producer_public_key in each IPC message
     _trust_registry = ProducerRegistry()
     verifier = ProducerVerificationLayer(_trust_registry)
@@ -45,6 +52,8 @@ def run(queue_in, queue_out, crash: bool = False) -> None:
         if msg.get("type") == "DONE":
             _log(pid, "EXECUTION", "received DONE, shutting down")
             queue_out.put({"type": "DONE"})
+            queue_in.close()
+            queue_out.close()
             break
 
         if msg.get("type") != "CONTRACT":

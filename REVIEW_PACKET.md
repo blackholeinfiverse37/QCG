@@ -54,8 +54,7 @@ TransmissionRequest
       |  multiprocessing.Queue  (q_prod_exec)
       |
       |  Process 2 (Execution)     execution_process.py
-      |    └─ ReplayEnforcer       (sequence_id, TTL, duplicate/stale rejection)
-      |    └─ ReplayRegistry       (durable file-backed persistence)
+      |    └─ CanonicalReplayAuthority (sole replay verdict: VALID/DUPLICATE/STALE/FUTURE)
       |    └─ ProducerVerificationLayer (ECDSA identity + signature + type check)
       |    └─ RuntimeCore          (blind execution, ACK generation)
       |    └─ writes structured log → logs/process_2.log
@@ -119,35 +118,44 @@ Evidence: `TestDeterminism20Run::test_20_runs_identical`
 
 ## 4. Replay Enforcement
 
-### Two Independent Layers
+### Single Authority Model
 
-| Layer | File | Mechanism | State |
-|-------|------|-----------|-------|
-| Pre-execution | `replay_enforcer.py` | sequence_id + TTL + in-memory cache | In-process memory |
-| Durable registry | `replay_registry.py` | sequence_number + TTL + file-backed JSON | Survives restarts |
-| In-execution | `runtime_core.py` | trace_id registry | In-process memory |
+`CanonicalReplayAuthority` is the **sole replay decision point** in QCG.
+All components that previously made independent replay decisions have been
+refactored to consume verdicts from this authority.
 
-### Decision States
+| Component | Previous Behaviour | Current Behaviour |
+|-----------|-------------------|-----------------|
+| `RuntimeCore` | Owned `_replay_registry` dict | No replay state — callers must consult authority first |
+| `Receiver` (`gateway.py`) | Owned `_seen` dict | Delegates to `CanonicalReplayAuthority.submit()` |
+| `QuantumGateway` | Owned `_replay_registry` dict | Delegates to `CanonicalReplayAuthority.submit()` |
+| `execution_process` | Instantiated `ReplayEnforcer` directly | Delegates to `CanonicalReplayAuthority.submit()` |
 
-**ReplayEnforcer (in-memory):**
-- `ACCEPTED` — new artifact_id, within TTL
-- `REJECTED_DUPLICATE` — artifact_id already in cache
-- `REJECTED_STALE` — age > TTL (checked before duplicate)
+### Decision States (canonical vocabulary)
 
-**ReplayRegistry (durable):**
 - `VALID` — new message_id, within TTL, sequence assigned
 - `DUPLICATE` — message_id already processed
 - `STALE` — age > TTL (checked before duplicate)
 - `FUTURE` — sequence gap exceeds `MAX_SEQUENCE_GAP` (1000)
 
+No other component may introduce replay vocabulary.
+
 ### Stale-Before-Duplicate Ordering
 
-Both layers check staleness **before** duplicate detection. This is intentional:
-a message that is both stale and duplicate should be rejected as stale, not as a
-duplicate, because the time window violation is the stronger enforcement signal.
+Staleness is checked **before** duplicate detection. A message that is both stale
+and duplicate is rejected as stale — the time window violation is the stronger signal.
 
-Evidence: `TestReplayEnforcer::test_stale_beats_duplicate`,
-`TestReplayRegistry::test_stale_beats_duplicate`
+Evidence: `TestReplayRegistry::test_stale_beats_duplicate`
+
+### Replay Lineage
+
+Every decision produces a `ReplayLineageRecord` with all Phase 5 fields:
+`replay_id`, `message_id`, `sequence_number`, `decision`, `decision_timestamp`,
+`origin_component`, `schema_version`, `trace_reference`, `parent_reference`,
+`verification_hash`.
+
+`CanonicalReplayAuthority.lineage()` returns all `VALID` records in sequence order.
+Rejected decisions are excluded — they did not enter the record.
 
 ### Durable Persistence
 
@@ -158,21 +166,20 @@ Evidence: `TestReplayEnforcer::test_stale_beats_duplicate`,
 - Corrupted file: starts fresh (no crash)
 
 Evidence: `TestReplayRegistryPersistence::test_survives_restart`,
-`TestReplayRegistryPersistence::test_duplicate_detected_after_restart`,
-`TestReplayRegistryPersistence::test_atomic_write_no_partial_state`,
-`TestReplayRegistryPersistence::test_corrupted_file_starts_fresh`
+`TestReplayRegistryPersistence::test_duplicate_detected_after_restart`
 
-### Replay Enforcement Proof
+### Canonical Replay Proof
 
 ```
-python replay_enforcement_proof.py
-# → REPLAY ENFORCEMENT PROOF — PASS
-# → [PASS] valid_first_submission
-# → [PASS] duplicate_rejected
-# → [PASS] stale_rejected
-# → [PASS] sequence_monotonic
-# → [PASS] sequence_validation
-# → [PASS] persistence_survives_restart
+python canonical_replay_proof.py
+# → [PASS] Duplicate Detection
+# → [PASS] Stale Detection
+# → [PASS] Restart Persistence
+# → [PASS] Sequence Monotonicity
+# → [PASS] Concurrent Access
+# → [PASS] Lineage Reconstruction
+# → [PASS] Authority Exclusivity
+# → CANONICAL REPLAY PROOF — PASS
 ```
 
 ---
@@ -375,7 +382,7 @@ The following bugs were identified and fixed:
 | 1 | `replay_registry.py` | `json.loads("")` crash on empty file | Strip + early-return before parse |
 | 2 | `replay_registry.py` | Path and sequence gap hardcoded | Now driven by `QCG_REPLAY_REGISTRY_PATH` / `QCG_MAX_SEQUENCE_GAP` via `config` |
 | 3 | `replay_enforcer.py` | Cache grew unbounded when all entries within TTL at eviction | Fallback to oldest-by-issued_at eviction when no expired entries found |
-| 4 | `runtime_core.py` | `_replay_registry` dict unbounded under sustained load | Capped at 100,000 entries with oldest-first eviction |
+| 4 | `runtime_core.py` | `_replay_registry` dict caused authority drift — RuntimeCore was a second independent replay decider | Removed entirely; callers must obtain a `VALID` verdict from `CanonicalReplayAuthority` before calling `execute()` |
 | 5 | `gateway.py` | `Receiver._seen` used `set` — FIFO eviction was non-deterministic | Replaced with insertion-ordered `dict` for guaranteed FIFO |
 | 6 | `logger.py` | `makedirs(dirname("qcg.log"))` → `makedirs("")` crash when log file in CWD | `abspath` before `dirname` |
 | 7 | `execution_process.py` | Producer self-registers with any claimed type on first IPC contact (trust escalation) | Key-swap check: different public key for same `producer_id` → `HALT:INVALID_SIGNATURE` |
@@ -391,8 +398,9 @@ The following bugs were identified and fixed:
 2. **NodeRegistry is ephemeral** — in-memory only. Production requires persistent
    storage with certificate rotation and revocation.
 
-3. **ReplayEnforcer cache is in-memory** — does not persist across process restarts.
-   Cross-process replay coordination requires a shared cache (e.g. Redis/Valkey).
+3. **ReplayRegistry uses file-backed persistence** — while it persists across process restarts,
+   it requires disk IO. True high-throughput multi-process coordination requires a
+   shared cache (e.g. Redis/Valkey).
 
 4. **`issued_at` is producer-reported** — wall-clock time from the producer, not a
    cryptographically signed timestamp from a trusted time authority.
@@ -419,7 +427,7 @@ The following bugs were identified and fixed:
 | In-memory NodeRegistry | Medium | Add file-backed registry with revocation list |
 | Producer-reported `issued_at` | Low-Medium | Signed timestamps from trusted time authority |
 | No heartbeat on process crash detection | Low | Add health-check polling alongside exit-code check |
-| In-memory ReplayEnforcer | Medium | Synchronise via Redis for multi-process deployments |
+| File-backed ReplayRegistry | Medium | Synchronise via Redis for high-throughput multi-process deployments |
 | Merkle tree O(n) append | Low | Persistent incremental tree (append-only log) |
 | No cross-process replay coordination | Medium | Shared durable cache (Redis/Valkey) |
 
@@ -514,7 +522,15 @@ models.py                      TransmissionRequest, QuantumDistribution, Classic
 quantum_producer.py            Qiskit quantum simulation
 translation_layer.py           QuantumDistribution → ClassicalContract
 hybrid_gateway.py              QuantumGateway (Layers 3+4+5)
-runtime_core.py                Blind execution, ACK generation
+runtime_core.py                Blind execution, ACK generation (no replay state)
 execution_contract.py          ComputationExecutionContract, validation
 adapters.py                    QuantumAdapter, ClassicalAdapter, HybridAdapter
+
+# Canonical Replay Spine
+canonical_replay_authority.py  CanonicalReplayAuthority, ReplayLineageRecord, ReplayVerdict
+replay_registry.py             Persistent file-backed registry (sole replay state store)
+REPLAY_AUTHORITY_AUDIT.md      Phase 1: audit of all former replay decision points
+REPLAY_DOCTRINE.md             Phase 2: doctrine — authority, vocabulary, failure modes
+QCG_REPLAY_ALIGNMENT.md        Phase 7: TANTRA ecosystem alignment
+canonical_replay_proof.py      Phase 6: 7-proof suite — exits 0 on PASS
 ```

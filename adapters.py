@@ -33,6 +33,7 @@ from execution_contract import (
 log = get_logger("qcg.adapters")
 
 
+
 # ---------------------------------------------------------------------------
 # Adapter trace record — produced by every adaptation for observability
 # ---------------------------------------------------------------------------

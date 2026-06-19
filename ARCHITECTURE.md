@@ -11,7 +11,7 @@
       |  Queue (CONTRACT)
       v
 [Execution Process]         execution_process.py
-      |  replay_enforcer.py (sequence_id, TTL, duplicate/stale detection)
+      |  canonical_replay_authority.py (Canonical Replay Spine, VALID/DUPLICATE/STALE)
       |  runtime_core.py    (blind execution, ACK generation)
       |  Queue (EXECUTION_RESULT)
       v
@@ -28,8 +28,8 @@
 
 | Component | Owns | Does NOT Own |
 |-----------|------|--------------|
-| `ReplayEnforcer` | sequence_id assignment, TTL enforcement, duplicate/stale rejection | Contract validation, execution logic |
-| `RuntimeCore` | Blind execution, ACK, runtime_hash | Producer type routing, governance policy |
+| `CanonicalReplayAuthority` | Replay registration, duplicate/stale detection, lineage, persistence | Contract validation, execution logic |
+| `RuntimeCore` | Blind execution, ACK, runtime_hash | Producer type routing, governance policy, Replay state |
 | `ConsensusEngine` | Attestation verification, quorum math | Contract authorship, execution |
 | `TrustChain` | Chain-of-custody handoff signatures | Identity issuance |
 | `MerkleAuditTrail` | Tamper-evident append-only log, inclusion proofs | Log rotation, persistence |
@@ -67,10 +67,10 @@ Replay comparison uses `DeterminismOracle.extract_deterministic_projection()`.
 
 | Layer | Mechanism | Rejection Signal |
 |-------|-----------|-----------------|
-| Duplicate | `ReplayEnforcer._cache` (artifact_id → seq) | `REJECTED_DUPLICATE` |
-| Stale | TTL check against `issued_at` | `REJECTED_STALE` |
-| Sequence | Monotonic counter per `ReplayEnforcer` instance | Visible in `sequence_id` field |
-| Runtime replay guard | `RuntimeCore._replay_registry` (trace_id) | `HALT:REPLAY_DETECTED` |
+| Single Replay Spine | `CanonicalReplayAuthority.submit()` (backed by `ReplayRegistry`) | `VALID`, `DUPLICATE`, `STALE`, `FUTURE` |
+| Duplicate / Stale | `ReplayRegistry` logic | `DUPLICATE` / `STALE` |
+| Sequence | Monotonic counter in `ReplayRegistry` | Visible in `sequence_number` field |
+| Runtime replay guard | DELEGATED | Calls `CanonicalReplayAuthority` (RuntimeCore owns no replay state) |
 
 ---
 
@@ -97,7 +97,7 @@ ReplayBundle.verify()     -- bundle sig + producer sig + consensus + audit root 
 - `NodeRegistry` is ephemeral (in-memory only)
 - Consensus nodes share the same OS process memory; true isolation requires network transport
 - `MerkleAuditTrail` rebuilds tree on each append (not production-scale)
-- `ReplayEnforcer` cache does not persist across process restarts
+- `ReplayRegistry` file backing requires IO (production-scale requires Redis/Valkey)
 
 ---
 

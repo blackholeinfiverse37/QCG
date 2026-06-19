@@ -1,5 +1,5 @@
-{"process_id": 16664, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-13T08:11:26Z"}
-{"process_id": 16664, "role": "EXECUTION", "event": "replay_check", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACCEPTED", "timestamp": "2026-06-13T08:11:26Z"}
-{"process_id": 16664, "role": "EXECUTION", "event": "executed", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACK:OK", "timestamp": "2026-06-13T08:11:26Z", "runtime_hash": "8c01874553dc0d36"}
-{"process_id": 16664, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-13T08:11:26Z"}
-{"process_id": 16664, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-13T08:11:26Z"}
+{"process_id": 16920, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:05Z"}
+{"process_id": 16920, "role": "EXECUTION", "event": "replay_check", "message_id": "proc-trace-001", "sequence_number": 1, "status": "VALID", "timestamp": "2026-06-19T08:09:06Z"}
+{"process_id": 16920, "role": "EXECUTION", "event": "executed", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACK:OK", "timestamp": "2026-06-19T08:09:06Z", "runtime_hash": "8c01874553dc0d36"}
+{"process_id": 16920, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:06Z"}
+{"process_id": 16920, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:06Z"}

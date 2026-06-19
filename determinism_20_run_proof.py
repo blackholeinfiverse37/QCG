@@ -50,12 +50,14 @@ def run_20_run_proof(runs: int = RUNS, verbose: bool = True) -> dict:
     """
     from gateway import CommunicationGateway
 
-    request = _make_request()
     comparator = ReplayComparator()
     contracts: list[ReplayContract] = []
 
+    # Fixed request — same message_id every run proves determinism
+    request = _make_request()
+
     for i in range(runs):
-        # Fresh gateway per run — no shared state
+        # Fresh gateway with its own isolated registry — no cross-run state
         gw = CommunicationGateway()
         response = gw.send(request)
         rc = ReplayContract.from_response(response)

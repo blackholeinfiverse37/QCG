@@ -235,8 +235,47 @@ class MerkleAuditTrail:
     # -- internal -----------------------------------------------------------
 
     def _rebuild_tree(self):
-        leaves = [e.leaf_hash for e in self._entries]
-        self._tree = _build_merkle_tree(leaves)
+        # O(log N) incremental Merkle tree update
+        if not self._tree:
+            self._tree = [[self._entries[-1].leaf_hash]]
+            return
+
+        leaf_hash = self._entries[-1].leaf_hash
+        old_count = len(self._entries) - 1
+        
+        # Remove padding from each level to prepare for append
+        count = old_count
+        for level in self._tree:
+            if count % 2 == 1 and len(level) > count:
+                level.pop()
+            count = (count + 1) // 2
+            
+        # Append the new leaf
+        self._tree[0].append(leaf_hash)
+        
+        # Update path to root
+        for i in range(len(self._tree) - 1):
+            level = self._tree[i]
+            if len(level) % 2 == 1:
+                level.append(level[-1])
+            
+            parent_idx = len(level) // 2 - 1
+            new_parent = _merkle_parent(level[-2], level[-1])
+            
+            next_level = self._tree[i+1]
+            if parent_idx < len(next_level):
+                next_level[parent_idx] = new_parent
+            else:
+                next_level.append(new_parent)
+                
+        # Add new root levels if necessary
+        top_level = self._tree[-1]
+        while len(top_level) > 1:
+            if len(top_level) % 2 == 1:
+                top_level.append(top_level[-1])
+            new_root = _merkle_parent(top_level[-2], top_level[-1])
+            self._tree.append([new_root])
+            top_level = self._tree[-1]
 
 
 # ---------------------------------------------------------------------------

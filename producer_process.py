@@ -25,7 +25,7 @@ import sys
 import time
 
 
-def run(queue_out, crash: bool = False) -> None:
+def run(out_port: int, crash: bool = False, hb_port: int = 9101) -> None:
     pid = os.getpid()
     _log(pid, "PRODUCER", "started")
 
@@ -37,6 +37,10 @@ def run(queue_out, crash: bool = False) -> None:
     from execution_contract import ComputationExecutionContract
     from node_identity import NodeSigner
     from provenance import sign_contract
+    from network_ipc import IPCSender, start_heartbeat_server
+    
+    start_heartbeat_server(hb_port)
+    queue_out = IPCSender(port=out_port)
 
     producer = NodeSigner("PROC_PRODUCER_01", "QUANTUM_PRODUCER")
 
@@ -61,6 +65,7 @@ def run(queue_out, crash: bool = False) -> None:
          status="SENT")
 
     queue_out.put({"type": "DONE"})
+    queue_out.close()
     _log(pid, "PRODUCER", "finished")
 
 

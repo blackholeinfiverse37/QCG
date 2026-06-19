@@ -318,7 +318,7 @@ class TestReceiver:
         assert rx.seen_count == 2
 
     def test_eviction_when_max_reached(self):
-        rx = Receiver(max_seen=5)
+        rx = Receiver(capacity=5)
         for i in range(5):
             rx.receive(self._tc(f"evict-{i}"))
         assert rx.seen_count == 5
