@@ -62,6 +62,17 @@ class QUBOTranslator:
                     coeff = constraint_weight * 2 * a_i * a_j
                     self._add_qubo_term(v1, v2, coeff)
                     
+        # 3. Map Explicit Penalties
+        for penalty in self.problem.penalties:
+            weight = penalty.weight
+            for term, coeff in penalty.terms.items():
+                if isinstance(term, str) and term != "offset":
+                    self._add_qubo_term(term, term, coeff * weight)
+                elif isinstance(term, tuple) and len(term) == 2:
+                    self._add_qubo_term(term[0], term[1], coeff * weight)
+                elif term == "offset":
+                    self.offset += coeff * weight
+
         return self.qubo_matrix
 
     def _add_qubo_term(self, v1: str, v2: str, coeff: float):
