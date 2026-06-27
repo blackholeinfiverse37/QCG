@@ -65,3 +65,49 @@ test_execution_provenance.py::test_proof_failure_recovery PASSED
 ============================== 7 passed in 0.08s ==============================
 ```
 
+---
+
+## 4. TANTRA Ecosystem Production Integration (Phase 8)
+
+The QCG has been transitioned from an isolated reference architecture into a **reusable sovereign capability** natively accessible by the TANTRA ecosystem. 
+
+### Integration Harness & Operational APIs
+- A lightweight HTTP API (`web_server.py`) now serves as the permanent attachment point.
+- Standardized, version-controlled classes in `integration_interfaces.py` encapsulate Replay, Trust, Execution, and Consensus mechanisms.
+- All operations execute over a continuous integration harness (`integration_harness.py`).
+
+### Verification Evidence
+Running `python production_validation.py` against the operational readiness API generates the following evidence:
+
+```text
+============================================================
+  TANTRA PRODUCTION VALIDATION SUITE
+============================================================
+
+1. Verifying Cold Start & Health Endpoints...
+[+] Evidence recorded: Cold Start & Health Check
+[+] Evidence recorded: Capability Manifest
+
+2. Verifying Continuous Execution & Trace Continuity...
+[+] Evidence recorded: Continuous Execution & Trace Continuity
+
+3. Verifying Replay Persistence...
+[+] Evidence recorded: Replay Persistence (Duplicate Blocked)
+
+4. Verifying Failure Recovery (Tamper Detection)...
+[+] Evidence recorded: Failure Recovery (Signature Tamper)
+
+5. Verifying Concurrent Execution...
+[+] Evidence recorded: Concurrent Execution (5 requests)
+
+============================================================
+  ALL VALIDATION PROOFS PASSED
+  Evidence written to TEST_RESULTS.md
+============================================================
+```
+
+### Supporting Documentation
+*   [ARCHITECTURE.md](file:///v:/QCG/QCG_task1/ARCHITECTURE.md) (Updated mapping and integration topology)
+*   [docs/INTEGRATION_GUIDE.md](file:///v:/QCG/QCG_task1/docs/INTEGRATION_GUIDE.md) (For KESHAV, InsightFlow, Pravah, NICAI)
+*   [docs/CAPABILITY_SPEC.md](file:///v:/QCG/QCG_task1/docs/CAPABILITY_SPEC.md) (Versioned manifest definitions)
+*   [docs/OPERATIONAL_RUNBOOK.md](file:///v:/QCG/QCG_task1/docs/OPERATIONAL_RUNBOOK.md) (Deployment & recovery procedures)

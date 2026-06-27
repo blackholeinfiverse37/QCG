@@ -1,0 +1,143 @@
+"""
+integration_harness.py — Phase 3: Runtime Participation Harness
+
+Executes one continuous flow representing a TANTRA ecosystem integration:
+- Incoming BHIV contract
+- Replay validation
+- Trust verification
+- Runtime execution
+- Consensus proof
+- Structured output with trace continuity
+"""
+
+import tempfile
+import time
+from pathlib import Path
+from typing import Dict, Any, Tuple
+
+from execution_contract import ComputationExecutionContract
+from canonical_replay_authority import CanonicalReplayAuthority
+from replay_registry import ReplayRegistry
+from producer_verification import ProducerRegistry, ProducerVerificationLayer
+from runtime_core import RuntimeCore
+from consensus_simulation import ConsensusEngine, DistributedConsensusNode
+from node_identity import NodeIdentity
+
+from integration_interfaces import (
+    ReplayVerifierInterface,
+    TrustVerifierInterface,
+    ExecutionValidatorInterface,
+    ConsensusVerifierInterface,
+    HealthStatusInterface
+)
+
+class TANTRAIntegrationHarness:
+    """
+    Simulates a continuous execution pipeline connecting all standard BHIV interfaces.
+    """
+    def __init__(self):
+        # 1. Initialize persistent stores
+        self.replay_registry = ReplayRegistry(path=Path(tempfile.mktemp(suffix="_tantra_registry.json")))
+        self.trust_registry = ProducerRegistry()
+        
+        # 2. Initialize Core Engines
+        self.replay_auth = CanonicalReplayAuthority(self.replay_registry)
+        self.verifier_layer = ProducerVerificationLayer(self.trust_registry)
+        self.runtime_core = RuntimeCore()
+        
+        nodes = [
+            DistributedConsensusNode("TANTRA_NODE_1"),
+            DistributedConsensusNode("TANTRA_NODE_2"),
+            DistributedConsensusNode("TANTRA_NODE_3"),
+        ]
+        self.consensus_engine = ConsensusEngine(nodes)
+        
+        # 3. Initialize Standard Interfaces
+        self.replay_iface = ReplayVerifierInterface(self.replay_auth)
+        self.trust_iface = TrustVerifierInterface(self.verifier_layer)
+        self.execution_iface = ExecutionValidatorInterface(self.runtime_core)
+        self.consensus_iface = ConsensusVerifierInterface(self.consensus_engine)
+        self.health_iface = HealthStatusInterface(self.replay_registry)
+
+    def process_incoming_contract(self, payload: Dict[str, Any], pub_key: str) -> Tuple[bool, Dict[str, Any]]:
+        """
+        Main continuous flow for incoming TANTRA contracts.
+        """
+        trace_id = payload.get("trace_id", "unknown")
+        parent_trace = payload.get("parent_trace_id", None)
+        issued_at = payload.get("issued_at", time.time())
+        
+        response = {
+            "trace_id": trace_id,
+            "parent_trace_id": parent_trace,
+            "flow_status": "STARTED",
+            "stages": {}
+        }
+        
+        try:
+            # 1. Replay Validation
+            replay_res = self.replay_iface.verify_replay(trace_id, issued_at)
+            response["stages"]["replay"] = replay_res
+            if not replay_res["is_valid"]:
+                response["flow_status"] = "HALTED"
+                response["halt_reason"] = f"REPLAY_{replay_res['status']}"
+                self.health_iface.record_process(False)
+                return False, response
+                
+            # Parse Contract (Governance Boundary)
+            try:
+                contract = ComputationExecutionContract(**payload)
+            except Exception as e:
+                response["flow_status"] = "HALTED"
+                response["halt_reason"] = f"INVALID_CONTRACT: {e}"
+                self.health_iface.record_process(False)
+                return False, response
+
+            # Auto-register producer for testing if not exists (simulates KESHAV identity sync)
+            if not self.trust_registry.is_registered(contract.producer_id):
+                identity = NodeIdentity(
+                    node_id=contract.producer_id,
+                    public_key=pub_key,
+                    node_role="PRODUCER",
+                    version="1.0.0"
+                )
+                self.trust_registry.register(identity, allowed_types={contract.producer_type})
+                
+            # 2. Trust Verification
+            trust_res = self.trust_iface.verify_trust(contract)
+            response["stages"]["trust"] = trust_res
+            if not trust_res["passed"]:
+                response["flow_status"] = "HALTED"
+                response["halt_reason"] = trust_res["halt_signal"]
+                self.health_iface.record_process(False)
+                return False, response
+                
+            # 3. Runtime Execution
+            exec_res = self.execution_iface.validate_execution(contract)
+            response["stages"]["execution"] = exec_res
+            if "HALT" in exec_res["ack"]:
+                response["flow_status"] = "HALTED"
+                response["halt_reason"] = exec_res["ack"]
+                self.health_iface.record_process(False)
+                return False, response
+                
+            # 4. Consensus Proof
+            cons_res = self.consensus_iface.verify_consensus(contract, pub_key)
+            response["stages"]["consensus"] = cons_res
+            
+            # Trace Continuity propagation
+            response["trace_continuity"] = {
+                "sequence_number": replay_res["sequence_number"],
+                "runtime_hash": exec_res["runtime_hash"],
+                "final_hash": cons_res.get("final_hash")
+            }
+            
+            response["flow_status"] = "COMPLETED"
+            self.health_iface.record_process(True)
+            return True, response
+            
+        except Exception as e:
+            response["flow_status"] = "ERROR"
+            response["error"] = str(e)
+            self.health_iface.record_process(False)
+            return False, response

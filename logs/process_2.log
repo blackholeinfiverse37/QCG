@@ -1,15 +1,5 @@
-{"process_id": 16920, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:05Z"}
-{"process_id": 16920, "role": "EXECUTION", "event": "replay_check", "message_id": "proc-trace-001", "sequence_number": 1, "status": "VALID", "timestamp": "2026-06-19T08:09:06Z"}
-{"process_id": 16920, "role": "EXECUTION", "event": "executed", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACK:OK", "timestamp": "2026-06-19T08:09:06Z", "runtime_hash": "8c01874553dc0d36"}
-{"process_id": 16920, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:06Z"}
-{"process_id": 16920, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-19T08:09:06Z"}
-{"process_id": 16136, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-23T06:15:52Z"}
-{"process_id": 16136, "role": "EXECUTION", "event": "replay_check", "message_id": "trace_1", "sequence_number": 1, "status": "VALID", "timestamp": "2026-06-23T06:15:53Z"}
-{"process_id": 16136, "role": "EXECUTION", "event": "trust_verification_failed", "message_id": "trace_1", "sequence_number": 0, "status": "INVALID_SIGNATURE", "timestamp": "2026-06-23T06:15:53Z", "reason": "ECDSA signature verification failed \u2014 contract may be tampered"}
-{"process_id": 16136, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-23T06:15:53Z"}
-{"process_id": 16136, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-23T06:15:53Z"}
-{"process_id": 16332, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-24T07:23:19Z"}
-{"process_id": 16332, "role": "EXECUTION", "event": "replay_check", "message_id": "trace_1", "sequence_number": 1, "status": "VALID", "timestamp": "2026-06-24T07:23:20Z"}
-{"process_id": 16332, "role": "EXECUTION", "event": "trust_verification_failed", "message_id": "trace_1", "sequence_number": 0, "status": "INVALID_SIGNATURE", "timestamp": "2026-06-24T07:23:20Z", "reason": "ECDSA signature verification failed \u2014 contract may be tampered"}
-{"process_id": 16332, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-24T07:23:20Z"}
-{"process_id": 16332, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-24T07:23:20Z"}
+{"process_id": 18556, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-27T11:58:16Z"}
+{"process_id": 18556, "role": "EXECUTION", "event": "replay_check", "message_id": "proc-trace-001", "sequence_number": 1, "status": "VALID", "timestamp": "2026-06-27T11:58:17Z"}
+{"process_id": 18556, "role": "EXECUTION", "event": "executed", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACK:OK", "timestamp": "2026-06-27T11:58:17Z", "runtime_hash": "f2deef2332911cee"}
+{"process_id": 18556, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-27T11:58:17Z"}
+{"process_id": 18556, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-06-27T11:58:17Z"}

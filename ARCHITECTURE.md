@@ -1,30 +1,58 @@
 # ARCHITECTURE.md
 
-> Phase 3 Trust Layer — Structural Reference
+> Phase 8 Trust Layer — TANTRA Ecosystem Production Integration
 
 ---
 
-## Layer Map
+## 1. System Topology
+
+The Hybrid Quantum Communication Gateway (QCG) bridges probabilistic quantum output to deterministic classical execution contracts. It has been transformed from an isolated reference architecture into a **production-ready TANTRA ecosystem participant**.
+
+### 1.1 Web Server Integration Layer (`web_server.py`)
+QCG now exposes a lightweight, standard HTTP API serving as the primary attachment surface.
+- **`GET /health`** (and `/health/live`): Provides readiness status and operational metrics for InsightFlow.
+- **`GET /capabilities`**: Serves the deterministic Capability Manifest for ecosystem discovery.
+- **`POST /verify`**: The primary ingestion pipeline for BHIV contracts from Pravah/NICAI.
+
+### 1.2 Execution Pipeline (Integration Harness)
 
 ```
-[Producer Process]          producer_process.py
-      |  Queue (CONTRACT)
+[External TANTRA Node]
+      |  (HTTP POST /verify with JSON contract)
       v
-[Execution Process]         execution_process.py
-      |  canonical_replay_authority.py (Canonical Replay Spine, VALID/DUPLICATE/STALE)
-      |  runtime_core.py    (blind execution, ACK generation)
-      |  Queue (EXECUTION_RESULT)
+[web_server.py]
+      |
       v
-[Consensus Process]         consensus_process.py
-      |  consensus_simulation.py (3 nodes, 66% quorum, signed attestations)
-      |  Queue (CONSENSUS_PROOF)
+[integration_harness.py]
+      |  (Continuous verification chain)
+      |
+      |-- 1. ReplayVerifierInterface (Duplicate/Stale Check)
+      |-- 2. TrustVerifierInterface (ECDSA Validation via KESHAV sync)
+      |-- 3. ExecutionValidatorInterface (Blind deterministic execution)
+      |-- 4. ConsensusVerifierInterface (3-node Byzantine quorum)
+      |
       v
-[Orchestrator]              process_runner.py
+[Structured Output]
+      |  (Trace Continuity and complete JSON verification proof)
+      v
+[External TANTRA Node]
 ```
 
 ---
 
-## Component Responsibilities
+## 2. Standardized Integration Interfaces
+
+To decouple business logic from ecosystem participation, all QCG capabilities are mapped behind versioned interfaces (see `integration_interfaces.py`):
+1. `CapabilityDiscoveryInterface`
+2. `HealthStatusInterface`
+3. `ReplayVerifierInterface`
+4. `TrustVerifierInterface`
+5. `ExecutionValidatorInterface`
+6. `ConsensusVerifierInterface`
+
+---
+
+## 3. Component Responsibilities
 
 | Component | Owns | Does NOT Own |
 |-----------|------|--------------|
@@ -33,80 +61,28 @@
 | `ConsensusEngine` | Attestation verification, quorum math | Contract authorship, execution |
 | `TrustChain` | Chain-of-custody handoff signatures | Identity issuance |
 | `MerkleAuditTrail` | Tamper-evident append-only log, inclusion proofs | Log rotation, persistence |
-| `NodeRegistry` | Identity lookup | Certificate rotation |
-| `DeterminismOracle` | Field classification, projection extraction | Execution |
+| `Operational Readiness API` | Exposing metrics, endpoints, payload validation | Internal state tracking |
 
 ---
 
-## IPC Topology
+## 4. Ecosystem Attachment Surfaces
 
-```
-producer_process --> q_prod_exec --> execution_process --> q_exec_cons --> consensus_process --> q_cons_out
-```
+The QCG integrates cleanly into the BHIV ecosystem without any product modification.
 
-- Transport: `multiprocessing.Queue` (shared memory; upgrade path: socket/gRPC)
-- Message schema: JSON-serialisable dicts with `"type"` discriminator field
-- `EXECUTION_RESULT` message forwards the original signed `contract` dict and
-  `producer_public_key` so consensus verifies the same payload that was executed
-- All processes are real OS processes with independent PIDs
-
----
-
-## Determinism Boundary
-
-Fields are classified as DETERMINISTIC or OBSERVABILITY in `determinism_doctrine.py`.
-
-- DETERMINISTIC fields: identical for identical inputs regardless of wall clock
-- OBSERVABILITY fields: wall-clock timestamps, excluded from replay comparison
-
-Replay comparison uses `DeterminismOracle.extract_deterministic_projection()`.
+| System | Attachment Point | Integration Protocol |
+|--------|-----------------|----------|
+| **NICAI** | `POST /verify` | HTTP REST (JSON) |
+| **InsightFlow** | `GET /health` / `GET /metrics` | HTTP REST (JSON) |
+| **Pravah** | `/verify` Response (`trace_continuity`) | Stream ingestion |
+| **KESHAV** | `ProducerVerificationLayer` | ECDSA Signature Verification |
+| **BHIV Core** | `GET /capabilities` | Capability Discovery |
 
 ---
 
-## Replay Protection Layers
+## 5. Trace Continuity & Provenance
 
-| Layer | Mechanism | Rejection Signal |
-|-------|-----------|-----------------|
-| Single Replay Spine | `CanonicalReplayAuthority.submit()` (backed by `ReplayRegistry`) | `VALID`, `DUPLICATE`, `STALE`, `FUTURE` |
-| Duplicate / Stale | `ReplayRegistry` logic | `DUPLICATE` / `STALE` |
-| Sequence | Monotonic counter in `ReplayRegistry` | Visible in `sequence_number` field |
-| Runtime replay guard | DELEGATED | Calls `CanonicalReplayAuthority` (RuntimeCore owns no replay state) |
-
----
-
-## Trust Verification Chain
-
-```
-NodeIdentity (public_key)
-      |
-      v
-TrustChain.add_handoff()  -- sender signs handoff dict
-      |
-      v
-TrustChain.verify_chain() -- checks registration + signature + continuity
-      |
-      v
-ReplayBundle.verify()     -- bundle sig + producer sig + consensus + audit root + chain
-```
-
----
-
-## Known Limitations
-
-- IPC transport is `multiprocessing.Queue` (shared memory), not a real network socket
-- `NodeRegistry` is ephemeral (in-memory only)
-- Consensus nodes share the same OS process memory; true isolation requires network transport
-- `MerkleAuditTrail` rebuilds tree on each append (not production-scale)
-- `ReplayRegistry` file backing requires IO (production-scale requires Redis/Valkey)
-
----
-
-## Capability Attachment Surfaces (not integrations)
-
-| Future Consumer | Attachment Point | Protocol |
-|-----------------|-----------------|----------|
-| NICAI | `execution_process.queue_out` | Queue / socket |
-| InsightFlow | `MerkleAuditTrail.root_hash()` | Merkle proof API |
-| Pravah | `ReplayBundle.verification_report()` | JSON |
-| Sampada | `TrustChain.to_dict_list()` | REST / gRPC |
-| TMS | `DeterminismOracle` field registry | In-process import |
+When an artifact is passed to QCG, it undergoes a fully traceable lifecycle:
+1. `sequence_number` is generated by Replay Registry.
+2. `runtime_hash` is created from execution parameters.
+3. `final_hash` is reached via Byzantine consensus.
+These elements are propagated end-to-end and returned collectively to the caller, guaranteeing true execution lineage.
