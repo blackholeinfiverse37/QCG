@@ -86,3 +86,7 @@ When an artifact is passed to QCG, it undergoes a fully traceable lifecycle:
 2. `runtime_hash` is created from execution parameters.
 3. `final_hash` is reached via Byzantine consensus.
 These elements are propagated end-to-end and returned collectively to the caller, guaranteeing true execution lineage.
+
+
+## Network Transport & Resilience
+QCG relies on an agnostic transport mechanism (TCP/UDS) enforced by 	ransport.py, integrating Circuit Breakers and Exponential Backoff. Service discovery dynamically routes runtime components through the Capability Registry, and all health and telemetry are propagated natively.

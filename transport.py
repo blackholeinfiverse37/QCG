@@ -13,6 +13,38 @@ import queue
 from abc import ABC, abstractmethod
 from typing import Any, Tuple, Union
 
+class CircuitBreakerOpenException(Exception):
+    pass
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold: int = 5, recovery_timeout: float = 10.0):
+        self.failure_threshold = failure_threshold
+        self.recovery_timeout = recovery_timeout
+        self.failures = 0
+        self.last_failure_time = 0.0
+        self.state = "CLOSED" # CLOSED, OPEN, HALF_OPEN
+        self._lock = threading.Lock()
+
+    def record_failure(self):
+        with self._lock:
+            self.failures += 1
+            self.last_failure_time = time.time()
+            if self.failures >= self.failure_threshold:
+                self.state = "OPEN"
+
+    def record_success(self):
+        with self._lock:
+            self.failures = 0
+            self.state = "CLOSED"
+
+    def check(self):
+        with self._lock:
+            if self.state == "OPEN":
+                if time.time() - self.last_failure_time > self.recovery_timeout:
+                    self.state = "HALF_OPEN"
+                else:
+                    raise CircuitBreakerOpenException("Circuit breaker is OPEN")
+
 # -- Abstract Interface -------------------------------------------------------
 
 class TransportSender(ABC):
@@ -47,26 +79,38 @@ class TCPTransportSender(TransportSender):
     def __init__(self, host: str, port: int):
         self.address = (host, port)
         self.sock = None
+        self.circuit_breaker = CircuitBreaker()
 
     def connect(self) -> None:
+        self.circuit_breaker.check()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        for _ in range(100):
+        
+        backoff = 0.1
+        for _ in range(10): # Exponential backoff retries
             try:
                 self.sock.connect(self.address)
+                self.circuit_breaker.record_success()
                 return
             except ConnectionRefusedError:
-                time.sleep(0.1)
+                time.sleep(backoff)
+                backoff = min(backoff * 2, 5.0)
+        
+        self.circuit_breaker.record_failure()
         raise ConnectionError(f"TCPTransport: Could not connect to {self.address}")
 
     def put(self, obj: dict) -> None:
+        self.circuit_breaker.check()
         if not self.sock:
             self.connect()
         try:
             data = json.dumps(obj).encode("utf-8")
             length_prefix = len(data).to_bytes(4, byteorder='big')
             self.sock.sendall(length_prefix + data)
+            self.circuit_breaker.record_success()
         except Exception as e:
+            self.circuit_breaker.record_failure()
+            self.close() # Force reconnect on next put
             raise IOError(f"TCPTransport: Failed to send data: {e}")
 
     def close(self) -> None:

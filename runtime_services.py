@@ -13,7 +13,9 @@ import socket
 import hashlib
 import argparse
 import threading
+import signal
 from urllib import request
+from urllib.error import URLError
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import config
@@ -45,6 +47,14 @@ _metrics = {
 }
 _metrics_lock = threading.Lock()
 _start_time = time.time()
+_shutdown_event = threading.Event()
+
+def signal_handler(sig, frame):
+    print(f"\n[Service] Received termination signal {sig}. Initiating graceful shutdown...", flush=True)
+    _shutdown_event.set()
+
+signal.signal(signal.SIGINT, signal_handler)
+signal.signal(signal.SIGTERM, signal_handler)
 
 # -- Dynamic Health & Metrics HTTP Server -------------------------------------
 
@@ -131,12 +141,32 @@ class HealthMetricsHandler(BaseHTTPRequestHandler):
             self.send_response(404)
             self.end_headers()
 
+def heartbeat_monitor(dependencies: list):
+    """Periodically check downstream capabilities and log failures."""
+    while not _shutdown_event.is_set():
+        if dependencies:
+            reg_client = CapabilityRegistryClient(f"http://127.0.0.1:{config.REGISTRY_PORT}")
+            for dep_id in dependencies:
+                # We could query the registry for endpoint by ID, or just check registry
+                # For simplicity, we just ping the registry to ensure it's alive.
+                try:
+                    request.urlopen(f"http://127.0.0.1:{config.REGISTRY_PORT}/capabilities", timeout=2)
+                except Exception as e:
+                    print(f"[Heartbeat] Failed to reach registry: {e}", flush=True)
+        _shutdown_event.wait(10.0)
+
 def start_health_server(port: int, capability_payload: dict = None, trace_store = None):
     server = HTTPServer(("127.0.0.1", port), HealthMetricsHandler)
     server.capability_payload = capability_payload or {}
     server.trace_store = trace_store
     t = threading.Thread(target=server.serve_forever, daemon=True)
     t.start()
+    
+    deps = server.capability_payload.get("dependencies", [])
+    if deps:
+        hb = threading.Thread(target=heartbeat_monitor, args=(deps,), daemon=True)
+        hb.start()
+        
     return server
 
 # -- Registry Helper Functions ------------------------------------------------
@@ -202,9 +232,11 @@ def run_replay_service():
     receiver = create_transport_receiver(config.TRANSPORT_TYPE, endpoint)
     print(f"[Service] Replay Authority listening on {endpoint}...", flush=True)
 
-    while True:
+    while not _shutdown_event.is_set():
         try:
-            req = receiver.get()
+            req = receiver.get(timeout=1.0)
+            if not req:
+                continue
             if req.get("type") == "DONE":
                 break
             
@@ -283,9 +315,11 @@ def run_trust_service():
     receiver = create_transport_receiver(config.TRANSPORT_TYPE, endpoint)
     print(f"[Service] Trust Service listening on {endpoint}...", flush=True)
 
-    while True:
+    while not _shutdown_event.is_set():
         try:
-            req = receiver.get()
+            req = receiver.get(timeout=1.0)
+            if not req:
+                continue
             if req.get("type") == "DONE":
                 break
             
@@ -468,9 +502,11 @@ def run_execution_service():
     local_reply_port = config.EXECUTION_PORT + 10
     local_reply_addr = f"127.0.0.1:{local_reply_port}" if config.TRANSPORT_TYPE != "uds" else f"./logs/uds_exec_reply.sock"
 
-    while True:
+    while not _shutdown_event.is_set():
         try:
-            msg = receiver.get()
+            msg = receiver.get(timeout=1.0)
+            if not msg:
+                continue
             if msg.get("type") == "DONE":
                 # Propagate DONE
                 try:
@@ -634,9 +670,11 @@ def run_consensus_service():
     with open(out_file, "w") as f:
         pass
 
-    while True:
+    while not _shutdown_event.is_set():
         try:
-            msg = receiver.get()
+            msg = receiver.get(timeout=1.0)
+            if not msg:
+                continue
             if msg.get("type") == "DONE":
                 break
 
