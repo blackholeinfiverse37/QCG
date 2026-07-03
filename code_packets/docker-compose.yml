@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  qcg-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qcg-service:latest
+    container_name: qcg-production
+    ports:
+      - "8080:8080"
+    environment:
+      - GATEWAY_MODE=hybrid
+      - REPLAY_TTL_SECONDS=3600
+      - BYZANTINE_TOLERANCE_NODES=1
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
