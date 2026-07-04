@@ -1,41 +1,47 @@
-# QCG Code Submission Packet
+# Execution Evidence Transformation - Review Packet
 
-**Engineer:** Pritesh / Dhiraj Integration Team  
-**Date:** 2026-07-01  
-**Project:** Quantum Communication Gateway (QCG)
+## Entry Point
+The foundation of this transformed trust capability originates from the newly defined constitutional boundaries wrapped around the existing `evidence_ledger.py` and `execution_record.py` structures. The integration and verification logic operates predominantly through the `PortableVerificationBundle` model tested inside `test_adversarial_provenance.py`.
 
-## Executive Summary
+## Core Execution Flow (Top 3 Files)
+1. **`EVIDENCE_LEDGER_DOCTRINE.md`**: Dictates the rules of engagement, stating exactly what the ledger does (computes hashes, chains evidence) and does not do (authorize, judge legitimacy).
+2. **`EXECUTION_CERTIFICATE_V2.md`**: Defines the `PortableVerificationBundle` artifact that decouples proof of compute from governance validation. 
+3. **`test_adversarial_provenance.py`**: A validation suite demonstrating the resilient properties of the verifiable chain under 8 different failure modes.
 
-The QCG has been successfully converted from an integration-ready platform into a production-ready ecosystem service. All required phases of the task have been met, resulting in a cohesive, verifiable, and secure computation pipeline.
+## What Changed
+- **Conceptual**: Transitioned the Evidence Ledger from a "database of logs" to a **Sovereign Evidence Capability**.
+- **Boundaries**: Strictly separated Evidence (cryptographic fact) from Legitimacy (governance rules).
+- **Documentation**: Produced Doctrine, Certificate v2 schemas, and Capability matrices preventing authority drift.
+- **Assurance**: Moved from happy-path checks to aggressive adversary modeling using sequence gap, cross-certificate reuse, and forgery scenarios.
 
-## Deliverables Met
+## Adversarial Test Evidence
+During validation, the `test_adversarial_provenance.py` framework intercepted all 8 sophisticated adversarial tampering efforts.
 
-1. **Phase 1: Production Packaging**
-   - Built a multi-stage Docker container (`Dockerfile`, `entrypoint.sh`).
-   - Defined standard Kubernetes Manifests (`k8s/deployment.yaml`, `k8s/service.yaml`).
-   - Migrated local testing server to a production-grade `FastAPI` instance (`web_server.py`).
+### Failure Demonstrations (Assertions Passing)
+- **Scenario 1 & 3**: Hacking the local payload or replay references correctly raised: `Verification Failure` / `Certificate Invalid`.
+- **Scenario 2 & 8**: Mismatching lineage anchors or cross-assigning certificates correctly trapped the lineage breakage, raising: `Lineage Failure`.
+- **Scenario 4 & 5**: Faking the Merkle tree root or sibling paths resulted exactly in: `Verification Rejection` / `Inclusion Proof Failure`. 
+- **Scenario 6 & 7**: Reordering temporal execution insertions caused local Ledger integrity crashes, proving temporal resilience.
 
-2. **Phase 2: Ecosystem Integration**
-   - Finalized `integration_harness.py` to route inbound traffic sequentially through `Replay`, `Trust`, `Runtime`, and `Consensus` layers.
-   - Provided an E2E demonstration script (`tests/e2e_ecosystem_flow.py`) showing a complete transaction lifecycle with cryptographically sound nodes.
+## Runtime Proof
+```text
+test_scenario_1_execution_record_tampering (__main__.TestAdversarialProvenance) ... ok
+test_scenario_2_lineage_corruption (__main__.TestAdversarialProvenance) ... ok
+test_scenario_3_replay_reference_corruption (__main__.TestAdversarialProvenance) ... ok
+test_scenario_4_merkle_root_mutation (__main__.TestAdversarialProvenance) ... ok
+test_scenario_5_certificate_forgery (__main__.TestAdversarialProvenance) ... ok
+test_scenario_6_sequence_gap_attack (__main__.TestAdversarialProvenance) ... ok
+test_scenario_7_record_reordering_attack (__main__.TestAdversarialProvenance) ... ok
+test_scenario_8_cross_certificate_replay (__main__.TestAdversarialProvenance) ... ok
 
-3. **Phase 3: Production Testing**
-   - Engineered an extensive integration test suite (`tests/production_validation_suite.py`) validating multi-node execution, trust failures, capability discovery, and consensus gathering.
-   - Built an automated Load Testing suite utilizing `locust` (`load_testing/locustfile.py`) simulating high throughput traffic for performance validation.
+----------------------------------------------------------------------
+Ran 8 tests in 0.006s
 
-4. **Phase 4: Adversarial Testing**
-   - Engineered `tests/adversarial_tests.py` implementing comprehensive security scenarios.
-   - Validated resilience against replay attacks, cryptographic signature tampering, identity spoofing, and byzantine low-confidence faults.
-   - Detailed outcomes published in `tests/adversarial_report.md`.
+OK
+```
 
-5. **Phase 5: Documentation**
-   - Generated `docs/DEPLOYMENT_GUIDE.md` containing Kubernetes and Docker instructions.
-   - Generated `docs/ECOSYSTEM_INTEGRATION.md` outlining the API boundaries and cryptographic protocols required to interact with the QCG.
-
-## Technical Notes
-
-- The system now properly signs and hashes incoming contracts. Test harness uses newly generated `NodeIdentity` keys, correctly mimicking a live distributed network with independent node cryptographic identities.
-- Logging has been standardized across all sub-components using structured JSON telemetry (compatible with InsightFlow).
-- Minimal external dependencies (`fastapi`, `uvicorn`, `locust`, `pytest`, `cryptography`) ensure high performance and strict security.
-
-The QCG node is now fully packaged, tested, documented, and ready for deployment into the BHIV core infrastructure.
+## Explicit Unknowns (UNKNOWN REGIONS)
+- **UNKNOWN**: How the Governance Constitutional Check explicitly downloads the Certificate before applying its policy evaluation. We know it *can*, but the actual adapter logic (e.g. `gateway.py` or `governance.py`) has not been wired to strictly enforce `fetch_inclusion_proof_first = True`.
+- **UNKNOWN**: Deep-tree optimization. The current `evidence_ledger.py` builds the merkle tree on every snapshot without a caching layer. The performance degradation on 1,000,000 leaves is undefined.
+- **UNKNOWN**: Storage pruning. We define that evidence is appended permanently, but if the nodes are edge devices (e.g. NICAI), their capability to hold the full evidence baseline graph is unmapped. 
+- **UNKNOWN**: Cross-System sequence synchronicity. If MDU audits sequences asynchronously, handling race conditions when the sequence is actively chaining on the Replay Runtime is undefined.
