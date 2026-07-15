@@ -367,4 +367,11 @@ copy .env.example .env
 
 ---
 
+## 7. Audit and Evidence
+
+- **System Audit:** A comprehensive system-wide readiness and security audit was conducted. The detailed report is available in [SYSTEM_AUDIT_REPORT.md](../SYSTEM_AUDIT_REPORT.md).
+- **Visual Proofs:** Screenshots documenting successful test suites, Locust load tests, Docker builds, and Kubernetes rollouts are located in the `QCG_images_proofs/` directory.
+
+---
+
 *This document is the non-technical companion to `PHASE3_REVIEW_PACKET.md` (technical) and `TEST_RESULTS.md` (evidence).*

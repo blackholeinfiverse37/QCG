@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qcg-gateway
+  labels:
+    app: qcg-gateway
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: qcg-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: qcg-gateway
+    spec:
+      containers:
+      - name: qcg-gateway
+        image: qcg-gateway:latest
+        imagePullPolicy: Always
+        securityContext:
+          allowPrivilegeEscalation: false
+        ports:
+        - containerPort: 8080
+        env:
+        - name: GATEWAY_MODE
+          value: "hybrid"
+        - name: REPLAY_TTL_SECONDS
+          value: "3600"
+        - name: BYZANTINE_TOLERANCE_NODES
+          value: "1"
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8080
+          initialDelaySeconds: 15
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
