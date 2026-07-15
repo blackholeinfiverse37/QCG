@@ -150,7 +150,6 @@ class TANTRAIntegrationHarness:
                 runtime_hash=exec_res["runtime_hash"],
                 previous_execution_hash=self.ledger._current_head,
                 execution_hash=hashlib.sha256(f"{trace_id}:{exec_res['runtime_hash']}".encode()).hexdigest(),
-                execution_root_hash=self.ledger.get_merkle_root(),
                 schema_version="1.0.0"
             )
             self.ledger.append(record)
