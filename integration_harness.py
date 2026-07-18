@@ -46,6 +46,8 @@ class TANTRAIntegrationHarness:
         # 1. Initialize persistent stores
         self.replay_registry = ReplayRegistry(path=Path(tempfile.mktemp(suffix="_tantra_registry.json")))
         self.trust_registry = ProducerRegistry()
+        from evidence_ledger import EvidenceLedger
+        self.ledger = EvidenceLedger()
         
         # 2. Initialize Core Engines
         self.replay_auth = CanonicalReplayAuthority(self.replay_registry)
@@ -190,6 +192,27 @@ class TANTRAIntegrationHarness:
                 "final_hash": cons_res.get("final_hash"),
                 "keshav_severity": keshav_res.get("severity"),
             }
+            
+            # Record Evidence
+            from execution_record import ExecutionRecord
+            import uuid
+            import hashlib
+            record = ExecutionRecord(
+                execution_id=str(uuid.uuid4()),
+                trace_id=trace_id,
+                replay_reference=replay_res["sequence_number"],
+                execution_sequence=len(self.ledger._records) + 1,
+                producer_identity=contract.producer_id,
+                runtime_identity="DHIRAJ_RUNTIME_v1",
+                governance_identity="TANTRA_GOVERNANCE",
+                execution_status=response["flow_status"],
+                runtime_hash=exec_res["runtime_hash"],
+                previous_execution_hash=self.ledger._current_head,
+                execution_hash=hashlib.sha256(f"{trace_id}:{exec_res['runtime_hash']}".encode()).hexdigest(),
+                execution_root_hash=self.ledger.get_merkle_root(),
+                schema_version="1.0.0"
+            )
+            self.ledger.append(record)
             
             response["flow_status"] = "COMPLETED"
             self.health_iface.record_process(True)

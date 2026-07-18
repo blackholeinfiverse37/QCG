@@ -114,45 +114,93 @@ class HealthStatusInterface(StandardizedInterface):
 
 
 class ReplayVerifierInterface(StandardizedInterface):
-    """Interface for Replay Validation."""
+    """Interface for Replay Validation via Live API."""
     
-    def __init__(self, authority: CanonicalReplayAuthority):
+    def __init__(self, authority=None):
         self.authority = authority
+        self.replay_endpoint = "http://127.0.0.1:8002/replay/verify"
 
     def verify_replay(self, message_id: str, issued_at: float) -> Dict[str, Any]:
-        verdict = self.authority.submit(message_id, issued_at)
-        return {
-            "is_valid": verdict.is_valid,
-            "status": verdict.status,
-            "sequence_number": verdict.sequence_number,
-            "verification_hash": verdict.lineage_record.verification_hash if verdict.is_valid else None
-        }
+        import requests
+        try:
+            req_data = {"trace_id": message_id, "issued_at": issued_at}
+            resp = requests.post(self.replay_endpoint, json=req_data, timeout=5)
+            resp.raise_for_status()
+            data = resp.json()
+            return {
+                "is_valid": data["is_valid"],
+                "status": data["status"],
+                "sequence_number": data["sequence_number"],
+                "verification_hash": None
+            }
+        except requests.RequestException as e:
+            if self.authority:
+                verdict = self.authority.submit(message_id, issued_at)
+                return {
+                    "is_valid": verdict.is_valid,
+                    "status": verdict.status,
+                    "sequence_number": verdict.sequence_number,
+                    "verification_hash": verdict.lineage_record.verification_hash if verdict.is_valid else None
+                }
+            return {"is_valid": False, "status": f"API_ERROR: {str(e)}", "sequence_number": -1, "verification_hash": None}
 
 
 class TrustVerifierInterface(StandardizedInterface):
-    """Interface for Trust and Provenance Verification."""
+    """Interface for Trust and GC Governance Verification via Live API."""
     
-    def __init__(self, verifier: ProducerVerificationLayer):
+    def __init__(self, verifier=None):
         self.verifier = verifier
+        self.gc_endpoint = "http://127.0.0.1:8002/governance/verify"
 
     def verify_trust(self, contract: ComputationExecutionContract) -> Dict[str, Any]:
-        result: VerificationResult = self.verifier.verify(contract)
-        return {
-            "passed": result.passed,
-            "halt_signal": result.halt_signal(),
-            "reason": result.reason
-        }
+        import requests
+        try:
+            req_data = {"contract": contract.to_dict()}
+            resp = requests.post(self.gc_endpoint, json=req_data, timeout=5)
+            resp.raise_for_status()
+            return resp.json()
+        except requests.RequestException as e:
+            if self.verifier:
+                result = self.verifier.verify(contract)
+                return {
+                    "passed": result.passed,
+                    "halt_signal": result.halt_signal(),
+                    "reason": result.reason
+                }
+            return {"passed": False, "halt_signal": f"HALT:API_ERROR", "reason": str(e)}
 
 
 class ExecutionValidatorInterface(StandardizedInterface):
-    """Interface for Deterministic Execution."""
+    """Interface for Deterministic Execution via live API."""
     
-    def __init__(self, runtime: RuntimeCore):
+    def __init__(self, runtime=None):
         self.runtime = runtime
+        self.dhiraj_endpoint = "http://127.0.0.1:8001/execute"
 
     def validate_execution(self, contract: ComputationExecutionContract) -> Dict[str, Any]:
-        result = self.runtime.execute(contract)
-        return result.to_dict()
+        import requests
+        try:
+            req_data = {
+                "trace_id": contract.trace_id,
+                "producer_type": contract.producer_type,
+                "payload": contract.payload,
+                "confidence": contract.confidence
+            }
+            resp = requests.post(self.dhiraj_endpoint, json=req_data, timeout=5)
+            resp.raise_for_status()
+            return resp.json()
+        except requests.RequestException as e:
+            # Fallback to local if live server is not reachable for some tests
+            if self.runtime:
+                result = self.runtime.execute(contract)
+                return result.to_dict()
+            return {
+                "contract_trace_id": contract.trace_id,
+                "producer_type": contract.producer_type,
+                "ack": f"HALT:LIVE_EXECUTION_FAILED:{str(e)}",
+                "confidence": contract.confidence,
+                "runtime_hash": ""
+            }
 
 
 class ConsensusVerifierInterface(StandardizedInterface):

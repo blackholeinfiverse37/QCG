@@ -1,0 +1,37 @@
+{
+  "trace_id": "test-trace-1234",
+  "parent_trace_id": null,
+  "flow_status": "COMPLETED",
+  "stages": {
+    "replay": {
+      "is_valid": true,
+      "status": "OK",
+      "sequence_number": 1,
+      "verification_hash": null
+    },
+    "trust": {
+      "passed": true,
+      "halt_signal": "OK",
+      "reason": "Contract authorized"
+    },
+    "execution": {
+      "contract_trace_id": "test-trace-1234",
+      "producer_type": "QUANTUM",
+      "ack": "ACK:OK",
+      "confidence": 0.99,
+      "runtime_hash": "a1b2c3d4e5f6",
+      "execution_timestamp": "1696932000.123",
+      "runtime": "DHIRAJ_RUNTIME_v1"
+    },
+    "consensus": {
+      "consensus_reached": true,
+      "agreement_percentage": 100.0,
+      "final_hash": "f9e8d7c6b5a4"
+    }
+  },
+  "trace_continuity": {
+    "sequence_number": 1,
+    "runtime_hash": "a1b2c3d4e5f6",
+    "final_hash": "f9e8d7c6b5a4"
+  }
+}

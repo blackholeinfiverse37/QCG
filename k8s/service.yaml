@@ -1,15 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: qcg-gateway
+  name: qcg-web-service
   labels:
-    app: qcg-gateway
+    app: qcg-web
 spec:
-  type: NodePort
+  type: ClusterIP
   ports:
   - port: 80
     targetPort: 8080
     protocol: TCP
-    name: http
   selector:
-    app: qcg-gateway
+    app: qcg-web
