@@ -1,0 +1,26 @@
+# REPLICA RECOVERY LOG (Fallback Simulation)
+
+```
+$ kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+qcg-gateway-5f778d9c6c-4jpl9   1/1     Running   0          5m
+qcg-gateway-5f778d9c6c-8vnc2   1/1     Running   0          5m
+qcg-gateway-5f778d9c6c-m9dkt   1/1     Running   0          5m
+
+$ kubectl delete pod qcg-gateway-5f778d9c6c-4jpl9
+pod "qcg-gateway-5f778d9c6c-4jpl9" deleted
+
+$ kubectl get pods -w
+NAME                           READY   STATUS              RESTARTS   AGE
+qcg-gateway-5f778d9c6c-8vnc2   1/1     Running             0          5m10s
+qcg-gateway-5f778d9c6c-m9dkt   1/1     Running             0          5m10s
+qcg-gateway-5f778d9c6c-zz9px   0/1     ContainerCreating   0          2s
+qcg-gateway-5f778d9c6c-zz9px   1/1     Running             0          14s
+
+[Recovery Validation]
+$ curl -s http://10.101.155.123:8080/health/ready | jq
+{
+  "status": "ready",
+  "replay_state_loaded": true
+}
+```

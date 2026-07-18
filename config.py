@@ -71,6 +71,11 @@ EXECUTION_PORT: int             = _int("QCG_EXECUTION_PORT", 9004)
 CONSENSUS_PORT: int             = _int("QCG_CONSENSUS_PORT", 9005)
 METRICS_PORT: int               = _int("QCG_METRICS_PORT", 9006)
 
+# -- Live Ecosystem Integration -----------------------------------------------
+KESHAV_API_URL: str             = _str("QCG_KESHAV_API_URL", "https://keshav-cia7.onrender.com")
+KESHAV_TIMEOUT_SECONDS: int     = _int("QCG_KESHAV_TIMEOUT_SECONDS", 15)
+KESHAV_ENABLED: bool            = _str("QCG_KESHAV_ENABLED", "true").lower() == "true"
+
 
 def validate():
     """Validate config at startup. Raises ValueError on bad values."""

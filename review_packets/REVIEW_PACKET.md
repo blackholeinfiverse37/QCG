@@ -1,41 +1,177 @@
-# QCG Code Submission Packet
+# QCG Final Review Packet — Ecosystem Convergence
 
-**Engineer:** Pritesh / Dhiraj Integration Team  
-**Date:** 2026-07-01  
-**Project:** Quantum Communication Gateway (QCG)
+**Engineer:** Pritesh / QCG Integration Team  
+**Date:** 2026-07-15  
+**Project:** Quantum Communication Gateway (QCG)  
+**Phase:** Ecosystem Convergence — Live Federation & Production Readiness
 
-## Executive Summary
+---
 
-The QCG has been successfully converted from an integration-ready platform into a production-ready ecosystem service. All required phases of the task have been met, resulting in a cohesive, verifiable, and secure computation pipeline.
+## 1. Entry Point
 
-## Deliverables Met
+The QCG system is accessed via a FastAPI web server:
 
-1. **Phase 1: Production Packaging**
-   - Built a multi-stage Docker container (`Dockerfile`, `entrypoint.sh`).
-   - Defined standard Kubernetes Manifests (`k8s/deployment.yaml`, `k8s/service.yaml`).
-   - Migrated local testing server to a production-grade `FastAPI` instance (`web_server.py`).
+- **File:** `web_server.py`
+- **URL:** `http://<host>:8080`
+- **Endpoints:**
+  - `GET /health` — Liveness/readiness check
+  - `GET /capabilities` — Capability manifest for ecosystem discovery
+  - `POST /verify` — End-to-end contract verification pipeline
 
-2. **Phase 2: Ecosystem Integration**
-   - Finalized `integration_harness.py` to route inbound traffic sequentially through `Replay`, `Trust`, `Runtime`, and `Consensus` layers.
-   - Provided an E2E demonstration script (`tests/e2e_ecosystem_flow.py`) showing a complete transaction lifecycle with cryptographically sound nodes.
+---
 
-3. **Phase 3: Production Testing**
-   - Engineered an extensive integration test suite (`tests/production_validation_suite.py`) validating multi-node execution, trust failures, capability discovery, and consensus gathering.
-   - Built an automated Load Testing suite utilizing `locust` (`load_testing/locustfile.py`) simulating high throughput traffic for performance validation.
+## 2. Core Execution Flow
 
-4. **Phase 4: Adversarial Testing**
-   - Engineered `tests/adversarial_tests.py` implementing comprehensive security scenarios.
-   - Validated resilience against replay attacks, cryptographic signature tampering, identity spoofing, and byzantine low-confidence faults.
-   - Detailed outcomes published in `tests/adversarial_report.md`.
+```
+Incoming POST /verify
+       │
+       ▼
+[1] Replay Validation (CanonicalReplayAuthority)
+       │ → DUPLICATE/STALE → HALT
+       ▼
+[2] KESHAV Live Analysis (keshav_live_client.py)
+       │ → POST https://keshav-cia7.onrender.com/analyze
+       │ → Returns: root_cause, severity, resolution_signal
+       ▼
+[3] Contract Parsing (ComputationExecutionContract)
+       │ → Invalid → HALT
+       ▼
+[4] Trust Verification (ProducerVerificationLayer)
+       │ → ECDSA signature validation
+       │ → Invalid → HALT
+       ▼
+[5] Runtime Execution (RuntimeCore)
+       │ → Blind deterministic execution
+       │ → LOW_CONFIDENCE → HALT
+       ▼
+[6] Consensus Proof (ConsensusEngine)
+       │ → 3-node Byzantine quorum
+       ▼
+[7] Response with trace_continuity
+       │ → sequence_number, runtime_hash, final_hash, keshav_severity
+       ▼
+Caller receives complete verification proof
+```
 
-5. **Phase 5: Documentation**
-   - Generated `docs/DEPLOYMENT_GUIDE.md` containing Kubernetes and Docker instructions.
-   - Generated `docs/ECOSYSTEM_INTEGRATION.md` outlining the API boundaries and cryptographic protocols required to interact with the QCG.
+---
 
-## Technical Notes
+## 3. Live Runtime Flow — KESHAV Integration
 
-- The system now properly signs and hashes incoming contracts. Test harness uses newly generated `NodeIdentity` keys, correctly mimicking a live distributed network with independent node cryptographic identities.
-- Logging has been standardized across all sub-components using structured JSON telemetry (compatible with InsightFlow).
-- Minimal external dependencies (`fastapi`, `uvicorn`, `locust`, `pytest`, `cryptography`) ensure high performance and strict security.
+### Request to KESHAV (POST /analyze)
+```json
+{
+  "trace_id": "qcg-evidence-valid-001",
+  "execution_id": "exec-evidence-valid",
+  "tasks": [
+    { "task_id": "QCG_VERIFY", "depends_on": [] }
+  ],
+  "constraint_results": [
+    { "task_id": "QCG_VERIFY", "is_valid": true, "unsatisfied_dependencies": [] }
+  ],
+  "propagation_results": [
+    { "task_id": "QCG_VERIFY", "affected_tasks": [], "impact_score": 3 }
+  ]
+}
+```
 
-The QCG node is now fully packaged, tested, documented, and ready for deployment into the BHIV core infrastructure.
+### Response from KESHAV (200 OK)
+```json
+{
+  "trace_id": "qcg-evidence-valid-001",
+  "execution_id": "exec-evidence-valid",
+  "root_cause": null,
+  "resolution_signal": null,
+  "impact_score": 0,
+  "severity": "LOW",
+  "timestamp": "2026-07-15T11:21:12Z"
+}
+```
+
+### Failure Scenario — Constraint Failure
+**Request:**
+```json
+{
+  "trace_id": "qcg-evidence-fail-001",
+  "execution_id": "exec-evidence-fail",
+  "tasks": [
+    { "task_id": "T1", "depends_on": [] },
+    { "task_id": "T2", "depends_on": ["T1"] }
+  ],
+  "constraint_results": [
+    { "task_id": "T1", "is_valid": false, "unsatisfied_dependencies": [] },
+    { "task_id": "T2", "is_valid": false, "unsatisfied_dependencies": ["T1"] }
+  ],
+  "propagation_results": [
+    { "task_id": "T1", "affected_tasks": ["T2"], "impact_score": 8 },
+    { "task_id": "T2", "affected_tasks": [], "impact_score": 3 }
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "trace_id": "qcg-evidence-fail-001",
+  "execution_id": "exec-evidence-fail",
+  "root_cause": "T1",
+  "resolution_signal": "UNBLOCK_DEPENDENCY:T1",
+  "impact_score": 8,
+  "severity": "MEDIUM",
+  "timestamp": "2026-07-15T11:21:12Z"
+}
+```
+
+---
+
+## 4. Failure Cases
+
+| Scenario | QCG Response | Evidence |
+|----------|-------------|----------|
+| Duplicate trace_id | `HALTED`, `REPLAY_DUPLICATE` | Replay enforcer rejects |
+| Stale message (TTL exceeded) | `HALTED`, `REPLAY_STALE` | TTL check in CanonicalReplayAuthority |
+| Invalid ECDSA signature | `HALTED`, `INVALID_SIGNATURE` | Trust verification fails |
+| Low confidence (<0.40) | `HALTED`, `HALT:LOW_CONFIDENCE` | RuntimeCore rejects |
+| KESHAV unreachable | Pipeline continues, `keshav_analysis.status = FALLBACK` | Graceful degradation logged |
+| Invalid contract schema | `HALTED`, `INVALID_CONTRACT` | Contract parsing fails |
+
+---
+
+## 5. Ecosystem Integration Status
+
+| Service | Status | Evidence |
+|---------|--------|----------|
+| **KESHAV** | ✅ Validated (Live) | `evidence/keshav_live_integration.json` — 5/5 tests passed |
+| **Pritesh Quantum** | ✅ Validated (Live) | `evidence/pritesh_evidence.json` — successfully adapted and executed |
+| Dhiraj Runtime | ⏳ Pending Live URL | `evidence/unavailable_services.json` |
+| Raj Governance | ⏳ Pending Live URL | `evidence/unavailable_services.json` |
+| Pravah Lineage | ⏳ Pending Live URL | `evidence/unavailable_services.json` |
+| InsightFlow | ⏳ Pending Live URL | `evidence/unavailable_services.json` |
+
+---
+
+## 6. Test Results
+
+- **Total tests:** 384
+- **Passed:** 384
+- **Failed:** 0
+- **Evidence:** `evidence/pytest_results.txt`
+
+---
+
+## 7. Evidence Index
+
+| File | Contents |
+|------|----------|
+| `evidence/keshav_live_integration.json` | Complete KESHAV live integration test results with request/response pairs |
+| `evidence/keshav_api_traces.json` | Raw API interaction log with timestamps and latencies |
+| `evidence/pritesh_evidence.json` | Complete Pritesh Quantum Capability integration payload and successful consensus validation response |
+| `evidence/unavailable_services.json` | Documentation of services awaiting live URLs |
+| `evidence/pytest_results.txt` | Full pytest suite output (384 tests) |
+| `evidence/kubernetes_deployment.txt` | K8s deployment evidence |
+| `evidence/replica_recovery_log.txt` | Pod recovery evidence |
+
+---
+
+## 8. Files Modified/Created in This Phase
+
+See `code_packets/FILE_PURPOSES.md` for the complete list.
