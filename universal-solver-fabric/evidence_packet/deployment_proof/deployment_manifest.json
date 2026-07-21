@@ -1,0 +1,13 @@
+{
+  "deployment_target": "TANTRA.Runtime.Phase5",
+  "service_endpoint": "Optimization.SolverFabric.v1",
+  "registry_status": "LOCKED",
+  "available_capabilities": [
+    "ORTOOLS_CP_SAT_01",
+    "QISKIT_QAOA_01"
+  ],
+  "governance": {
+    "boundary_policy": "BCAB",
+    "ecosystem_status": "BCAES_REGISTERED"
+  }
+}

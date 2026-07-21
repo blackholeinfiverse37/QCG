@@ -1,0 +1,31 @@
+{
+  "trace_id": "88ac62ae-58dd-4295-bee9-30a255849309",
+  "replay_id": "409cb7b1-32c8-4f81-94cc-fa2c5d48bf78",
+  "status": "COMPLETED",
+  "provenance": {
+    "timestamp_start_ms": 1784623898209,
+    "timestamp_end_ms": 1784623898310,
+    "execution_duration_ms": 101,
+    "fabric_version": "1.0.0",
+    "solver_id": "ORTOOLS_CP_SAT_01",
+    "solver_version": "9.8.0",
+    "attachment_mode": "LOCAL"
+  },
+  "deterministic_inputs": {
+    "problem_type": "MILP",
+    "constraints_applied": [
+      "LINEAR"
+    ]
+  },
+  "result": {
+    "objective_value": 1337.0,
+    "decision_variables": {
+      "x1": 42,
+      "x2": 99
+    },
+    "solver_specific_metrics": {
+      "nodes_explored": 1500,
+      "gap": 0.0
+    }
+  }
+}

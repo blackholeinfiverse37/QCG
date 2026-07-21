@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Solver Capability Contract",
+  "description": "Unified contract that every optimization engine must satisfy to participate in the Universal Solver Fabric.",
+  "type": "object",
+  "properties": {
+    "solver_id": {
+      "type": "string",
+      "description": "Unique identifier for the solver capability."
+    },
+    "solver_name": {
+      "type": "string",
+      "description": "Human-readable name of the solver."
+    },
+    "solver_type": {
+      "type": "string",
+      "enum": ["CLASSICAL", "QUANTUM", "HEURISTIC", "EVOLUTIONARY", "MIP", "CP", "HYBRID"],
+      "description": "Type of the underlying optimization engine."
+    },
+    "version": {
+      "type": "string",
+      "description": "Semantic version of the solver capability."
+    },
+    "supported_problem_types": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["LP", "MILP", "QUBO", "TSP", "VRP", "CP", "NLP", "MINLP"]
+      },
+      "description": "List of optimization problem structures this solver can handle."
+    },
+    "supported_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["LINEAR", "NONLINEAR", "QUADRATIC", "LOGICAL", "GLOBAL", "CARDINALITY"]
+      },
+      "description": "Types of mathematical constraints supported."
+    },
+    "objective_support": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["SINGLE", "MULTI_OBJECTIVE", "LINEAR", "QUADRATIC"]
+      },
+      "description": "Types of objective functions supported."
+    },
+    "optimization_direction": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["MINIMIZE", "MAXIMIZE"]
+      }
+    },
+    "deterministic_capability": {
+      "type": "boolean",
+      "description": "True if the solver guarantees deterministic results given the same input and seed."
+    },
+    "replay_capability": {
+      "type": "boolean",
+      "description": "True if the solver provides sufficient metadata to exactly replay an execution."
+    },
+    "explainability_support": {
+      "type": "boolean",
+      "description": "True if the solver provides explainability or provenance for its decisions."
+    },
+    "execution_requirements": {
+      "type": "object",
+      "properties": {
+        "hardware": {
+          "type": "string",
+          "enum": ["CPU", "GPU", "QPU", "ASIC", "ANY"]
+        },
+        "distributed": {
+          "type": "boolean"
+        }
+      },
+      "required": ["hardware"]
+    },
+    "resource_requirements": {
+      "type": "object",
+      "properties": {
+        "memory_mb_min": {
+          "type": "integer"
+        },
+        "cores_min": {
+          "type": "integer"
+        }
+      }
+    },
+    "estimated_cost": {
+      "type": "string",
+      "enum": ["LOW", "MEDIUM", "HIGH", "DYNAMIC"],
+      "description": "Qualitative or structural cost representation."
+    },
+    "estimated_runtime": {
+      "type": "string",
+      "enum": ["REALTIME", "SECONDS", "MINUTES", "HOURS", "DAYS"],
+      "description": "Typical execution duration class."
+    },
+    "confidence_model": {
+      "type": "string",
+      "enum": ["EXACT", "PROBABILISTIC", "HEURISTIC_BOUNDED", "UNBOUNDED"]
+    },
+    "authority_limits": {
+      "type": "object",
+      "properties": {
+        "max_variables": { "type": "integer" },
+        "max_constraints": { "type": "integer" },
+        "max_runtime_seconds": { "type": "integer" }
+      },
+      "description": "Governed limits that restrict the solver's execution boundaries."
+    },
+    "attachment_mode": {
+      "type": "string",
+      "enum": ["LOCAL", "REMOTE", "HYBRID"],
+      "description": "How the fabric orchestrates the solver execution."
+    },
+    "schema_version": {
+      "type": "string",
+      "description": "Version of the contract schema."
+    }
+  },
+  "required": [
+    "solver_id",
+    "solver_name",
+    "solver_type",
+    "version",
+    "supported_problem_types",
+    "deterministic_capability",
+    "replay_capability",
+    "attachment_mode",
+    "schema_version"
+  ]
+}

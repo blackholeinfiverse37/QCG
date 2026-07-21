@@ -1,0 +1,11 @@
+{
+  "problem_type": "MILP",
+  "required_constraints": [
+    "LINEAR"
+  ],
+  "require_deterministic": true,
+  "available_memory_mb": 4096,
+  "available_cores": 4,
+  "max_variables": 500,
+  "max_constraints": 1000
+}

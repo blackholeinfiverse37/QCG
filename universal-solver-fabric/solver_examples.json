@@ -1,0 +1,64 @@
+[
+  {
+    "solver_id": "ORTOOLS_CP_SAT_01",
+    "solver_name": "Google OR-Tools CP-SAT",
+    "solver_type": "CP",
+    "version": "9.8.0",
+    "supported_problem_types": ["CP", "MILP", "TSP", "VRP"],
+    "supported_constraints": ["LINEAR", "LOGICAL", "GLOBAL", "CARDINALITY"],
+    "objective_support": ["SINGLE", "LINEAR"],
+    "optimization_direction": ["MINIMIZE", "MAXIMIZE"],
+    "deterministic_capability": true,
+    "replay_capability": true,
+    "explainability_support": true,
+    "execution_requirements": {
+      "hardware": "CPU",
+      "distributed": false
+    },
+    "resource_requirements": {
+      "memory_mb_min": 512,
+      "cores_min": 1
+    },
+    "estimated_cost": "LOW",
+    "estimated_runtime": "MINUTES",
+    "confidence_model": "EXACT",
+    "authority_limits": {
+      "max_variables": 1000000,
+      "max_constraints": 1000000,
+      "max_runtime_seconds": 3600
+    },
+    "attachment_mode": "LOCAL",
+    "schema_version": "1.0.0"
+  },
+  {
+    "solver_id": "QISKIT_QAOA_01",
+    "solver_name": "Qiskit QAOA Optimization",
+    "solver_type": "QUANTUM",
+    "version": "0.45.0",
+    "supported_problem_types": ["QUBO"],
+    "supported_constraints": ["QUADRATIC"],
+    "objective_support": ["QUADRATIC"],
+    "optimization_direction": ["MINIMIZE"],
+    "deterministic_capability": false,
+    "replay_capability": true,
+    "explainability_support": false,
+    "execution_requirements": {
+      "hardware": "QPU",
+      "distributed": false
+    },
+    "resource_requirements": {
+      "memory_mb_min": 2048,
+      "cores_min": 4
+    },
+    "estimated_cost": "HIGH",
+    "estimated_runtime": "SECONDS",
+    "confidence_model": "PROBABILISTIC",
+    "authority_limits": {
+      "max_variables": 127,
+      "max_constraints": 127,
+      "max_runtime_seconds": 60
+    },
+    "attachment_mode": "REMOTE",
+    "schema_version": "1.0.0"
+  }
+]
