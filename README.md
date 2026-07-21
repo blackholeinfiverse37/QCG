@@ -3,7 +3,7 @@
 A deterministic hybrid quantum/classical communication gateway built with Qiskit.
 Bridges probabilistic quantum output to deterministic classical contracts.
 
-## Architecture
+## Architecture ..
 
 ```
 TransmissionRequest
