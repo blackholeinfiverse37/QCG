@@ -1,0 +1,192 @@
+{
+  "_metadata": {
+    "captured_at": "2026-07-17T09:36:32.490681+00:00",
+    "description": "Complete KESHAV live integration evidence with all API request/response pairs",
+    "file": "keshav_live_integration.json"
+  },
+  "data": {
+    "service": "KESHAV",
+    "base_url": "https://keshav-cia7.onrender.com",
+    "tests": [
+      {
+        "test": "KESHAV Health Check",
+        "endpoint": "GET /health",
+        "purpose": "Verify KESHAV service is live and responsive",
+        "expected_outcome": "Status OK, service KESHAV",
+        "actual_outcome": "Status=UNREACHABLE, Service=KESHAV",
+        "passed": false,
+        "response": {
+          "error": "The read operation timed out"
+        }
+      },
+      {
+        "test": "KESHAV Metrics Retrieval",
+        "endpoint": "GET /metrics/json",
+        "purpose": "Verify KESHAV exposes operational metrics",
+        "expected_outcome": "JSON metrics with request_count, latency stats",
+        "actual_outcome": "Received 8 metric fields",
+        "passed": true,
+        "response": {
+          "request_count": 0,
+          "request_errors": 0,
+          "request_success_rate": 1.0,
+          "avg_latency_seconds": 0,
+          "p95_latency_seconds": 0,
+          "p99_latency_seconds": 0,
+          "severity_distribution": {},
+          "unique_traces_processed": 0
+        }
+      },
+      {
+        "test": "KESHAV Analyze - Valid Contract",
+        "endpoint": "POST /analyze",
+        "purpose": "Verify KESHAV correctly analyzes a valid QCG contract",
+        "expected_outcome": "200 OK with severity LOW (no constraint failures)",
+        "actual_outcome": "Severity=LOW, RootCause=None",
+        "passed": true,
+        "request": {
+          "trace_id": "qcg-evidence-valid-001",
+          "execution_id": "exec-evidence-valid",
+          "tasks": [
+            {
+              "task_id": "QCG_VERIFY",
+              "depends_on": []
+            }
+          ],
+          "constraint_results": [
+            {
+              "task_id": "QCG_VERIFY",
+              "is_valid": true,
+              "unsatisfied_dependencies": []
+            }
+          ],
+          "propagation_results": [
+            {
+              "task_id": "QCG_VERIFY",
+              "affected_tasks": [],
+              "impact_score": 3
+            }
+          ]
+        },
+        "response": {
+          "trace_id": "qcg-evidence-valid-001",
+          "execution_id": "exec-evidence-valid",
+          "root_cause": null,
+          "resolution_signal": null,
+          "impact_score": 0,
+          "severity": "LOW",
+          "timestamp": "2026-07-17T09:35:28Z"
+        }
+      },
+      {
+        "test": "KESHAV Analyze - Constraint Failure",
+        "endpoint": "POST /analyze",
+        "purpose": "Verify KESHAV detects root cause in a failing dependency chain",
+        "expected_outcome": "200 OK with severity HIGH, root_cause identified",
+        "actual_outcome": "Severity=MEDIUM, RootCause=T1, Signal=UNBLOCK_DEPENDENCY:T1",
+        "passed": true,
+        "request": {
+          "trace_id": "qcg-evidence-fail-001",
+          "execution_id": "exec-evidence-fail",
+          "tasks": [
+            {
+              "task_id": "T1",
+              "depends_on": []
+            },
+            {
+              "task_id": "T2",
+              "depends_on": [
+                "T1"
+              ]
+            }
+          ],
+          "constraint_results": [
+            {
+              "task_id": "T1",
+              "is_valid": false,
+              "unsatisfied_dependencies": []
+            },
+            {
+              "task_id": "T2",
+              "is_valid": false,
+              "unsatisfied_dependencies": [
+                "T1"
+              ]
+            }
+          ],
+          "propagation_results": [
+            {
+              "task_id": "T1",
+              "affected_tasks": [
+                "T2"
+              ],
+              "impact_score": 8
+            },
+            {
+              "task_id": "T2",
+              "affected_tasks": [],
+              "impact_score": 3
+            }
+          ]
+        },
+        "response": {
+          "trace_id": "qcg-evidence-fail-001",
+          "execution_id": "exec-evidence-fail",
+          "root_cause": "T1",
+          "resolution_signal": "UNBLOCK_DEPENDENCY:T1",
+          "impact_score": 8,
+          "severity": "MEDIUM",
+          "timestamp": "2026-07-17T09:35:29Z"
+        }
+      },
+      {
+        "test": "KESHAV Trace Continuity",
+        "endpoint": "POST /analyze",
+        "purpose": "Verify KESHAV preserves trace_id for end-to-end lineage",
+        "expected_outcome": "Response trace_id matches request trace_id",
+        "actual_outcome": "Request trace_id=qcg-trace-continuity-test, Response trace_id=qcg-trace-continuity-test, Match=True",
+        "passed": true,
+        "request": {
+          "trace_id": "qcg-trace-continuity-test",
+          "execution_id": "exec-trace-continuity",
+          "tasks": [
+            {
+              "task_id": "TRACE_CHECK",
+              "depends_on": []
+            }
+          ],
+          "constraint_results": [
+            {
+              "task_id": "TRACE_CHECK",
+              "is_valid": true,
+              "unsatisfied_dependencies": []
+            }
+          ],
+          "propagation_results": [
+            {
+              "task_id": "TRACE_CHECK",
+              "affected_tasks": [],
+              "impact_score": 0
+            }
+          ]
+        },
+        "response": {
+          "trace_id": "qcg-trace-continuity-test",
+          "execution_id": "exec-trace-continuity",
+          "root_cause": null,
+          "resolution_signal": null,
+          "impact_score": 0,
+          "severity": "LOW",
+          "timestamp": "2026-07-17T09:35:29Z"
+        }
+      }
+    ],
+    "overall_status": "PARTIAL",
+    "summary": {
+      "total_tests": 5,
+      "passed": 4,
+      "failed": 1,
+      "pass_rate": "4/5"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+Sending payload to /verify...
+{
+  "status": 422,
+  "data": "{\"detail\":{\"trace_id\":\"22ae3a93-bbaa-45e9-b335-8f78ad383ab5\",\"parent_trace_id\":null,\"flow_status\":\"HALTED\",\"stages\":{\"replay\":{\"is_valid\":true,\"status\":\"VALID\",\"sequence_number\":2,\"verification_hash\":\"fb767d27f761457723263ae66653cbc3a8695efb12cb3c186336e492ca024ac9\"},\"keshav_analysis\":{\"status\":\"COMPLETED\",\"live\":true,\"trace_id\":\"22ae3a93-bbaa-45e9-b335-8f78ad383ab5\",\"root_cause\":null,\"resolution_signal\":null,\"impact_score\":0,\"severity\":\"LOW\",\"timestamp\":\"2026-07-17T09:35:32Z\"},\"trust\":{\"passed\":false,\"halt_signal\":\"HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered\",\"reason\":\"ECDSA signature verification failed \u2014 contract may be tampered\"}},\"halt_reason\":\"HALT:INVALID_SIGNATURE:ECDSA signature verification failed \u2014 contract may be tampered\"}}",
+  "latency": 2.309019088745117,
+  "error": "HTTP Error 422: Unprocessable Content"
+}

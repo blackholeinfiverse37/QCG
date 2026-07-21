@@ -1,0 +1,48 @@
+{
+  "_metadata": {
+    "captured_at": "2026-07-17T09:36:34.905018+00:00",
+    "description": "Documentation of ecosystem services unavailable for live integration, with reasons and required follow-ups",
+    "file": "unavailable_services.json"
+  },
+  "data": {
+    "documented_at": "2026-07-17T09:36:34.904999+00:00",
+    "services": [
+      {
+        "service": "Dhiraj Runtime",
+        "role": "Runtime Execution",
+        "status": "UNAVAILABLE",
+        "reason": "No live API URL provided. Service endpoint not yet deployed or communicated.",
+        "evidence": "No URL available for HTTP connection attempt",
+        "required_followup": "Dhiraj to provide live runtime API URL",
+        "qcg_readiness": "Integration harness ready \u2014 ExecutionValidatorInterface implemented and tested locally"
+      },
+      {
+        "service": "Raj Governance",
+        "role": "Governance Approval",
+        "status": "UNAVAILABLE",
+        "reason": "No live API URL provided. Governance API not yet accessible.",
+        "evidence": "No URL available for HTTP connection attempt",
+        "required_followup": "Raj to provide live governance API URL",
+        "qcg_readiness": "GovernanceAuthority and strict mode enforcement tested locally"
+      },
+      {
+        "service": "Pravah Lineage",
+        "role": "Trace Continuity & Provenance",
+        "status": "UNAVAILABLE",
+        "reason": "No live API URL provided. Lineage tracking endpoints not accessible.",
+        "evidence": "No URL available for HTTP connection attempt",
+        "required_followup": "Pravah team to provide live lineage API URL",
+        "qcg_readiness": "Trace continuity propagation implemented \u2014 sequence_number, runtime_hash, final_hash emitted in /verify response"
+      },
+      {
+        "service": "InsightFlow Telemetry",
+        "role": "Observability",
+        "status": "UNAVAILABLE",
+        "reason": "No live API URL provided. Telemetry ingestion endpoints not accessible.",
+        "evidence": "No URL available for HTTP connection attempt",
+        "required_followup": "InsightFlow team to provide telemetry push endpoint",
+        "qcg_readiness": "Structured JSON logging operational, /health and /metrics endpoints serving data"
+      }
+    ]
+  }
+}

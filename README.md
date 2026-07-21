@@ -66,12 +66,18 @@ python process_runner.py --crash consensus
 
 # Replay enforcer demo
 python replay_enforcer.py
+
+# KESHAV live integration test
+python keshav_live_client.py
+
+# Full evidence collection (KESHAV + unavailable services)
+python live_integration_evidence.py
 ```
 
 ## Test
 
 ```bash
-pytest tests/ -v  # 213 tests, 0 failures
+pytest tests/ -v  # 384 tests, 0 failures
 ```
 
 ## Configuration
@@ -126,11 +132,18 @@ participation_proof.py     -- Bytecode-level proof of identical execution path a
 ecosystem_participation.py -- 6 ecosystem participants through universal trust pipeline
 runtime_demo.py            -- Full 6-phase demonstration
 
+# Live Ecosystem Integration
+keshav_live_client.py      -- Production HTTP client for live KESHAV API
+pritesh_live_client.py     -- Production HTTP client to simulate Pritesh payload to web server
+web_server.py              -- Local web server endpoint to ingest Pritesh payloads at /verify
+live_integration_evidence.py -- Evidence collection script for all live integrations
+integration_harness.py     -- TANTRA pipeline harness with KESHAV live integration
+
 # Handover documents
 ARCHITECTURE.md            -- System architecture reference
-DETERMINISM_DOCTRINE.md    -- Field classification table
-REPLAY_ENFORCEMENT.md      -- Replay protection specification
-PROCESS_MODEL.md           -- Multi-process architecture
-TEST_RESULTS.md            -- Evidence matrix (213/213 pass)
-review_packets/PHASE3_REVIEW_PACKET.md  -- Phase 3 submission review packet
+DEPLOYMENT_GUIDE.md        -- Docker/K8s deployment instructions
+ECOSYSTEM_INTEGRATION.md   -- Ecosystem federation status (live vs pending)
+OPERATIONAL_RUNBOOK.md     -- On-call troubleshooting guide
+HANDOVER.md                -- Final system state and developer handover
+review_packets/            -- Review packet with evidence and code packets
 ```

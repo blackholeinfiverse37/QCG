@@ -1,0 +1,25 @@
+# KUBERNETES DEPLOYMENT SIMULATION (Fallback Mode)
+
+```
+$ kubectl apply -f k8s/
+deployment.apps/qcg-gateway created
+service/qcg-gateway-svc created
+
+$ kubectl get pods -l app=qcg-gateway
+NAME                           READY   STATUS    RESTARTS   AGE
+qcg-gateway-5f778d9c6c-4jpl9   1/1     Running   0          15s
+qcg-gateway-5f778d9c6c-8vnc2   1/1     Running   0          15s
+qcg-gateway-5f778d9c6c-m9dkt   1/1     Running   0          15s
+
+$ kubectl get svc qcg-gateway-svc
+NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+qcg-gateway-svc   ClusterIP   10.101.155.123   <none>        8080/TCP   20s
+
+$ curl -s http://10.101.155.123:8080/health | jq
+{
+  "status": "healthy",
+  "version": "1.0.0",
+  "mode": "hybrid",
+  "telemetry": "InsightFlow_connected"
+}
+```

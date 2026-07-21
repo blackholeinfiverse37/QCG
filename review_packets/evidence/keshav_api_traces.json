@@ -1,0 +1,191 @@
+{
+  "_metadata": {
+    "captured_at": "2026-07-17T09:36:32.491701+00:00",
+    "description": "Raw KESHAV API interaction log with timestamps and latencies",
+    "file": "keshav_api_traces.json"
+  },
+  "data": [
+    {
+      "timestamp": "2026-07-17T09:36:23.241601+00:00",
+      "method": "GET",
+      "endpoint": "/health",
+      "url": "https://keshav-cia7.onrender.com/health",
+      "request_body": null,
+      "status_code": 0,
+      "response_body": null,
+      "latency_ms": 15087.58,
+      "error": "The read operation timed out",
+      "success": false
+    },
+    {
+      "timestamp": "2026-07-17T09:36:31.183057+00:00",
+      "method": "GET",
+      "endpoint": "/metrics/json",
+      "url": "https://keshav-cia7.onrender.com/metrics/json",
+      "request_body": null,
+      "status_code": 200,
+      "response_body": {
+        "request_count": 0,
+        "request_errors": 0,
+        "request_success_rate": 1.0,
+        "avg_latency_seconds": 0,
+        "p95_latency_seconds": 0,
+        "p99_latency_seconds": 0,
+        "severity_distribution": {},
+        "unique_traces_processed": 0
+      },
+      "latency_ms": 7941.0,
+      "error": null,
+      "success": true
+    },
+    {
+      "timestamp": "2026-07-17T09:36:31.583411+00:00",
+      "method": "POST",
+      "endpoint": "/analyze",
+      "url": "https://keshav-cia7.onrender.com/analyze",
+      "request_body": {
+        "trace_id": "qcg-evidence-valid-001",
+        "execution_id": "exec-evidence-valid",
+        "tasks": [
+          {
+            "task_id": "QCG_VERIFY",
+            "depends_on": []
+          }
+        ],
+        "constraint_results": [
+          {
+            "task_id": "QCG_VERIFY",
+            "is_valid": true,
+            "unsatisfied_dependencies": []
+          }
+        ],
+        "propagation_results": [
+          {
+            "task_id": "QCG_VERIFY",
+            "affected_tasks": [],
+            "impact_score": 3
+          }
+        ]
+      },
+      "status_code": 200,
+      "response_body": {
+        "trace_id": "qcg-evidence-valid-001",
+        "execution_id": "exec-evidence-valid",
+        "root_cause": null,
+        "resolution_signal": null,
+        "impact_score": 0,
+        "severity": "LOW",
+        "timestamp": "2026-07-17T09:35:28Z"
+      },
+      "latency_ms": 399.99,
+      "error": null,
+      "success": true
+    },
+    {
+      "timestamp": "2026-07-17T09:36:31.842085+00:00",
+      "method": "POST",
+      "endpoint": "/analyze",
+      "url": "https://keshav-cia7.onrender.com/analyze",
+      "request_body": {
+        "trace_id": "qcg-evidence-fail-001",
+        "execution_id": "exec-evidence-fail",
+        "tasks": [
+          {
+            "task_id": "T1",
+            "depends_on": []
+          },
+          {
+            "task_id": "T2",
+            "depends_on": [
+              "T1"
+            ]
+          }
+        ],
+        "constraint_results": [
+          {
+            "task_id": "T1",
+            "is_valid": false,
+            "unsatisfied_dependencies": []
+          },
+          {
+            "task_id": "T2",
+            "is_valid": false,
+            "unsatisfied_dependencies": [
+              "T1"
+            ]
+          }
+        ],
+        "propagation_results": [
+          {
+            "task_id": "T1",
+            "affected_tasks": [
+              "T2"
+            ],
+            "impact_score": 8
+          },
+          {
+            "task_id": "T2",
+            "affected_tasks": [],
+            "impact_score": 3
+          }
+        ]
+      },
+      "status_code": 200,
+      "response_body": {
+        "trace_id": "qcg-evidence-fail-001",
+        "execution_id": "exec-evidence-fail",
+        "root_cause": "T1",
+        "resolution_signal": "UNBLOCK_DEPENDENCY:T1",
+        "impact_score": 8,
+        "severity": "MEDIUM",
+        "timestamp": "2026-07-17T09:35:29Z"
+      },
+      "latency_ms": 258.28,
+      "error": null,
+      "success": true
+    },
+    {
+      "timestamp": "2026-07-17T09:36:32.490505+00:00",
+      "method": "POST",
+      "endpoint": "/analyze",
+      "url": "https://keshav-cia7.onrender.com/analyze",
+      "request_body": {
+        "trace_id": "qcg-trace-continuity-test",
+        "execution_id": "exec-trace-continuity",
+        "tasks": [
+          {
+            "task_id": "TRACE_CHECK",
+            "depends_on": []
+          }
+        ],
+        "constraint_results": [
+          {
+            "task_id": "TRACE_CHECK",
+            "is_valid": true,
+            "unsatisfied_dependencies": []
+          }
+        ],
+        "propagation_results": [
+          {
+            "task_id": "TRACE_CHECK",
+            "affected_tasks": [],
+            "impact_score": 0
+          }
+        ]
+      },
+      "status_code": 200,
+      "response_body": {
+        "trace_id": "qcg-trace-continuity-test",
+        "execution_id": "exec-trace-continuity",
+        "root_cause": null,
+        "resolution_signal": null,
+        "impact_score": 0,
+        "severity": "LOW",
+        "timestamp": "2026-07-17T09:35:29Z"
+      },
+      "latency_ms": 648.05,
+      "error": null,
+      "success": true
+    }
+  ]
+}

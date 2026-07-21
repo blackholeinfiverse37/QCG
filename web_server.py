@@ -46,11 +46,58 @@ async def get_capabilities():
     """Get capability manifest and API contracts."""
     return CapabilityDiscoveryInterface.discover_capabilities()
 
+<<<<<<< HEAD
+@app.post("/verify")
+async def verify_contract(payload: VerifyRequest):
+    """
+    Synchronous end-to-end integration flow.
+    Primary ingestion pipeline for BHIV contracts from Pravah/NICAI.
+    """
+    import uuid
+    from datetime import datetime, timezone
+
+    # Adapt raw Pritesh payload into QCG ComputationExecutionContract
+    if "producer_type" not in payload.contract:
+        from execution_contract import ComputationExecutionContract
+        from node_identity import NodeSigner
+        from provenance import sign_contract
+        import uuid
+        from datetime import datetime, timezone
+
+        c = ComputationExecutionContract(
+            producer_type="QUANTUM",
+            producer_id="PRITESH_QUANTUM",
+            payload=payload.contract,
+            confidence=0.99,
+            trace_id=str(uuid.uuid4()),
+            contract_version="2.0.0",
+            timestamp=datetime.now(timezone.utc).isoformat()
+        )
+        
+        # Create a proxy identity for Pritesh to sign the contract
+        proxy_signer = NodeSigner("PRITESH_QUANTUM", "QUANTUM")
+        signed_c = sign_contract(c, proxy_signer)
+        contract_dict = signed_c.to_dict()
+        
+        # Override the dummy "YOUR_KEY" with the actual generated public key for verification
+        pub_key_to_use = proxy_signer.identity.public_key
+    else:
+        contract_dict = payload.contract
+        pub_key_to_use = payload.producer_public_key
+
+    success, result = harness.process_incoming_contract(contract_dict, pub_key_to_use)
+    
+    if success:
+        return result
+    else:
+        # If verification fails, return 422 Unprocessable Entity
+=======
 @app.post("/verify", tags=["Integration"])
 async def verify_contract(req: VerifyRequest):
     """Synchronous end-to-end integration flow verification."""
     success, result = harness.process_incoming_contract(req.contract, req.producer_public_key)
     if not success:
+>>>>>>> 86f51a31442616a0759a9b57244d9d361d16197f
         raise HTTPException(status_code=422, detail=result)
     return result
 

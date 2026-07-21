@@ -114,6 +114,47 @@ class HealthStatusInterface(StandardizedInterface):
 
 
 class ReplayVerifierInterface(StandardizedInterface):
+<<<<<<< HEAD
+    """Interface for Replay Validation."""
+    
+    def __init__(self, authority: CanonicalReplayAuthority):
+        self.authority = authority
+
+    def verify_replay(self, message_id: str, issued_at: float) -> Dict[str, Any]:
+        verdict = self.authority.submit(message_id, issued_at)
+        return {
+            "is_valid": verdict.is_valid,
+            "status": verdict.status,
+            "sequence_number": verdict.sequence_number,
+            "verification_hash": verdict.lineage_record.verification_hash if verdict.is_valid else None
+        }
+
+
+class TrustVerifierInterface(StandardizedInterface):
+    """Interface for Trust and Provenance Verification."""
+    
+    def __init__(self, verifier: ProducerVerificationLayer):
+        self.verifier = verifier
+
+    def verify_trust(self, contract: ComputationExecutionContract) -> Dict[str, Any]:
+        result: VerificationResult = self.verifier.verify(contract)
+        return {
+            "passed": result.passed,
+            "halt_signal": result.halt_signal(),
+            "reason": result.reason
+        }
+
+
+class ExecutionValidatorInterface(StandardizedInterface):
+    """Interface for Deterministic Execution."""
+    
+    def __init__(self, runtime: RuntimeCore):
+        self.runtime = runtime
+
+    def validate_execution(self, contract: ComputationExecutionContract) -> Dict[str, Any]:
+        result = self.runtime.execute(contract)
+        return result.to_dict()
+=======
     """Interface for Replay Validation via Live API."""
     
     def __init__(self, authority=None):
@@ -201,6 +242,7 @@ class ExecutionValidatorInterface(StandardizedInterface):
                 "confidence": contract.confidence,
                 "runtime_hash": ""
             }
+>>>>>>> 86f51a31442616a0759a9b57244d9d361d16197f
 
 
 class ConsensusVerifierInterface(StandardizedInterface):
