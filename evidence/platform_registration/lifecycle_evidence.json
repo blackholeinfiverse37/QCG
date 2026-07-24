@@ -1,0 +1,209 @@
+{
+  "lifecycle_transitions": [
+    {
+      "action": "disable",
+      "expected_state": "DRAFT",
+      "actual_state": "DRAFT",
+      "passed": true,
+      "event": {
+        "event_id": "e80e1717-6197-4c00-b2c1-a9a635ed1624",
+        "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+        "action": "DISABLE",
+        "previous_state": "ACTIVE",
+        "new_state": "DRAFT",
+        "actor": "RUNNER",
+        "reason": "Disabled by operator",
+        "timestamp": "2026-07-24T08:51:57.245135+00:00",
+        "event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+        "previous_event_hash": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf",
+        "replay_metadata": {
+          "chain_length": 4,
+          "head_hash_before": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf"
+        }
+      }
+    },
+    {
+      "action": "enable",
+      "expected_state": "ACTIVE",
+      "actual_state": "ACTIVE",
+      "passed": true,
+      "event": {
+        "event_id": "c78a2d56-6d3b-4b20-a0d7-41637ed1103b",
+        "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+        "action": "ENABLE",
+        "previous_state": "DRAFT",
+        "new_state": "ACTIVE",
+        "actor": "RUNNER",
+        "reason": "Enabled by operator",
+        "timestamp": "2026-07-24T08:51:57.245180+00:00",
+        "event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+        "previous_event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+        "replay_metadata": {
+          "chain_length": 5,
+          "head_hash_before": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a"
+        }
+      }
+    },
+    {
+      "action": "deprecate",
+      "expected_state": "DEPRECATED",
+      "actual_state": "DEPRECATED",
+      "passed": true,
+      "event": {
+        "event_id": "8ac29e61-7eb9-474a-a04f-a29316e53e8b",
+        "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+        "action": "DEPRECATE",
+        "previous_state": "ACTIVE",
+        "new_state": "DEPRECATED",
+        "actor": "RUNNER",
+        "reason": "Test deprecation",
+        "timestamp": "2026-07-24T08:51:57.245215+00:00",
+        "event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+        "previous_event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+        "replay_metadata": {
+          "chain_length": 6,
+          "head_hash_before": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011"
+        }
+      }
+    },
+    {
+      "action": "retire",
+      "expected_state": "RETIRED",
+      "actual_state": "RETIRED",
+      "passed": true,
+      "event": {
+        "event_id": "bbee4c54-1d22-475f-9d59-8c8ddca1826f",
+        "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+        "action": "RETIRE",
+        "previous_state": "DEPRECATED",
+        "new_state": "RETIRED",
+        "actor": "RUNNER",
+        "reason": "Test retirement",
+        "timestamp": "2026-07-24T08:51:57.245247+00:00",
+        "event_hash": "c7dbdeee0c40872843364f3a91eef906e739e1795753c50d871205156da303e5",
+        "previous_event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+        "replay_metadata": {
+          "chain_length": 7,
+          "head_hash_before": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef"
+        }
+      }
+    },
+    {
+      "chain_valid": true
+    }
+  ],
+  "all_lifecycle_events": [
+    {
+      "event_id": "a46067d9-abc1-4257-90bf-e76e2d477c95",
+      "service_id": "TANTRA-PSR-USF-001",
+      "action": "REGISTER",
+      "previous_state": "NONE",
+      "new_state": "ACTIVE",
+      "actor": "SYSTEM",
+      "reason": "Initial registration",
+      "timestamp": "2026-07-24T08:51:57.201294+00:00",
+      "event_hash": "0be274ffcbaf8e6dd22021eedd3f6e74c4ea61dd47d9bc7c66e46a21f0db54e3",
+      "previous_event_hash": "6cef4b76a71ce33dfdfec80fbcab90d81d5a4656e4c620e36e099a28d79d838a",
+      "replay_metadata": {
+        "chain_length": 1,
+        "head_hash_before": "6cef4b76a71ce33dfdfec80fbcab90d81d5a4656e4c620e36e099a28d79d838a"
+      }
+    },
+    {
+      "event_id": "415d8c82-f7a1-4610-b281-7dfda7a2ff82",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "action": "REGISTER",
+      "previous_state": "NONE",
+      "new_state": "ACTIVE",
+      "actor": "SYSTEM",
+      "reason": "Initial registration",
+      "timestamp": "2026-07-24T08:51:57.219274+00:00",
+      "event_hash": "3c90a698d269232b4353ff60f4a3e11c16c56efafaefce819cb330a210fbef20",
+      "previous_event_hash": "0be274ffcbaf8e6dd22021eedd3f6e74c4ea61dd47d9bc7c66e46a21f0db54e3",
+      "replay_metadata": {
+        "chain_length": 2,
+        "head_hash_before": "0be274ffcbaf8e6dd22021eedd3f6e74c4ea61dd47d9bc7c66e46a21f0db54e3"
+      }
+    },
+    {
+      "event_id": "8bc5a233-b35e-4b9e-9b1b-e88b8998840b",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "action": "REGISTER",
+      "previous_state": "NONE",
+      "new_state": "ACTIVE",
+      "actor": "RUNNER",
+      "reason": "Lifecycle test registration",
+      "timestamp": "2026-07-24T08:51:57.245099+00:00",
+      "event_hash": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf",
+      "previous_event_hash": "3c90a698d269232b4353ff60f4a3e11c16c56efafaefce819cb330a210fbef20",
+      "replay_metadata": {
+        "chain_length": 3,
+        "head_hash_before": "3c90a698d269232b4353ff60f4a3e11c16c56efafaefce819cb330a210fbef20"
+      }
+    },
+    {
+      "event_id": "e80e1717-6197-4c00-b2c1-a9a635ed1624",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "action": "DISABLE",
+      "previous_state": "ACTIVE",
+      "new_state": "DRAFT",
+      "actor": "RUNNER",
+      "reason": "Disabled by operator",
+      "timestamp": "2026-07-24T08:51:57.245135+00:00",
+      "event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+      "previous_event_hash": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf",
+      "replay_metadata": {
+        "chain_length": 4,
+        "head_hash_before": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf"
+      }
+    },
+    {
+      "event_id": "c78a2d56-6d3b-4b20-a0d7-41637ed1103b",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "action": "ENABLE",
+      "previous_state": "DRAFT",
+      "new_state": "ACTIVE",
+      "actor": "RUNNER",
+      "reason": "Enabled by operator",
+      "timestamp": "2026-07-24T08:51:57.245180+00:00",
+      "event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+      "previous_event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+      "replay_metadata": {
+        "chain_length": 5,
+        "head_hash_before": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a"
+      }
+    },
+    {
+      "event_id": "8ac29e61-7eb9-474a-a04f-a29316e53e8b",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "action": "DEPRECATE",
+      "previous_state": "ACTIVE",
+      "new_state": "DEPRECATED",
+      "actor": "RUNNER",
+      "reason": "Test deprecation",
+      "timestamp": "2026-07-24T08:51:57.245215+00:00",
+      "event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+      "previous_event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+      "replay_metadata": {
+        "chain_length": 6,
+        "head_hash_before": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011"
+      }
+    },
+    {
+      "event_id": "bbee4c54-1d22-475f-9d59-8c8ddca1826f",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "action": "RETIRE",
+      "previous_state": "DEPRECATED",
+      "new_state": "RETIRED",
+      "actor": "RUNNER",
+      "reason": "Test retirement",
+      "timestamp": "2026-07-24T08:51:57.245247+00:00",
+      "event_hash": "c7dbdeee0c40872843364f3a91eef906e739e1795753c50d871205156da303e5",
+      "previous_event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+      "replay_metadata": {
+        "chain_length": 7,
+        "head_hash_before": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef"
+      }
+    }
+  ]
+}

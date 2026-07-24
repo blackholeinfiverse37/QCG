@@ -1,0 +1,2048 @@
+{
+  "run_started": "2026-07-24T08:51:56.593501+00:00",
+  "steps": [
+    {
+      "step": "USF_REGISTRATION",
+      "result": {
+        "status": "REGISTERED",
+        "service_id": "TANTRA-PSR-USF-001",
+        "registration_hash": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+        "evidence": {
+          "evidence_id": "c7dc5a22-135c-4f00-941b-0a0ce0796de3",
+          "event_type": "SERVICE_REGISTERED",
+          "service_id": "TANTRA-PSR-USF-001",
+          "timestamp": "2026-07-24T08:51:57.201213+00:00",
+          "details": {
+            "service_name": "UNIVERSAL_SOLVER_FABRIC",
+            "version": "1.0.0",
+            "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+            "status": "ACTIVE",
+            "registration_hash": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+            "has_manifest": true
+          },
+          "evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734",
+          "previous_evidence_hash": "9a9b162a21fc3e957ea53d4d174eac82f527616cd7e5205671b92c9d1de4d6ab"
+        }
+      }
+    },
+    {
+      "step": "QCG_REGISTRATION",
+      "result": {
+        "status": "REGISTERED",
+        "service_id": "TANTRA-PSR-QCG-001",
+        "registration_hash": "ade9229bc6b1b100df509f2ffc83ec45909ddbb576822b14c771bfd59d20f894",
+        "evidence": {
+          "evidence_id": "b755cbd9-529d-48a9-833e-7de81f454f08",
+          "event_type": "SERVICE_REGISTERED",
+          "service_id": "TANTRA-PSR-QCG-001",
+          "timestamp": "2026-07-24T08:51:57.219218+00:00",
+          "details": {
+            "service_name": "QCG_TRUST_VERIFICATION",
+            "version": "1.0.0",
+            "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+            "status": "ACTIVE",
+            "registration_hash": "ade9229bc6b1b100df509f2ffc83ec45909ddbb576822b14c771bfd59d20f894",
+            "has_manifest": true
+          },
+          "evidence_hash": "3bf3e5cf2648da3fc1c158976b41c60e5af081e69bfc0dd644cb082548850653",
+          "previous_evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734"
+        }
+      }
+    },
+    {
+      "step": "ENDPOINT_VALIDATION",
+      "all_ok": true,
+      "results": {
+        "list_services": {
+          "url": "http://127.0.0.1:9010/platform/v1/services",
+          "status": "OK",
+          "response": {
+            "services": [
+              {
+                "platform_service_id": "TANTRA-PSR-USF-001",
+                "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+                "service_name": "UNIVERSAL_SOLVER_FABRIC",
+                "version": "1.0.0",
+                "provider": "TANTRA Platform Engineering",
+                "owner": {
+                  "team": "TANTRA Sovereign Core",
+                  "contact": "solver-fabric@tantra.internal"
+                },
+                "runtime_type": "PROCESS",
+                "service_classification": "PLATFORM_SERVICE",
+                "capability_category": "OPTIMIZATION",
+                "status": "ACTIVE",
+                "registration_timestamp": "2026-07-24T08:51:57.201108+00:00",
+                "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+                "tags": [
+                  "optimization",
+                  "solver",
+                  "deterministic",
+                  "replay-safe",
+                  "evidence"
+                ],
+                "endpoints": {
+                  "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+                  "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+                  "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                  "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                  "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                  "version": "http://127.0.0.1:9010/platform/v1/version",
+                  "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+                },
+                "dependencies": []
+              },
+              {
+                "platform_service_id": "TANTRA-PSR-QCG-001",
+                "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+                "service_name": "QCG_TRUST_VERIFICATION",
+                "version": "1.0.0",
+                "provider": "TANTRA Platform Engineering",
+                "owner": {
+                  "team": "TANTRA Sovereign Core",
+                  "contact": "qcg-trust@tantra.internal"
+                },
+                "runtime_type": "PROCESS",
+                "service_classification": "PLATFORM_SERVICE",
+                "capability_category": "VERIFICATION",
+                "status": "ACTIVE",
+                "registration_timestamp": "2026-07-24T08:51:57.219161+00:00",
+                "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+                "tags": [
+                  "verification",
+                  "trust",
+                  "replay",
+                  "consensus",
+                  "quantum",
+                  "deterministic"
+                ],
+                "endpoints": {
+                  "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+                  "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+                  "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                  "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                  "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                  "version": "http://127.0.0.1:9010/platform/v1/version",
+                  "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+                },
+                "dependencies": []
+              }
+            ],
+            "count": 2,
+            "registry_version": "1.0.0"
+          }
+        },
+        "get_usf": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+          "status": "OK",
+          "response": {
+            "platform_service_id": "TANTRA-PSR-USF-001",
+            "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+            "service_name": "UNIVERSAL_SOLVER_FABRIC",
+            "version": "1.0.0",
+            "provider": "TANTRA Platform Engineering",
+            "owner": {
+              "team": "TANTRA Sovereign Core",
+              "contact": "solver-fabric@tantra.internal"
+            },
+            "runtime_type": "PROCESS",
+            "service_classification": "PLATFORM_SERVICE",
+            "capability_category": "OPTIMIZATION",
+            "status": "ACTIVE",
+            "registration_timestamp": "2026-07-24T08:51:57.201108+00:00",
+            "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+            "tags": [
+              "optimization",
+              "solver",
+              "deterministic",
+              "replay-safe",
+              "evidence"
+            ],
+            "endpoints": {
+              "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+              "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+              "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+              "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+              "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+              "version": "http://127.0.0.1:9010/platform/v1/version",
+              "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+            },
+            "dependencies": []
+          }
+        },
+        "get_qcg": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+          "status": "OK",
+          "response": {
+            "platform_service_id": "TANTRA-PSR-QCG-001",
+            "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+            "service_name": "QCG_TRUST_VERIFICATION",
+            "version": "1.0.0",
+            "provider": "TANTRA Platform Engineering",
+            "owner": {
+              "team": "TANTRA Sovereign Core",
+              "contact": "qcg-trust@tantra.internal"
+            },
+            "runtime_type": "PROCESS",
+            "service_classification": "PLATFORM_SERVICE",
+            "capability_category": "VERIFICATION",
+            "status": "ACTIVE",
+            "registration_timestamp": "2026-07-24T08:51:57.219161+00:00",
+            "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+            "tags": [
+              "verification",
+              "trust",
+              "replay",
+              "consensus",
+              "quantum",
+              "deterministic"
+            ],
+            "endpoints": {
+              "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+              "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+              "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+              "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+              "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+              "version": "http://127.0.0.1:9010/platform/v1/version",
+              "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+            },
+            "dependencies": []
+          }
+        },
+        "usf_versions": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/versions",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-USF-001",
+            "compatible": [
+              "1.0.0"
+            ],
+            "deprecated": [
+              "0.9.0"
+            ],
+            "unsupported": [
+              "0.1.0",
+              "0.5.0"
+            ]
+          }
+        },
+        "usf_metadata": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata",
+          "status": "OK",
+          "response": {
+            "service": {
+              "platform_service_id": "TANTRA-PSR-USF-001",
+              "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+              "service_name": "UNIVERSAL_SOLVER_FABRIC",
+              "version": "1.0.0",
+              "provider": "TANTRA Platform Engineering",
+              "owner": {
+                "team": "TANTRA Sovereign Core",
+                "contact": "solver-fabric@tantra.internal"
+              },
+              "runtime_type": "PROCESS",
+              "service_classification": "PLATFORM_SERVICE",
+              "capability_category": "OPTIMIZATION",
+              "status": "ACTIVE",
+              "registration_timestamp": "2026-07-24T08:51:57.201108+00:00",
+              "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+              "tags": [
+                "optimization",
+                "solver",
+                "deterministic",
+                "replay-safe",
+                "evidence"
+              ],
+              "endpoints": {
+                "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+                "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+                "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                "version": "http://127.0.0.1:9010/platform/v1/version",
+                "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+              },
+              "dependencies": []
+            },
+            "manifest": {
+              "manifest_id": "USF-MANIFEST-001",
+              "service_name": "UNIVERSAL_SOLVER_FABRIC",
+              "version": "1.0.0",
+              "supported_operations": [
+                {
+                  "operation_name": "discover_solvers",
+                  "description": "Discover available solver capabilities matching query criteria including problem type, constraints, and resource requirements.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "problem_type"
+                    ],
+                    "properties": {
+                      "problem_type": {
+                        "type": "string",
+                        "enum": [
+                          "LP",
+                          "MILP",
+                          "QUBO",
+                          "TSP",
+                          "VRP",
+                          "CP",
+                          "NLP",
+                          "MINLP"
+                        ]
+                      },
+                      "required_constraints": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "enum": [
+                            "LINEAR",
+                            "NONLINEAR",
+                            "QUADRATIC",
+                            "LOGICAL",
+                            "GLOBAL",
+                            "CARDINALITY"
+                          ]
+                        }
+                      },
+                      "require_deterministic": {
+                        "type": "boolean"
+                      },
+                      "require_replay": {
+                        "type": "boolean"
+                      },
+                      "available_memory_mb": {
+                        "type": "integer"
+                      },
+                      "available_cores": {
+                        "type": "integer"
+                      },
+                      "max_variables": {
+                        "type": "integer"
+                      },
+                      "max_constraints": {
+                        "type": "integer"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "solvers": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "solver_id": {
+                              "type": "string"
+                            },
+                            "solver_name": {
+                              "type": "string"
+                            },
+                            "version": {
+                              "type": "string"
+                            },
+                            "supported_problem_types": {
+                              "type": "array"
+                            },
+                            "deterministic_capability": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": true
+                },
+                {
+                  "operation_name": "execute_optimization",
+                  "description": "Execute an optimization problem through the solver fabric. Automatically selects the best solver unless overridden. Produces replay-safe evidence.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "problem_schema"
+                    ],
+                    "properties": {
+                      "problem_schema": {
+                        "type": "object",
+                        "required": [
+                          "problem_type"
+                        ],
+                        "properties": {
+                          "problem_type": {
+                            "type": "string"
+                          },
+                          "required_constraints": {
+                            "type": "array"
+                          },
+                          "require_deterministic": {
+                            "type": "boolean"
+                          }
+                        }
+                      },
+                      "payload": {
+                        "type": "object"
+                      },
+                      "execution_constraints": {
+                        "type": "object",
+                        "properties": {
+                          "max_time_ms": {
+                            "type": "integer"
+                          },
+                          "max_memory_mb": {
+                            "type": "integer"
+                          }
+                        }
+                      },
+                      "solver_override": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "trace_id": {
+                        "type": "string"
+                      },
+                      "replay_id": {
+                        "type": "string"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "COMPLETED",
+                          "FAILED"
+                        ]
+                      },
+                      "provenance": {
+                        "type": "object",
+                        "properties": {
+                          "timestamp_start_ms": {
+                            "type": "integer"
+                          },
+                          "timestamp_end_ms": {
+                            "type": "integer"
+                          },
+                          "execution_duration_ms": {
+                            "type": "integer"
+                          },
+                          "fabric_version": {
+                            "type": "string"
+                          },
+                          "solver_id": {
+                            "type": "string"
+                          },
+                          "solver_version": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "deterministic_inputs": {
+                        "type": "object"
+                      },
+                      "result": {
+                        "type": "object"
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS",
+                    "ASYNCHRONOUS"
+                  ],
+                  "idempotent": false
+                },
+                {
+                  "operation_name": "get_solver_health",
+                  "description": "Query the health status of a registered solver.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "solver_id"
+                    ],
+                    "properties": {
+                      "solver_id": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "solver_id": {
+                        "type": "string"
+                      },
+                      "health_status": {
+                        "type": "string",
+                        "enum": [
+                          "ENABLED",
+                          "DISABLED",
+                          "UNKNOWN"
+                        ]
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": true
+                }
+              ],
+              "execution_modes": [
+                "SYNCHRONOUS",
+                "ASYNCHRONOUS"
+              ],
+              "determinism_guarantees": {
+                "deterministic_execution": true,
+                "deterministic_selection": true,
+                "deterministic_evidence": true,
+                "note": "Given identical inputs and solver seed, results are identical. Selection ranking is deterministic."
+              },
+              "replay_guarantees": {
+                "replay_safe": true,
+                "replay_metadata_captured": true,
+                "replay_fields": [
+                  "trace_id",
+                  "replay_id",
+                  "deterministic_inputs",
+                  "provenance"
+                ],
+                "note": "Every execution produces a replay-safe evidence package containing all state necessary for exact reconstruction."
+              },
+              "trust_requirements": {
+                "authentication": "TANTRA_SERVICE_IDENTITY",
+                "authorization": "CAPABILITY_REGISTRY_REGISTERED",
+                "encryption": "TLS_1_3_RECOMMENDED",
+                "integrity": "SHA256_EVIDENCE_CHAIN"
+              },
+              "evidence_guarantees": {
+                "evidence_per_execution": true,
+                "evidence_chain": true,
+                "evidence_format": "JSON",
+                "tamper_detection": "SHA256_HASH_CHAIN",
+                "note": "Every execution generates a signed evidence package chained to the previous execution."
+              },
+              "runtime_dependencies": [
+                {
+                  "name": "solver_registry",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "solver_selection_engine",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "execution_adapter",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "solver_contract_schema",
+                  "version": "1.0.0",
+                  "type": "SCHEMA"
+                }
+              ],
+              "version_compatibility": {
+                "compatible": [
+                  "1.0.0"
+                ],
+                "deprecated": [],
+                "unsupported": [],
+                "minimum_consumer_version": "1.0.0"
+              },
+              "security_requirements": {
+                "network_policy": "INTERNAL_ONLY",
+                "data_classification": "INTERNAL",
+                "audit_logging": true,
+                "evidence_retention_days": 90
+              },
+              "resource_requirements": {
+                "memory_mb_min": 512,
+                "cpu_cores_min": 1,
+                "disk_mb_min": 100,
+                "network": "INTERNAL_TCP"
+              },
+              "publication_timestamp": "2026-07-24T08:51:57.201138+00:00"
+            },
+            "versions": {
+              "service_id": "TANTRA-PSR-USF-001",
+              "compatible": [
+                "1.0.0"
+              ],
+              "deprecated": [
+                "0.9.0"
+              ],
+              "unsupported": [
+                "0.1.0",
+                "0.5.0"
+              ]
+            }
+          }
+        },
+        "usf_contracts": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/contracts",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-USF-001",
+            "contracts": [
+              {
+                "operation_name": "discover_solvers",
+                "description": "Discover available solver capabilities matching query criteria including problem type, constraints, and resource requirements.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "problem_type"
+                  ],
+                  "properties": {
+                    "problem_type": {
+                      "type": "string",
+                      "enum": [
+                        "LP",
+                        "MILP",
+                        "QUBO",
+                        "TSP",
+                        "VRP",
+                        "CP",
+                        "NLP",
+                        "MINLP"
+                      ]
+                    },
+                    "required_constraints": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "enum": [
+                          "LINEAR",
+                          "NONLINEAR",
+                          "QUADRATIC",
+                          "LOGICAL",
+                          "GLOBAL",
+                          "CARDINALITY"
+                        ]
+                      }
+                    },
+                    "require_deterministic": {
+                      "type": "boolean"
+                    },
+                    "require_replay": {
+                      "type": "boolean"
+                    },
+                    "available_memory_mb": {
+                      "type": "integer"
+                    },
+                    "available_cores": {
+                      "type": "integer"
+                    },
+                    "max_variables": {
+                      "type": "integer"
+                    },
+                    "max_constraints": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "solvers": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "solver_id": {
+                            "type": "string"
+                          },
+                          "solver_name": {
+                            "type": "string"
+                          },
+                          "version": {
+                            "type": "string"
+                          },
+                          "supported_problem_types": {
+                            "type": "array"
+                          },
+                          "deterministic_capability": {
+                            "type": "boolean"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": true
+              },
+              {
+                "operation_name": "execute_optimization",
+                "description": "Execute an optimization problem through the solver fabric. Automatically selects the best solver unless overridden. Produces replay-safe evidence.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "problem_schema"
+                  ],
+                  "properties": {
+                    "problem_schema": {
+                      "type": "object",
+                      "required": [
+                        "problem_type"
+                      ],
+                      "properties": {
+                        "problem_type": {
+                          "type": "string"
+                        },
+                        "required_constraints": {
+                          "type": "array"
+                        },
+                        "require_deterministic": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "payload": {
+                      "type": "object"
+                    },
+                    "execution_constraints": {
+                      "type": "object",
+                      "properties": {
+                        "max_time_ms": {
+                          "type": "integer"
+                        },
+                        "max_memory_mb": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "solver_override": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "trace_id": {
+                      "type": "string"
+                    },
+                    "replay_id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "COMPLETED",
+                        "FAILED"
+                      ]
+                    },
+                    "provenance": {
+                      "type": "object",
+                      "properties": {
+                        "timestamp_start_ms": {
+                          "type": "integer"
+                        },
+                        "timestamp_end_ms": {
+                          "type": "integer"
+                        },
+                        "execution_duration_ms": {
+                          "type": "integer"
+                        },
+                        "fabric_version": {
+                          "type": "string"
+                        },
+                        "solver_id": {
+                          "type": "string"
+                        },
+                        "solver_version": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "deterministic_inputs": {
+                      "type": "object"
+                    },
+                    "result": {
+                      "type": "object"
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS",
+                  "ASYNCHRONOUS"
+                ],
+                "idempotent": false
+              },
+              {
+                "operation_name": "get_solver_health",
+                "description": "Query the health status of a registered solver.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "solver_id"
+                  ],
+                  "properties": {
+                    "solver_id": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "solver_id": {
+                      "type": "string"
+                    },
+                    "health_status": {
+                      "type": "string",
+                      "enum": [
+                        "ENABLED",
+                        "DISABLED",
+                        "UNKNOWN"
+                      ]
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": true
+              }
+            ],
+            "count": 3
+          }
+        },
+        "usf_endpoints": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/endpoints",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-USF-001",
+            "endpoints": {
+              "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+              "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+              "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+              "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+              "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+              "version": "http://127.0.0.1:9010/platform/v1/version",
+              "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+            }
+          }
+        },
+        "usf_health": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+          "status": "OK",
+          "response": {
+            "status": "UP",
+            "service_id": "TANTRA-PSR-USF-001",
+            "service_status": "ACTIVE",
+            "version": "1.0.0",
+            "registration_timestamp": "2026-07-24T08:51:57.201108+00:00"
+          }
+        },
+        "usf_compatibility": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/compatibility",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-USF-001",
+            "current_version": "1.0.0",
+            "version_matrix": {
+              "service_id": "TANTRA-PSR-USF-001",
+              "compatible": [
+                "1.0.0"
+              ],
+              "deprecated": [
+                "0.9.0"
+              ],
+              "unsupported": [
+                "0.1.0",
+                "0.5.0"
+              ]
+            },
+            "runtime_type": "PROCESS",
+            "capability_category": "OPTIMIZATION"
+          }
+        },
+        "qcg_versions": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/versions",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-QCG-001",
+            "compatible": [
+              "1.0.0"
+            ],
+            "deprecated": [
+              "0.8.0"
+            ],
+            "unsupported": [
+              "0.1.0"
+            ]
+          }
+        },
+        "qcg_metadata": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata",
+          "status": "OK",
+          "response": {
+            "service": {
+              "platform_service_id": "TANTRA-PSR-QCG-001",
+              "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+              "service_name": "QCG_TRUST_VERIFICATION",
+              "version": "1.0.0",
+              "provider": "TANTRA Platform Engineering",
+              "owner": {
+                "team": "TANTRA Sovereign Core",
+                "contact": "qcg-trust@tantra.internal"
+              },
+              "runtime_type": "PROCESS",
+              "service_classification": "PLATFORM_SERVICE",
+              "capability_category": "VERIFICATION",
+              "status": "ACTIVE",
+              "registration_timestamp": "2026-07-24T08:51:57.219161+00:00",
+              "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+              "tags": [
+                "verification",
+                "trust",
+                "replay",
+                "consensus",
+                "quantum",
+                "deterministic"
+              ],
+              "endpoints": {
+                "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+                "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+                "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                "version": "http://127.0.0.1:9010/platform/v1/version",
+                "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+              },
+              "dependencies": []
+            },
+            "manifest": {
+              "manifest_id": "QCG-MANIFEST-001",
+              "service_name": "QCG_TRUST_VERIFICATION",
+              "version": "1.0.0",
+              "supported_operations": [
+                {
+                  "operation_name": "verify_replay",
+                  "description": "Verify that a message has not been replayed (duplicate/stale detection) and assign a monotonic sequence number.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "message_id",
+                      "issued_at"
+                    ],
+                    "properties": {
+                      "message_id": {
+                        "type": "string",
+                        "description": "Unique message/artifact ID to check"
+                      },
+                      "issued_at": {
+                        "type": "number",
+                        "description": "Unix timestamp of when the message was issued"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "is_valid": {
+                        "type": "boolean"
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": [
+                          "ACCEPTED",
+                          "REJECTED_DUPLICATE",
+                          "REJECTED_STALE"
+                        ]
+                      },
+                      "sequence_number": {
+                        "type": "integer"
+                      },
+                      "verification_hash": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": true
+                },
+                {
+                  "operation_name": "verify_trust",
+                  "description": "Validate producer identity, ECDSA signature, and authorization against the trust registry.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "contract"
+                    ],
+                    "properties": {
+                      "contract": {
+                        "type": "object",
+                        "description": "ComputationExecutionContract as dict"
+                      },
+                      "producer_public_key": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "passed": {
+                        "type": "boolean"
+                      },
+                      "halt_signal": {
+                        "type": "string"
+                      },
+                      "reason": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": true
+                },
+                {
+                  "operation_name": "execute_deterministic",
+                  "description": "Execute a contract through the blind runtime core producing a deterministic ACK and runtime hash.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "contract"
+                    ],
+                    "properties": {
+                      "contract": {
+                        "type": "object",
+                        "description": "ComputationExecutionContract as dict"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "contract_trace_id": {
+                        "type": "string"
+                      },
+                      "producer_type": {
+                        "type": "string"
+                      },
+                      "ack": {
+                        "type": "string"
+                      },
+                      "confidence": {
+                        "type": "number"
+                      },
+                      "runtime_hash": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": false
+                },
+                {
+                  "operation_name": "verify_consensus",
+                  "description": "Run Byzantine consensus across multiple nodes to verify execution validity.",
+                  "input_contract": {
+                    "type": "object",
+                    "required": [
+                      "contract",
+                      "producer_public_key"
+                    ],
+                    "properties": {
+                      "contract": {
+                        "type": "object"
+                      },
+                      "producer_public_key": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "output_contract": {
+                    "type": "object",
+                    "properties": {
+                      "consensus_reached": {
+                        "type": "boolean"
+                      },
+                      "agreement_percentage": {
+                        "type": "number"
+                      },
+                      "final_hash": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "execution_modes": [
+                    "SYNCHRONOUS"
+                  ],
+                  "idempotent": false
+                }
+              ],
+              "execution_modes": [
+                "SYNCHRONOUS"
+              ],
+              "determinism_guarantees": {
+                "deterministic_execution": true,
+                "deterministic_ack": true,
+                "deterministic_hash": true,
+                "note": "RuntimeCore processes every contract through an identical code path. Given identical inputs, the ACK and runtime_hash are identical."
+              },
+              "replay_guarantees": {
+                "replay_safe": true,
+                "replay_authority": "CanonicalReplayAuthority",
+                "replay_detection": [
+                  "DUPLICATE",
+                  "STALE"
+                ],
+                "replay_fields": [
+                  "sequence_number",
+                  "verification_hash",
+                  "lineage_record"
+                ],
+                "note": "CanonicalReplayAuthority is the sole replay authority. All replay state is persisted and deterministic."
+              },
+              "trust_requirements": {
+                "authentication": "ECDSA_SIGNATURE",
+                "authorization": "PRODUCER_REGISTRY",
+                "identity_verification": "ProducerVerificationLayer",
+                "key_management": "NODE_IDENTITY"
+              },
+              "evidence_guarantees": {
+                "evidence_per_execution": true,
+                "evidence_chain": true,
+                "evidence_format": "JSON",
+                "tamper_detection": "MERKLE_TREE",
+                "ledger_type": "EvidenceLedger"
+              },
+              "runtime_dependencies": [
+                {
+                  "name": "canonical_replay_authority",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "runtime_core",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "producer_verification",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "consensus_simulation",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "evidence_ledger",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                },
+                {
+                  "name": "governance_layer",
+                  "version": "1.0.0",
+                  "type": "INTERNAL"
+                }
+              ],
+              "version_compatibility": {
+                "compatible": [
+                  "1.0.0"
+                ],
+                "deprecated": [],
+                "unsupported": [],
+                "minimum_consumer_version": "1.0.0"
+              },
+              "security_requirements": {
+                "network_policy": "INTERNAL_ONLY",
+                "data_classification": "SOVEREIGN",
+                "audit_logging": true,
+                "evidence_retention_days": 365,
+                "byzantine_fault_tolerance": true,
+                "consensus_quorum_threshold": 0.66
+              },
+              "resource_requirements": {
+                "memory_mb_min": 256,
+                "cpu_cores_min": 1,
+                "disk_mb_min": 50,
+                "network": "INTERNAL_TCP",
+                "consensus_nodes_min": 3
+              },
+              "publication_timestamp": "2026-07-24T08:51:57.219182+00:00"
+            },
+            "versions": {
+              "service_id": "TANTRA-PSR-QCG-001",
+              "compatible": [
+                "1.0.0"
+              ],
+              "deprecated": [
+                "0.8.0"
+              ],
+              "unsupported": [
+                "0.1.0"
+              ]
+            }
+          }
+        },
+        "qcg_contracts": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/contracts",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-QCG-001",
+            "contracts": [
+              {
+                "operation_name": "verify_replay",
+                "description": "Verify that a message has not been replayed (duplicate/stale detection) and assign a monotonic sequence number.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "message_id",
+                    "issued_at"
+                  ],
+                  "properties": {
+                    "message_id": {
+                      "type": "string",
+                      "description": "Unique message/artifact ID to check"
+                    },
+                    "issued_at": {
+                      "type": "number",
+                      "description": "Unix timestamp of when the message was issued"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "is_valid": {
+                      "type": "boolean"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "ACCEPTED",
+                        "REJECTED_DUPLICATE",
+                        "REJECTED_STALE"
+                      ]
+                    },
+                    "sequence_number": {
+                      "type": "integer"
+                    },
+                    "verification_hash": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": true
+              },
+              {
+                "operation_name": "verify_trust",
+                "description": "Validate producer identity, ECDSA signature, and authorization against the trust registry.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "contract"
+                  ],
+                  "properties": {
+                    "contract": {
+                      "type": "object",
+                      "description": "ComputationExecutionContract as dict"
+                    },
+                    "producer_public_key": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "passed": {
+                      "type": "boolean"
+                    },
+                    "halt_signal": {
+                      "type": "string"
+                    },
+                    "reason": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": true
+              },
+              {
+                "operation_name": "execute_deterministic",
+                "description": "Execute a contract through the blind runtime core producing a deterministic ACK and runtime hash.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "contract"
+                  ],
+                  "properties": {
+                    "contract": {
+                      "type": "object",
+                      "description": "ComputationExecutionContract as dict"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "contract_trace_id": {
+                      "type": "string"
+                    },
+                    "producer_type": {
+                      "type": "string"
+                    },
+                    "ack": {
+                      "type": "string"
+                    },
+                    "confidence": {
+                      "type": "number"
+                    },
+                    "runtime_hash": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": false
+              },
+              {
+                "operation_name": "verify_consensus",
+                "description": "Run Byzantine consensus across multiple nodes to verify execution validity.",
+                "input_contract": {
+                  "type": "object",
+                  "required": [
+                    "contract",
+                    "producer_public_key"
+                  ],
+                  "properties": {
+                    "contract": {
+                      "type": "object"
+                    },
+                    "producer_public_key": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "output_contract": {
+                  "type": "object",
+                  "properties": {
+                    "consensus_reached": {
+                      "type": "boolean"
+                    },
+                    "agreement_percentage": {
+                      "type": "number"
+                    },
+                    "final_hash": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "execution_modes": [
+                  "SYNCHRONOUS"
+                ],
+                "idempotent": false
+              }
+            ],
+            "count": 4
+          }
+        },
+        "qcg_endpoints": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/endpoints",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-QCG-001",
+            "endpoints": {
+              "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+              "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+              "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+              "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+              "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+              "version": "http://127.0.0.1:9010/platform/v1/version",
+              "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+            }
+          }
+        },
+        "qcg_health": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+          "status": "OK",
+          "response": {
+            "status": "UP",
+            "service_id": "TANTRA-PSR-QCG-001",
+            "service_status": "ACTIVE",
+            "version": "1.0.0",
+            "registration_timestamp": "2026-07-24T08:51:57.219161+00:00"
+          }
+        },
+        "qcg_compatibility": {
+          "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/compatibility",
+          "status": "OK",
+          "response": {
+            "service_id": "TANTRA-PSR-QCG-001",
+            "current_version": "1.0.0",
+            "version_matrix": {
+              "service_id": "TANTRA-PSR-QCG-001",
+              "compatible": [
+                "1.0.0"
+              ],
+              "deprecated": [
+                "0.8.0"
+              ],
+              "unsupported": [
+                "0.1.0"
+              ]
+            },
+            "runtime_type": "PROCESS",
+            "capability_category": "VERIFICATION"
+          }
+        },
+        "server_health": {
+          "url": "http://127.0.0.1:9010/platform/v1/health",
+          "status": "OK",
+          "response": {
+            "status": "UP",
+            "version": "1.0.0",
+            "uptime_seconds": 0.33,
+            "total_requests": 16,
+            "registry_version": "1.0.0"
+          }
+        },
+        "server_readiness": {
+          "url": "http://127.0.0.1:9010/platform/v1/readiness",
+          "status": "OK",
+          "response": {
+            "ready": true,
+            "services_registered": 2,
+            "version": "1.0.0"
+          }
+        },
+        "server_evidence": {
+          "url": "http://127.0.0.1:9010/platform/v1/evidence",
+          "status": "OK",
+          "response": {
+            "evidence": [
+              {
+                "evidence_id": "c7dc5a22-135c-4f00-941b-0a0ce0796de3",
+                "event_type": "SERVICE_REGISTERED",
+                "service_id": "TANTRA-PSR-USF-001",
+                "timestamp": "2026-07-24T08:51:57.201213+00:00",
+                "details": {
+                  "service_name": "UNIVERSAL_SOLVER_FABRIC",
+                  "version": "1.0.0",
+                  "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+                  "status": "ACTIVE",
+                  "registration_hash": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+                  "has_manifest": true
+                },
+                "evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734",
+                "previous_evidence_hash": "9a9b162a21fc3e957ea53d4d174eac82f527616cd7e5205671b92c9d1de4d6ab"
+              },
+              {
+                "evidence_id": "b755cbd9-529d-48a9-833e-7de81f454f08",
+                "event_type": "SERVICE_REGISTERED",
+                "service_id": "TANTRA-PSR-QCG-001",
+                "timestamp": "2026-07-24T08:51:57.219218+00:00",
+                "details": {
+                  "service_name": "QCG_TRUST_VERIFICATION",
+                  "version": "1.0.0",
+                  "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+                  "status": "ACTIVE",
+                  "registration_hash": "ade9229bc6b1b100df509f2ffc83ec45909ddbb576822b14c771bfd59d20f894",
+                  "has_manifest": true
+                },
+                "evidence_hash": "3bf3e5cf2648da3fc1c158976b41c60e5af081e69bfc0dd644cb082548850653",
+                "previous_evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734"
+              }
+            ],
+            "chain_length": 2,
+            "chain_valid": true,
+            "head_hash": "3bf3e5cf2648da3fc1c158976b41c60e5af081e69bfc0dd644cb082548850653"
+          }
+        },
+        "server_version": {
+          "url": "http://127.0.0.1:9010/platform/v1/version",
+          "status": "OK",
+          "response": {
+            "discovery_server_version": "1.0.0",
+            "registry_version": "1.0.0",
+            "api_version": "v1"
+          }
+        },
+        "server_metrics": {
+          "url": "http://127.0.0.1:9010/platform/v1/metrics",
+          "status": "OK",
+          "response_length": 625
+        }
+      }
+    },
+    {
+      "step": "VERSION_NEGOTIATION",
+      "results": [
+        {
+          "service_id": "TANTRA-PSR-USF-001",
+          "requested_version": "1.0.0",
+          "expected": "COMPATIBLE",
+          "actual": "COMPATIBLE",
+          "passed": true,
+          "response": {
+            "status": "COMPATIBLE",
+            "requested_version": "1.0.0",
+            "service_id": "TANTRA-PSR-USF-001",
+            "message": "Version 1.0.0 is fully supported.",
+            "negotiated_version": "1.0.0",
+            "timestamp": "2026-07-24T08:51:57.237597+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-USF-001",
+          "requested_version": "0.9.0",
+          "expected": "DEPRECATED",
+          "actual": "DEPRECATED",
+          "passed": true,
+          "response": {
+            "status": "DEPRECATED",
+            "requested_version": "0.9.0",
+            "service_id": "TANTRA-PSR-USF-001",
+            "message": "Version 0.9.0 is deprecated. Please migrate to 1.0.0.",
+            "negotiated_version": "0.9.0",
+            "suggested_versions": [
+              "1.0.0"
+            ],
+            "timestamp": "2026-07-24T08:51:57.238537+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-USF-001",
+          "requested_version": "0.1.0",
+          "expected": "UNSUPPORTED",
+          "actual": "UNSUPPORTED",
+          "passed": true,
+          "response": {
+            "status": "UNSUPPORTED",
+            "requested_version": "0.1.0",
+            "service_id": "TANTRA-PSR-USF-001",
+            "message": "Version 0.1.0 is no longer supported. Request rejected.",
+            "negotiated_version": null,
+            "suggested_versions": [
+              "1.0.0"
+            ],
+            "timestamp": "2026-07-24T08:51:57.239360+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-USF-001",
+          "requested_version": "99.0.0",
+          "expected": "UNSUPPORTED",
+          "actual": "UNSUPPORTED",
+          "passed": true,
+          "response": {
+            "status": "UNSUPPORTED",
+            "requested_version": "99.0.0",
+            "service_id": "TANTRA-PSR-USF-001",
+            "message": "Version 99.0.0 is not recognised. Available versions: ['1.0.0']",
+            "negotiated_version": null,
+            "suggested_versions": [
+              "1.0.0"
+            ],
+            "timestamp": "2026-07-24T08:51:57.240223+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-QCG-001",
+          "requested_version": "1.0.0",
+          "expected": "COMPATIBLE",
+          "actual": "COMPATIBLE",
+          "passed": true,
+          "response": {
+            "status": "COMPATIBLE",
+            "requested_version": "1.0.0",
+            "service_id": "TANTRA-PSR-QCG-001",
+            "message": "Version 1.0.0 is fully supported.",
+            "negotiated_version": "1.0.0",
+            "timestamp": "2026-07-24T08:51:57.241083+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-QCG-001",
+          "requested_version": "0.8.0",
+          "expected": "DEPRECATED",
+          "actual": "DEPRECATED",
+          "passed": true,
+          "response": {
+            "status": "DEPRECATED",
+            "requested_version": "0.8.0",
+            "service_id": "TANTRA-PSR-QCG-001",
+            "message": "Version 0.8.0 is deprecated. Please migrate to 1.0.0.",
+            "negotiated_version": "0.8.0",
+            "suggested_versions": [
+              "1.0.0"
+            ],
+            "timestamp": "2026-07-24T08:51:57.241888+00:00"
+          }
+        },
+        {
+          "service_id": "TANTRA-PSR-QCG-001",
+          "requested_version": "0.1.0",
+          "expected": "UNSUPPORTED",
+          "actual": "UNSUPPORTED",
+          "passed": true,
+          "response": {
+            "status": "UNSUPPORTED",
+            "requested_version": "0.1.0",
+            "service_id": "TANTRA-PSR-QCG-001",
+            "message": "Version 0.1.0 is no longer supported. Request rejected.",
+            "negotiated_version": null,
+            "suggested_versions": [
+              "1.0.0"
+            ],
+            "timestamp": "2026-07-24T08:51:57.242693+00:00"
+          }
+        },
+        {
+          "service_id": "NONEXISTENT-SERVICE",
+          "requested_version": "1.0.0",
+          "expected": "UNKNOWN_SERVICE",
+          "actual": "UNKNOWN_SERVICE",
+          "passed": true,
+          "response": {
+            "status": "UNKNOWN_SERVICE",
+            "requested_version": "1.0.0",
+            "service_id": "NONEXISTENT-SERVICE",
+            "message": "Service 'NONEXISTENT-SERVICE' is not registered for version negotiation.",
+            "suggested_versions": [],
+            "timestamp": "2026-07-24T08:51:57.243594+00:00"
+          }
+        }
+      ]
+    },
+    {
+      "step": "LIFECYCLE_MANAGEMENT",
+      "results": [
+        {
+          "action": "disable",
+          "expected_state": "DRAFT",
+          "actual_state": "DRAFT",
+          "passed": true,
+          "event": {
+            "event_id": "e80e1717-6197-4c00-b2c1-a9a635ed1624",
+            "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+            "action": "DISABLE",
+            "previous_state": "ACTIVE",
+            "new_state": "DRAFT",
+            "actor": "RUNNER",
+            "reason": "Disabled by operator",
+            "timestamp": "2026-07-24T08:51:57.245135+00:00",
+            "event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+            "previous_event_hash": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf",
+            "replay_metadata": {
+              "chain_length": 4,
+              "head_hash_before": "d577e1f5da74936b29d6ef06f6dcbf9a6dfe7f3910d061e5e2f32fc1fb689eaf"
+            }
+          }
+        },
+        {
+          "action": "enable",
+          "expected_state": "ACTIVE",
+          "actual_state": "ACTIVE",
+          "passed": true,
+          "event": {
+            "event_id": "c78a2d56-6d3b-4b20-a0d7-41637ed1103b",
+            "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+            "action": "ENABLE",
+            "previous_state": "DRAFT",
+            "new_state": "ACTIVE",
+            "actor": "RUNNER",
+            "reason": "Enabled by operator",
+            "timestamp": "2026-07-24T08:51:57.245180+00:00",
+            "event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+            "previous_event_hash": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a",
+            "replay_metadata": {
+              "chain_length": 5,
+              "head_hash_before": "ccb11f2233b1dc8ffb903a882573e116b3fa3ed57ef947ecde7a5f05e76cf44a"
+            }
+          }
+        },
+        {
+          "action": "deprecate",
+          "expected_state": "DEPRECATED",
+          "actual_state": "DEPRECATED",
+          "passed": true,
+          "event": {
+            "event_id": "8ac29e61-7eb9-474a-a04f-a29316e53e8b",
+            "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+            "action": "DEPRECATE",
+            "previous_state": "ACTIVE",
+            "new_state": "DEPRECATED",
+            "actor": "RUNNER",
+            "reason": "Test deprecation",
+            "timestamp": "2026-07-24T08:51:57.245215+00:00",
+            "event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+            "previous_event_hash": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011",
+            "replay_metadata": {
+              "chain_length": 6,
+              "head_hash_before": "6f34ae552b45a6f5975ed8230b791e14ce21586d16d624e2e83ceba800cf8011"
+            }
+          }
+        },
+        {
+          "action": "retire",
+          "expected_state": "RETIRED",
+          "actual_state": "RETIRED",
+          "passed": true,
+          "event": {
+            "event_id": "bbee4c54-1d22-475f-9d59-8c8ddca1826f",
+            "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+            "action": "RETIRE",
+            "previous_state": "DEPRECATED",
+            "new_state": "RETIRED",
+            "actor": "RUNNER",
+            "reason": "Test retirement",
+            "timestamp": "2026-07-24T08:51:57.245247+00:00",
+            "event_hash": "c7dbdeee0c40872843364f3a91eef906e739e1795753c50d871205156da303e5",
+            "previous_event_hash": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef",
+            "replay_metadata": {
+              "chain_length": 7,
+              "head_hash_before": "5e403ab141504fdece5ba7c390319b2cdac54c1635911a1574d8c3676f5922ef"
+            }
+          }
+        },
+        {
+          "chain_valid": true
+        }
+      ]
+    },
+    {
+      "step": "DISCOVERY_VALIDATION",
+      "results": {
+        "platform_discovery": {
+          "services": [
+            {
+              "platform_service_id": "TANTRA-PSR-USF-001",
+              "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+              "service_name": "UNIVERSAL_SOLVER_FABRIC",
+              "version": "1.0.0",
+              "provider": "TANTRA Platform Engineering",
+              "owner": {
+                "team": "TANTRA Sovereign Core",
+                "contact": "solver-fabric@tantra.internal"
+              },
+              "runtime_type": "PROCESS",
+              "service_classification": "PLATFORM_SERVICE",
+              "capability_category": "OPTIMIZATION",
+              "status": "ACTIVE",
+              "registration_timestamp": "2026-07-24T08:51:57.201108+00:00",
+              "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+              "tags": [
+                "optimization",
+                "solver",
+                "deterministic",
+                "replay-safe",
+                "evidence"
+              ],
+              "endpoints": {
+                "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+                "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+                "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                "version": "http://127.0.0.1:9010/platform/v1/version",
+                "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+              },
+              "dependencies": []
+            },
+            {
+              "platform_service_id": "TANTRA-PSR-QCG-001",
+              "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+              "service_name": "QCG_TRUST_VERIFICATION",
+              "version": "1.0.0",
+              "provider": "TANTRA Platform Engineering",
+              "owner": {
+                "team": "TANTRA Sovereign Core",
+                "contact": "qcg-trust@tantra.internal"
+              },
+              "runtime_type": "PROCESS",
+              "service_classification": "PLATFORM_SERVICE",
+              "capability_category": "VERIFICATION",
+              "status": "ACTIVE",
+              "registration_timestamp": "2026-07-24T08:51:57.219161+00:00",
+              "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+              "tags": [
+                "verification",
+                "trust",
+                "replay",
+                "consensus",
+                "quantum",
+                "deterministic"
+              ],
+              "endpoints": {
+                "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+                "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+                "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+                "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+                "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+                "version": "http://127.0.0.1:9010/platform/v1/version",
+                "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+              },
+              "dependencies": []
+            },
+            {
+              "platform_service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+              "capability_id": "00000000-0000-5000-a000-000000000001",
+              "service_name": "LIFECYCLE_TEST_SERVICE",
+              "version": "1.0.0",
+              "provider": "TANTRA Platform Engineering",
+              "owner": {
+                "team": "TANTRA Test",
+                "contact": "test@tantra.internal"
+              },
+              "runtime_type": "PROCESS",
+              "service_classification": "PLATFORM_SERVICE",
+              "capability_category": "VERIFICATION",
+              "status": "RETIRED",
+              "registration_timestamp": "2026-07-24T08:51:57.244996+00:00",
+              "description": "",
+              "tags": [],
+              "endpoints": {},
+              "dependencies": []
+            }
+          ],
+          "count": 3,
+          "registry_version": "1.0.0"
+        },
+        "capability_registry_discovery": [
+          {
+            "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+            "capability_name": "UNIVERSAL_SOLVER_FABRIC",
+            "owner": {
+              "team": "TANTRA Sovereign Core",
+              "contact": "solver-fabric@tantra.internal"
+            },
+            "version": "1.0.0",
+            "status": "ACTIVE",
+            "scope": "SYSTEM",
+            "dependencies": [],
+            "attachment_rules": {
+              "attachment_type": "api_linked",
+              "protocol": "http_rest",
+              "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001"
+            },
+            "authority_limits": {
+              "owns": [
+                "solver discovery",
+                "solver selection",
+                "evidence-wrapped execution"
+              ],
+              "does_not_own": [
+                "contract validation",
+                "replay detection",
+                "governance policy"
+              ]
+            },
+            "inputs": [
+              {
+                "name": "problem_schema",
+                "type": "object",
+                "required": true,
+                "description": "Optimization problem definition"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "evidence_package",
+                "type": "object",
+                "description": "Replay-safe execution evidence"
+              }
+            ],
+            "consumers": [],
+            "documentation_reference": {
+              "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+              "schema_file": "platform_capability_manifest.json"
+            }
+          },
+          {
+            "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+            "capability_name": "QCG_TRUST_VERIFICATION",
+            "owner": {
+              "team": "TANTRA Sovereign Core",
+              "contact": "qcg-trust@tantra.internal"
+            },
+            "version": "1.0.0",
+            "status": "ACTIVE",
+            "scope": "SYSTEM",
+            "dependencies": [],
+            "attachment_rules": {
+              "attachment_type": "api_linked",
+              "protocol": "http_rest",
+              "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001"
+            },
+            "authority_limits": {
+              "owns": [
+                "replay verification",
+                "trust validation",
+                "deterministic execution",
+                "Byzantine consensus"
+              ],
+              "does_not_own": [
+                "solver selection",
+                "problem formulation",
+                "budget approval"
+              ]
+            },
+            "inputs": [
+              {
+                "name": "contract",
+                "type": "object",
+                "required": true,
+                "description": "ComputationExecutionContract"
+              }
+            ],
+            "outputs": [
+              {
+                "name": "verification_result",
+                "type": "object",
+                "description": "Trust verification result"
+              }
+            ],
+            "consumers": [],
+            "documentation_reference": {
+              "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+              "schema_file": "platform_capability_manifest.json"
+            }
+          }
+        ],
+        "usf_name_discovery": {
+          "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+          "capability_name": "UNIVERSAL_SOLVER_FABRIC",
+          "owner": {
+            "team": "TANTRA Sovereign Core",
+            "contact": "solver-fabric@tantra.internal"
+          },
+          "version": "1.0.0",
+          "status": "ACTIVE",
+          "scope": "SYSTEM",
+          "dependencies": [],
+          "attachment_rules": {
+            "attachment_type": "api_linked",
+            "protocol": "http_rest",
+            "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001"
+          },
+          "authority_limits": {
+            "owns": [
+              "solver discovery",
+              "solver selection",
+              "evidence-wrapped execution"
+            ],
+            "does_not_own": [
+              "contract validation",
+              "replay detection",
+              "governance policy"
+            ]
+          },
+          "inputs": [
+            {
+              "name": "problem_schema",
+              "type": "object",
+              "required": true,
+              "description": "Optimization problem definition"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "evidence_package",
+              "type": "object",
+              "description": "Replay-safe execution evidence"
+            }
+          ],
+          "consumers": [],
+          "documentation_reference": {
+            "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+            "schema_file": "platform_capability_manifest.json"
+          }
+        },
+        "qcg_name_discovery": {
+          "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+          "capability_name": "QCG_TRUST_VERIFICATION",
+          "owner": {
+            "team": "TANTRA Sovereign Core",
+            "contact": "qcg-trust@tantra.internal"
+          },
+          "version": "1.0.0",
+          "status": "ACTIVE",
+          "scope": "SYSTEM",
+          "dependencies": [],
+          "attachment_rules": {
+            "attachment_type": "api_linked",
+            "protocol": "http_rest",
+            "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001"
+          },
+          "authority_limits": {
+            "owns": [
+              "replay verification",
+              "trust validation",
+              "deterministic execution",
+              "Byzantine consensus"
+            ],
+            "does_not_own": [
+              "solver selection",
+              "problem formulation",
+              "budget approval"
+            ]
+          },
+          "inputs": [
+            {
+              "name": "contract",
+              "type": "object",
+              "required": true,
+              "description": "ComputationExecutionContract"
+            }
+          ],
+          "outputs": [
+            {
+              "name": "verification_result",
+              "type": "object",
+              "description": "Trust verification result"
+            }
+          ],
+          "consumers": [],
+          "documentation_reference": {
+            "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+            "schema_file": "platform_capability_manifest.json"
+          }
+        }
+      }
+    },
+    {
+      "step": "REPLAY_DETERMINISM",
+      "results": {
+        "registration_hash_1": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+        "registration_hash_2": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+        "hashes_match": true,
+        "deterministic": true,
+        "manifest_hash_1": "093e67a871ab2f9acced539183635353ad7a103b135c62fd2f5e6d3e96e96086",
+        "manifest_hash_2": "093e67a871ab2f9acced539183635353ad7a103b135c62fd2f5e6d3e96e96086",
+        "manifest_hashes_match": true
+      }
+    }
+  ],
+  "run_completed": "2026-07-24T08:51:57.256152+00:00"
+}

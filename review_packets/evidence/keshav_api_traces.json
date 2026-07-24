@@ -1,24 +1,24 @@
 {
   "_metadata": {
-    "captured_at": "2026-07-17T09:36:32.491701+00:00",
+    "captured_at": "2026-07-18T07:39:07.242926+00:00",
     "description": "Raw KESHAV API interaction log with timestamps and latencies",
     "file": "keshav_api_traces.json"
   },
   "data": [
     {
-      "timestamp": "2026-07-17T09:36:23.241601+00:00",
+      "timestamp": "2026-07-18T07:39:00.737840+00:00",
       "method": "GET",
       "endpoint": "/health",
       "url": "https://keshav-cia7.onrender.com/health",
       "request_body": null,
       "status_code": 0,
       "response_body": null,
-      "latency_ms": 15087.58,
+      "latency_ms": 15117.24,
       "error": "The read operation timed out",
       "success": false
     },
     {
-      "timestamp": "2026-07-17T09:36:31.183057+00:00",
+      "timestamp": "2026-07-18T07:39:06.028497+00:00",
       "method": "GET",
       "endpoint": "/metrics/json",
       "url": "https://keshav-cia7.onrender.com/metrics/json",
@@ -34,12 +34,12 @@
         "severity_distribution": {},
         "unique_traces_processed": 0
       },
-      "latency_ms": 7941.0,
+      "latency_ms": 5286.36,
       "error": null,
       "success": true
     },
     {
-      "timestamp": "2026-07-17T09:36:31.583411+00:00",
+      "timestamp": "2026-07-18T07:39:06.284087+00:00",
       "method": "POST",
       "endpoint": "/analyze",
       "url": "https://keshav-cia7.onrender.com/analyze",
@@ -75,14 +75,14 @@
         "resolution_signal": null,
         "impact_score": 0,
         "severity": "LOW",
-        "timestamp": "2026-07-17T09:35:28Z"
+        "timestamp": "2026-07-18T07:38:02Z"
       },
-      "latency_ms": 399.99,
+      "latency_ms": 255.18,
       "error": null,
       "success": true
     },
     {
-      "timestamp": "2026-07-17T09:36:31.842085+00:00",
+      "timestamp": "2026-07-18T07:39:06.931085+00:00",
       "method": "POST",
       "endpoint": "/analyze",
       "url": "https://keshav-cia7.onrender.com/analyze",
@@ -138,14 +138,14 @@
         "resolution_signal": "UNBLOCK_DEPENDENCY:T1",
         "impact_score": 8,
         "severity": "MEDIUM",
-        "timestamp": "2026-07-17T09:35:29Z"
+        "timestamp": "2026-07-18T07:38:03Z"
       },
-      "latency_ms": 258.28,
+      "latency_ms": 646.61,
       "error": null,
       "success": true
     },
     {
-      "timestamp": "2026-07-17T09:36:32.490505+00:00",
+      "timestamp": "2026-07-18T07:39:07.198589+00:00",
       "method": "POST",
       "endpoint": "/analyze",
       "url": "https://keshav-cia7.onrender.com/analyze",
@@ -181,9 +181,9 @@
         "resolution_signal": null,
         "impact_score": 0,
         "severity": "LOW",
-        "timestamp": "2026-07-17T09:35:29Z"
+        "timestamp": "2026-07-18T07:38:03Z"
       },
-      "latency_ms": 648.05,
+      "latency_ms": 267.1,
       "error": null,
       "success": true
     }

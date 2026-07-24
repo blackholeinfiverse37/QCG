@@ -1,0 +1,9 @@
+{
+  "url": "http://127.0.0.1:9010/platform/v1/readiness",
+  "status": "OK",
+  "response": {
+    "ready": true,
+    "services_registered": 2,
+    "version": "1.0.0"
+  }
+}

@@ -1,0 +1,297 @@
+{
+  "platform_discovery": {
+    "services": [
+      {
+        "platform_service_id": "TANTRA-PSR-USF-001",
+        "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+        "service_name": "UNIVERSAL_SOLVER_FABRIC",
+        "version": "1.0.0",
+        "provider": "TANTRA Platform Engineering",
+        "owner": {
+          "team": "TANTRA Sovereign Core",
+          "contact": "solver-fabric@tantra.internal"
+        },
+        "runtime_type": "PROCESS",
+        "service_classification": "PLATFORM_SERVICE",
+        "capability_category": "OPTIMIZATION",
+        "status": "ACTIVE",
+        "registration_timestamp": "2026-07-24T08:51:57.201108+00:00",
+        "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+        "tags": [
+          "optimization",
+          "solver",
+          "deterministic",
+          "replay-safe",
+          "evidence"
+        ],
+        "endpoints": {
+          "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+          "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+          "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+          "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+          "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+          "version": "http://127.0.0.1:9010/platform/v1/version",
+          "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+        },
+        "dependencies": []
+      },
+      {
+        "platform_service_id": "TANTRA-PSR-QCG-001",
+        "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+        "service_name": "QCG_TRUST_VERIFICATION",
+        "version": "1.0.0",
+        "provider": "TANTRA Platform Engineering",
+        "owner": {
+          "team": "TANTRA Sovereign Core",
+          "contact": "qcg-trust@tantra.internal"
+        },
+        "runtime_type": "PROCESS",
+        "service_classification": "PLATFORM_SERVICE",
+        "capability_category": "VERIFICATION",
+        "status": "ACTIVE",
+        "registration_timestamp": "2026-07-24T08:51:57.219161+00:00",
+        "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+        "tags": [
+          "verification",
+          "trust",
+          "replay",
+          "consensus",
+          "quantum",
+          "deterministic"
+        ],
+        "endpoints": {
+          "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+          "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+          "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+          "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+          "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+          "version": "http://127.0.0.1:9010/platform/v1/version",
+          "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+        },
+        "dependencies": []
+      },
+      {
+        "platform_service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+        "capability_id": "00000000-0000-5000-a000-000000000001",
+        "service_name": "LIFECYCLE_TEST_SERVICE",
+        "version": "1.0.0",
+        "provider": "TANTRA Platform Engineering",
+        "owner": {
+          "team": "TANTRA Test",
+          "contact": "test@tantra.internal"
+        },
+        "runtime_type": "PROCESS",
+        "service_classification": "PLATFORM_SERVICE",
+        "capability_category": "VERIFICATION",
+        "status": "RETIRED",
+        "registration_timestamp": "2026-07-24T08:51:57.244996+00:00",
+        "description": "",
+        "tags": [],
+        "endpoints": {},
+        "dependencies": []
+      }
+    ],
+    "count": 3,
+    "registry_version": "1.0.0"
+  },
+  "capability_registry_discovery": [
+    {
+      "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+      "capability_name": "UNIVERSAL_SOLVER_FABRIC",
+      "owner": {
+        "team": "TANTRA Sovereign Core",
+        "contact": "solver-fabric@tantra.internal"
+      },
+      "version": "1.0.0",
+      "status": "ACTIVE",
+      "scope": "SYSTEM",
+      "dependencies": [],
+      "attachment_rules": {
+        "attachment_type": "api_linked",
+        "protocol": "http_rest",
+        "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001"
+      },
+      "authority_limits": {
+        "owns": [
+          "solver discovery",
+          "solver selection",
+          "evidence-wrapped execution"
+        ],
+        "does_not_own": [
+          "contract validation",
+          "replay detection",
+          "governance policy"
+        ]
+      },
+      "inputs": [
+        {
+          "name": "problem_schema",
+          "type": "object",
+          "required": true,
+          "description": "Optimization problem definition"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "evidence_package",
+          "type": "object",
+          "description": "Replay-safe execution evidence"
+        }
+      ],
+      "consumers": [],
+      "documentation_reference": {
+        "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+        "schema_file": "platform_capability_manifest.json"
+      }
+    },
+    {
+      "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+      "capability_name": "QCG_TRUST_VERIFICATION",
+      "owner": {
+        "team": "TANTRA Sovereign Core",
+        "contact": "qcg-trust@tantra.internal"
+      },
+      "version": "1.0.0",
+      "status": "ACTIVE",
+      "scope": "SYSTEM",
+      "dependencies": [],
+      "attachment_rules": {
+        "attachment_type": "api_linked",
+        "protocol": "http_rest",
+        "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001"
+      },
+      "authority_limits": {
+        "owns": [
+          "replay verification",
+          "trust validation",
+          "deterministic execution",
+          "Byzantine consensus"
+        ],
+        "does_not_own": [
+          "solver selection",
+          "problem formulation",
+          "budget approval"
+        ]
+      },
+      "inputs": [
+        {
+          "name": "contract",
+          "type": "object",
+          "required": true,
+          "description": "ComputationExecutionContract"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "verification_result",
+          "type": "object",
+          "description": "Trust verification result"
+        }
+      ],
+      "consumers": [],
+      "documentation_reference": {
+        "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+        "schema_file": "platform_capability_manifest.json"
+      }
+    }
+  ],
+  "usf_name_discovery": {
+    "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+    "capability_name": "UNIVERSAL_SOLVER_FABRIC",
+    "owner": {
+      "team": "TANTRA Sovereign Core",
+      "contact": "solver-fabric@tantra.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [],
+    "attachment_rules": {
+      "attachment_type": "api_linked",
+      "protocol": "http_rest",
+      "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001"
+    },
+    "authority_limits": {
+      "owns": [
+        "solver discovery",
+        "solver selection",
+        "evidence-wrapped execution"
+      ],
+      "does_not_own": [
+        "contract validation",
+        "replay detection",
+        "governance policy"
+      ]
+    },
+    "inputs": [
+      {
+        "name": "problem_schema",
+        "type": "object",
+        "required": true,
+        "description": "Optimization problem definition"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "evidence_package",
+        "type": "object",
+        "description": "Replay-safe execution evidence"
+      }
+    ],
+    "consumers": [],
+    "documentation_reference": {
+      "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+      "schema_file": "platform_capability_manifest.json"
+    }
+  },
+  "qcg_name_discovery": {
+    "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+    "capability_name": "QCG_TRUST_VERIFICATION",
+    "owner": {
+      "team": "TANTRA Sovereign Core",
+      "contact": "qcg-trust@tantra.internal"
+    },
+    "version": "1.0.0",
+    "status": "ACTIVE",
+    "scope": "SYSTEM",
+    "dependencies": [],
+    "attachment_rules": {
+      "attachment_type": "api_linked",
+      "protocol": "http_rest",
+      "endpoint": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001"
+    },
+    "authority_limits": {
+      "owns": [
+        "replay verification",
+        "trust validation",
+        "deterministic execution",
+        "Byzantine consensus"
+      ],
+      "does_not_own": [
+        "solver selection",
+        "problem formulation",
+        "budget approval"
+      ]
+    },
+    "inputs": [
+      {
+        "name": "contract",
+        "type": "object",
+        "required": true,
+        "description": "ComputationExecutionContract"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "verification_result",
+        "type": "object",
+        "description": "Trust verification result"
+      }
+    ],
+    "consumers": [],
+    "documentation_reference": {
+      "primary": "docs/PLATFORM_SERVICE_ARCHITECTURE.md",
+      "schema_file": "platform_capability_manifest.json"
+    }
+  }
+}

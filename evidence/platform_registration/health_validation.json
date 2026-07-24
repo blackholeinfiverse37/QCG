@@ -1,0 +1,35 @@
+{
+  "usf_health": {
+    "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+    "status": "OK",
+    "response": {
+      "status": "UP",
+      "service_id": "TANTRA-PSR-USF-001",
+      "service_status": "ACTIVE",
+      "version": "1.0.0",
+      "registration_timestamp": "2026-07-24T08:51:57.201108+00:00"
+    }
+  },
+  "qcg_health": {
+    "url": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+    "status": "OK",
+    "response": {
+      "status": "UP",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "service_status": "ACTIVE",
+      "version": "1.0.0",
+      "registration_timestamp": "2026-07-24T08:51:57.219161+00:00"
+    }
+  },
+  "server_health": {
+    "url": "http://127.0.0.1:9010/platform/v1/health",
+    "status": "OK",
+    "response": {
+      "status": "UP",
+      "version": "1.0.0",
+      "uptime_seconds": 0.33,
+      "total_requests": 16,
+      "registry_version": "1.0.0"
+    }
+  }
+}

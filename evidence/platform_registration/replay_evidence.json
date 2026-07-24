@@ -1,0 +1,9 @@
+{
+  "registration_hash_1": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+  "registration_hash_2": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+  "hashes_match": true,
+  "deterministic": true,
+  "manifest_hash_1": "093e67a871ab2f9acced539183635353ad7a103b135c62fd2f5e6d3e96e96086",
+  "manifest_hash_2": "093e67a871ab2f9acced539183635353ad7a103b135c62fd2f5e6d3e96e96086",
+  "manifest_hashes_match": true
+}

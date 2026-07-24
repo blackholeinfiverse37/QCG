@@ -1,33 +1,24 @@
 # Code Packets — File Purposes
 
-## New Files (Ecosystem Convergence Phase)
+This directory contains references to the critical modified files and new files created during the Ecosystem Convergence integration phase.
 
-| File | Purpose |
-|------|---------|
-| `keshav_live_client.py` | Production HTTP client for live KESHAV API with structured logging and evidence collection |
-| `live_integration_evidence.py` | Script that runs all live integrations, captures evidence, and documents unavailable services |
+## Critical Modified Files
+- `web_server.py`: Exposes HTTP interfaces for contract verification (`/verify`) and provenance querying (`/evidence/certificate/{execution_id}`).
+- `integration_harness.py`: The main controller that processes incoming contracts, calls live APIs for Replay/GC, invokes Dhiraj runtime, runs consensus, and records evidence to the Evidence Ledger.
+- `integration_interfaces.py`: Defines the translation layer from Python objects to standard HTTP requests targeting external (simulated via live endpoints) systems like Dhiraj, GC, and Replay Authority.
 
-## Modified Files
+## Integration Files (Phase 1 Ecosystem Federation)
+- `keshav_live_client.py`: Implementation of the live KESHAV Identity and Analysis integration client.
+- `pritesh_live_client.py`: Client for submitting simulated payloads to the Pritesh Quantum runtime capability.
+- `live_integration_evidence.py`: Script to generate all API request/response pairs and dump evidence.
+- `tests/e2e_ecosystem_flow.py`: Full Phase 2 Flow integration test demonstrating all nodes acting together.
 
-| File | Purpose |
-|------|---------|
-| `integration_harness.py` | TANTRA pipeline harness — added KESHAV live analysis step after replay validation |
-| `config.py` | Central config — added KESHAV API URL, timeout, and enable/disable settings |
-| `web_server.py` | FastAPI server exposing /health, /capabilities, and /verify endpoints |
+## Local Simulation Nodes
+- `dhiraj_runtime_server.py`: Dedicated live endpoint representing Dhiraj Runtime for local simulation.
+- `replay_and_gc_server.py`: Dedicated live endpoint representing Replay Auth and GC Governance for local simulation.
 
-## Integration Files
-
-| File | Purpose |
-|------|---------|
-| `integration_interfaces.py` | Standard BHIV interfaces for replay, trust, execution, consensus, and health |
-| `ecosystem_participation.py` | 6 ecosystem participants through universal trust pipeline |
-
-## Critical Core Files (Unchanged)
-
-| File | Purpose |
-|------|---------|
-| `execution_contract.py` | ComputationExecutionContract data model — uniform producer envelope |
-| `canonical_replay_authority.py` | Replay registration, duplicate/stale detection, lineage |
-| `producer_verification.py` | ECDSA-based producer identity verification |
-| `runtime_core.py` | Blind deterministic execution engine |
-| `consensus_simulation.py` | 3-node Byzantine consensus with signed attestations |
+## Deployment Files
+- `k8s/deployment.yaml`: Primary deployment manifest for the QCG web server.
+- `k8s/service.yaml`: Service definition for QCG load balancer.
+- `k8s/hpa.yaml`: Horizontal Pod Autoscaler for scaling under load.
+- `load_testing/locustfile.py`: Locust file used for swarm load testing.

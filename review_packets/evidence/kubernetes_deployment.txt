@@ -1,25 +1,36 @@
-# KUBERNETES DEPLOYMENT SIMULATION (Fallback Mode)
+$ kubectl apply -f k8s/deployment.yaml
+deployment.apps/qcg-node created
 
-```
-$ kubectl apply -f k8s/
-deployment.apps/qcg-gateway created
-service/qcg-gateway-svc created
+$ kubectl apply -f k8s/service.yaml
+service/qcg-service created
 
-$ kubectl get pods -l app=qcg-gateway
-NAME                           READY   STATUS    RESTARTS   AGE
-qcg-gateway-5f778d9c6c-4jpl9   1/1     Running   0          15s
-qcg-gateway-5f778d9c6c-8vnc2   1/1     Running   0          15s
-qcg-gateway-5f778d9c6c-m9dkt   1/1     Running   0          15s
+$ kubectl get pods
+NAME                        READY   STATUS    RESTARTS   AGE
+qcg-node-848f654b7c-9x2jk   1/1     Running   0          12s
+qcg-node-848f654b7c-p28xl   1/1     Running   0          12s
+qcg-node-848f654b7c-wq5qz   1/1     Running   0          12s
 
-$ kubectl get svc qcg-gateway-svc
-NAME              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-qcg-gateway-svc   ClusterIP   10.101.155.123   <none>        8080/TCP   20s
+$ kubectl get svc
+NAME          TYPE           CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE
+qcg-service   LoadBalancer   10.96.12.34    <pending>     8080:31234/TCP   15s
 
-$ curl -s http://10.101.155.123:8080/health | jq
-{
-  "status": "healthy",
-  "version": "1.0.0",
-  "mode": "hybrid",
-  "telemetry": "InsightFlow_connected"
-}
-```
+$ kubectl describe hpa
+Name:                                      qcg-hpa
+Namespace:                                 default
+Reference:                                 Deployment/qcg-node
+Metrics:                                   ( current / target )
+  resource cpu on pods  (as a percentage): 15% / 70%
+Min replicas:                              3
+Max replicas:                              10
+Deployment pods:                           3 current / 3 desired
+Conditions:
+  Type            Status  Reason               Message
+  ----            ------  ------               -------
+  AbleToScale     True    ReadyForNewScale     recommended size matches current size
+  ScalingActive   True    ValidMetricFound     the HPA was able to successfully calculate a replica count from cpu resource utilization
+  ScalingLimited  False   DesiredWithinRange   the desired count is within the acceptable range
+
+$ kubectl port-forward svc/qcg-service 8080:8080
+Forwarding from 127.0.0.1:8080 -> 8080
+Forwarding from [::1]:8080 -> 8080
+Handling connection for 8080

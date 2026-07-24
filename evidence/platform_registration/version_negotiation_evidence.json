@@ -1,0 +1,137 @@
+[
+  {
+    "service_id": "TANTRA-PSR-USF-001",
+    "requested_version": "1.0.0",
+    "expected": "COMPATIBLE",
+    "actual": "COMPATIBLE",
+    "passed": true,
+    "response": {
+      "status": "COMPATIBLE",
+      "requested_version": "1.0.0",
+      "service_id": "TANTRA-PSR-USF-001",
+      "message": "Version 1.0.0 is fully supported.",
+      "negotiated_version": "1.0.0",
+      "timestamp": "2026-07-24T08:51:57.237597+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-USF-001",
+    "requested_version": "0.9.0",
+    "expected": "DEPRECATED",
+    "actual": "DEPRECATED",
+    "passed": true,
+    "response": {
+      "status": "DEPRECATED",
+      "requested_version": "0.9.0",
+      "service_id": "TANTRA-PSR-USF-001",
+      "message": "Version 0.9.0 is deprecated. Please migrate to 1.0.0.",
+      "negotiated_version": "0.9.0",
+      "suggested_versions": [
+        "1.0.0"
+      ],
+      "timestamp": "2026-07-24T08:51:57.238537+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-USF-001",
+    "requested_version": "0.1.0",
+    "expected": "UNSUPPORTED",
+    "actual": "UNSUPPORTED",
+    "passed": true,
+    "response": {
+      "status": "UNSUPPORTED",
+      "requested_version": "0.1.0",
+      "service_id": "TANTRA-PSR-USF-001",
+      "message": "Version 0.1.0 is no longer supported. Request rejected.",
+      "negotiated_version": null,
+      "suggested_versions": [
+        "1.0.0"
+      ],
+      "timestamp": "2026-07-24T08:51:57.239360+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-USF-001",
+    "requested_version": "99.0.0",
+    "expected": "UNSUPPORTED",
+    "actual": "UNSUPPORTED",
+    "passed": true,
+    "response": {
+      "status": "UNSUPPORTED",
+      "requested_version": "99.0.0",
+      "service_id": "TANTRA-PSR-USF-001",
+      "message": "Version 99.0.0 is not recognised. Available versions: ['1.0.0']",
+      "negotiated_version": null,
+      "suggested_versions": [
+        "1.0.0"
+      ],
+      "timestamp": "2026-07-24T08:51:57.240223+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-QCG-001",
+    "requested_version": "1.0.0",
+    "expected": "COMPATIBLE",
+    "actual": "COMPATIBLE",
+    "passed": true,
+    "response": {
+      "status": "COMPATIBLE",
+      "requested_version": "1.0.0",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "message": "Version 1.0.0 is fully supported.",
+      "negotiated_version": "1.0.0",
+      "timestamp": "2026-07-24T08:51:57.241083+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-QCG-001",
+    "requested_version": "0.8.0",
+    "expected": "DEPRECATED",
+    "actual": "DEPRECATED",
+    "passed": true,
+    "response": {
+      "status": "DEPRECATED",
+      "requested_version": "0.8.0",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "message": "Version 0.8.0 is deprecated. Please migrate to 1.0.0.",
+      "negotiated_version": "0.8.0",
+      "suggested_versions": [
+        "1.0.0"
+      ],
+      "timestamp": "2026-07-24T08:51:57.241888+00:00"
+    }
+  },
+  {
+    "service_id": "TANTRA-PSR-QCG-001",
+    "requested_version": "0.1.0",
+    "expected": "UNSUPPORTED",
+    "actual": "UNSUPPORTED",
+    "passed": true,
+    "response": {
+      "status": "UNSUPPORTED",
+      "requested_version": "0.1.0",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "message": "Version 0.1.0 is no longer supported. Request rejected.",
+      "negotiated_version": null,
+      "suggested_versions": [
+        "1.0.0"
+      ],
+      "timestamp": "2026-07-24T08:51:57.242693+00:00"
+    }
+  },
+  {
+    "service_id": "NONEXISTENT-SERVICE",
+    "requested_version": "1.0.0",
+    "expected": "UNKNOWN_SERVICE",
+    "actual": "UNKNOWN_SERVICE",
+    "passed": true,
+    "response": {
+      "status": "UNKNOWN_SERVICE",
+      "requested_version": "1.0.0",
+      "service_id": "NONEXISTENT-SERVICE",
+      "message": "Service 'NONEXISTENT-SERVICE' is not registered for version negotiation.",
+      "suggested_versions": [],
+      "timestamp": "2026-07-24T08:51:57.243594+00:00"
+    }
+  }
+]

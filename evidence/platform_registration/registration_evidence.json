@@ -1,0 +1,172 @@
+{
+  "evidence_chain": [
+    {
+      "evidence_id": "c7dc5a22-135c-4f00-941b-0a0ce0796de3",
+      "event_type": "SERVICE_REGISTERED",
+      "service_id": "TANTRA-PSR-USF-001",
+      "timestamp": "2026-07-24T08:51:57.201213+00:00",
+      "details": {
+        "service_name": "UNIVERSAL_SOLVER_FABRIC",
+        "version": "1.0.0",
+        "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+        "status": "ACTIVE",
+        "registration_hash": "37a52bab93dd855e5c5b737cf96a55ec4ebb7c5dee8be42853e1a40ec5137b30",
+        "has_manifest": true
+      },
+      "evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734",
+      "previous_evidence_hash": "9a9b162a21fc3e957ea53d4d174eac82f527616cd7e5205671b92c9d1de4d6ab"
+    },
+    {
+      "evidence_id": "b755cbd9-529d-48a9-833e-7de81f454f08",
+      "event_type": "SERVICE_REGISTERED",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "timestamp": "2026-07-24T08:51:57.219218+00:00",
+      "details": {
+        "service_name": "QCG_TRUST_VERIFICATION",
+        "version": "1.0.0",
+        "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+        "status": "ACTIVE",
+        "registration_hash": "ade9229bc6b1b100df509f2ffc83ec45909ddbb576822b14c771bfd59d20f894",
+        "has_manifest": true
+      },
+      "evidence_hash": "3bf3e5cf2648da3fc1c158976b41c60e5af081e69bfc0dd644cb082548850653",
+      "previous_evidence_hash": "fa045afad9beee0998ef8246856fa3b28f7c7f2d63567126e0deb15f19794734"
+    },
+    {
+      "evidence_id": "678e4ec4-7434-4013-a7a3-ea005d91c364",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-USF-001",
+      "timestamp": "2026-07-24T08:51:57.237632+00:00",
+      "details": {
+        "requested_version": "1.0.0",
+        "negotiation_status": "COMPATIBLE",
+        "negotiated_version": "1.0.0"
+      },
+      "evidence_hash": "c31a7e2acd2d6fd54b5f8764ec8f2dda3f04ec46235d34005bd4c684a6ae4059",
+      "previous_evidence_hash": "3bf3e5cf2648da3fc1c158976b41c60e5af081e69bfc0dd644cb082548850653"
+    },
+    {
+      "evidence_id": "9ee74717-a713-4c6e-bfc5-e0d19257ecce",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-USF-001",
+      "timestamp": "2026-07-24T08:51:57.238555+00:00",
+      "details": {
+        "requested_version": "0.9.0",
+        "negotiation_status": "DEPRECATED",
+        "negotiated_version": "0.9.0"
+      },
+      "evidence_hash": "6dc46dc22a6b6b94395608c6fdadda1661d47041fb6ead88d118742865ac609a",
+      "previous_evidence_hash": "c31a7e2acd2d6fd54b5f8764ec8f2dda3f04ec46235d34005bd4c684a6ae4059"
+    },
+    {
+      "evidence_id": "8529e8b1-8c4d-4100-a325-d118f90e3c07",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-USF-001",
+      "timestamp": "2026-07-24T08:51:57.239376+00:00",
+      "details": {
+        "requested_version": "0.1.0",
+        "negotiation_status": "UNSUPPORTED",
+        "negotiated_version": null
+      },
+      "evidence_hash": "383551e56be33844c064264d67bf025977c35eec28ed58cdf561b2fc9c149e1f",
+      "previous_evidence_hash": "6dc46dc22a6b6b94395608c6fdadda1661d47041fb6ead88d118742865ac609a"
+    },
+    {
+      "evidence_id": "c284faa1-6c6c-4960-af24-41068232824c",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-USF-001",
+      "timestamp": "2026-07-24T08:51:57.240244+00:00",
+      "details": {
+        "requested_version": "99.0.0",
+        "negotiation_status": "UNSUPPORTED",
+        "negotiated_version": null
+      },
+      "evidence_hash": "bfaeca336c257674b766abf75339b3460cd0c93eb052cdd5268a1744e72f6e45",
+      "previous_evidence_hash": "383551e56be33844c064264d67bf025977c35eec28ed58cdf561b2fc9c149e1f"
+    },
+    {
+      "evidence_id": "5bdc12e0-d285-4bad-9291-385c77c89498",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "timestamp": "2026-07-24T08:51:57.241096+00:00",
+      "details": {
+        "requested_version": "1.0.0",
+        "negotiation_status": "COMPATIBLE",
+        "negotiated_version": "1.0.0"
+      },
+      "evidence_hash": "35065b5c5c6a3201b1cd141926712ae06268d3fa3c067da2be02883c50165dc0",
+      "previous_evidence_hash": "bfaeca336c257674b766abf75339b3460cd0c93eb052cdd5268a1744e72f6e45"
+    },
+    {
+      "evidence_id": "42f9bd91-5f02-4b76-aad2-39404c1067ff",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "timestamp": "2026-07-24T08:51:57.241906+00:00",
+      "details": {
+        "requested_version": "0.8.0",
+        "negotiation_status": "DEPRECATED",
+        "negotiated_version": "0.8.0"
+      },
+      "evidence_hash": "7564c396618e81f620ec50ba1268e70ff7a65ba774eef5b3ca1cb6cbf937e7d4",
+      "previous_evidence_hash": "35065b5c5c6a3201b1cd141926712ae06268d3fa3c067da2be02883c50165dc0"
+    },
+    {
+      "evidence_id": "4307fd04-e6b9-4c65-8c81-45b6149a94ac",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "TANTRA-PSR-QCG-001",
+      "timestamp": "2026-07-24T08:51:57.242708+00:00",
+      "details": {
+        "requested_version": "0.1.0",
+        "negotiation_status": "UNSUPPORTED",
+        "negotiated_version": null
+      },
+      "evidence_hash": "2f5103096736a2fbe70b6f980a6a11dc4d2b1fe0621f428684ac1cc444e23d70",
+      "previous_evidence_hash": "7564c396618e81f620ec50ba1268e70ff7a65ba774eef5b3ca1cb6cbf937e7d4"
+    },
+    {
+      "evidence_id": "ca3cd432-eada-4967-8647-d0bb40870a7a",
+      "event_type": "VERSION_NEGOTIATION",
+      "service_id": "NONEXISTENT-SERVICE",
+      "timestamp": "2026-07-24T08:51:57.243646+00:00",
+      "details": {
+        "requested_version": "1.0.0",
+        "negotiation_status": "UNKNOWN_SERVICE",
+        "negotiated_version": null
+      },
+      "evidence_hash": "a8a792dd13154b644e20ab74ea372597b71548ae1139c2a1f71e0d9c3cd6cbe4",
+      "previous_evidence_hash": "2f5103096736a2fbe70b6f980a6a11dc4d2b1fe0621f428684ac1cc444e23d70"
+    },
+    {
+      "evidence_id": "9f6a1329-b6ad-4aff-aa49-70e3d84b47b5",
+      "event_type": "SERVICE_REGISTERED",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "timestamp": "2026-07-24T08:51:57.245040+00:00",
+      "details": {
+        "service_name": "LIFECYCLE_TEST_SERVICE",
+        "version": "1.0.0",
+        "capability_id": "00000000-0000-5000-a000-000000000001",
+        "status": "ACTIVE",
+        "registration_hash": "a6f3ce7996180e7560c2530d29ffdb1e29198cbe80c9b3950fee39d9c570cd1a",
+        "has_manifest": false
+      },
+      "evidence_hash": "c889d83964cba7d1711a0c0c072663cb279a38ccd64d6a9de2d14a441b2b5792",
+      "previous_evidence_hash": "a8a792dd13154b644e20ab74ea372597b71548ae1139c2a1f71e0d9c3cd6cbe4"
+    },
+    {
+      "evidence_id": "b8110613-465b-4bee-9c7e-13439e21ec2b",
+      "event_type": "SERVICE_RETIRED",
+      "service_id": "TANTRA-PSR-TEST-LIFECYCLE",
+      "timestamp": "2026-07-24T08:51:57.246404+00:00",
+      "details": {
+        "previous_status": "ACTIVE",
+        "new_status": "RETIRED",
+        "reason": "Lifecycle test complete"
+      },
+      "evidence_hash": "4cb8a0d4340a05b89dc54430a70a9a6752cdb8f16f53fbc86c897a32763cfc6f",
+      "previous_evidence_hash": "c889d83964cba7d1711a0c0c072663cb279a38ccd64d6a9de2d14a441b2b5792"
+    }
+  ],
+  "chain_length": 12,
+  "chain_valid": true,
+  "head_hash": "4cb8a0d4340a05b89dc54430a70a9a6752cdb8f16f53fbc86c897a32763cfc6f"
+}

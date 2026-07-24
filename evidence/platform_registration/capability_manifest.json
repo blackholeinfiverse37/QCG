@@ -1,0 +1,632 @@
+{
+  "manifest_version": "1.0.0",
+  "publication_timestamp": "2026-07-24T08:00:00Z",
+  "publisher": "TANTRA Sovereign Core",
+  "services": [
+    {
+      "platform_service_id": "TANTRA-PSR-USF-001",
+      "capability_id": "c8a1b2d3-e4f5-5678-9abc-def012345678",
+      "service_name": "UNIVERSAL_SOLVER_FABRIC",
+      "version": "1.0.0",
+      "provider": "TANTRA Platform Engineering",
+      "owner": {
+        "team": "TANTRA Sovereign Core",
+        "contact": "solver-fabric@tantra.internal"
+      },
+      "runtime_type": "PROCESS",
+      "service_classification": "PLATFORM_SERVICE",
+      "capability_category": "OPTIMIZATION",
+      "status": "ACTIVE",
+      "description": "Universal Solver Fabric \u00e2\u20ac\u201d agnostic optimization capability layer that discovers, selects, and executes optimization solvers with replay-safe evidence, deterministic provenance, and zero manual configuration.",
+      "tags": [
+        "optimization",
+        "solver",
+        "deterministic",
+        "replay-safe",
+        "evidence"
+      ],
+      "endpoints": {
+        "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001",
+        "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/health",
+        "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+        "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+        "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+        "version": "http://127.0.0.1:9010/platform/v1/version",
+        "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-USF-001/metadata"
+      },
+      "manifest": {
+        "manifest_id": "USF-MANIFEST-001",
+        "supported_operations": [
+          {
+            "operation_name": "discover_solvers",
+            "description": "Discover available solver capabilities matching query criteria including problem type, constraints, and resource requirements.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "problem_type"
+              ],
+              "properties": {
+                "problem_type": {
+                  "type": "string",
+                  "enum": [
+                    "LP",
+                    "MILP",
+                    "QUBO",
+                    "TSP",
+                    "VRP",
+                    "CP",
+                    "NLP",
+                    "MINLP"
+                  ]
+                },
+                "required_constraints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "LINEAR",
+                      "NONLINEAR",
+                      "QUADRATIC",
+                      "LOGICAL",
+                      "GLOBAL",
+                      "CARDINALITY"
+                    ]
+                  }
+                },
+                "require_deterministic": {
+                  "type": "boolean"
+                },
+                "require_replay": {
+                  "type": "boolean"
+                },
+                "available_memory_mb": {
+                  "type": "integer"
+                },
+                "available_cores": {
+                  "type": "integer"
+                },
+                "max_variables": {
+                  "type": "integer"
+                },
+                "max_constraints": {
+                  "type": "integer"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "solvers": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "solver_id": {
+                        "type": "string"
+                      },
+                      "solver_name": {
+                        "type": "string"
+                      },
+                      "version": {
+                        "type": "string"
+                      },
+                      "supported_problem_types": {
+                        "type": "array"
+                      },
+                      "deterministic_capability": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": true
+          },
+          {
+            "operation_name": "execute_optimization",
+            "description": "Execute an optimization problem through the solver fabric. Automatically selects the best solver unless overridden. Produces replay-safe evidence.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "problem_schema"
+              ],
+              "properties": {
+                "problem_schema": {
+                  "type": "object",
+                  "required": [
+                    "problem_type"
+                  ],
+                  "properties": {
+                    "problem_type": {
+                      "type": "string"
+                    },
+                    "required_constraints": {
+                      "type": "array"
+                    },
+                    "require_deterministic": {
+                      "type": "boolean"
+                    }
+                  }
+                },
+                "payload": {
+                  "type": "object"
+                },
+                "execution_constraints": {
+                  "type": "object",
+                  "properties": {
+                    "max_time_ms": {
+                      "type": "integer"
+                    },
+                    "max_memory_mb": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "solver_override": {
+                  "type": "string"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "trace_id": {
+                  "type": "string"
+                },
+                "replay_id": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "COMPLETED",
+                    "FAILED"
+                  ]
+                },
+                "provenance": {
+                  "type": "object",
+                  "properties": {
+                    "timestamp_start_ms": {
+                      "type": "integer"
+                    },
+                    "timestamp_end_ms": {
+                      "type": "integer"
+                    },
+                    "execution_duration_ms": {
+                      "type": "integer"
+                    },
+                    "fabric_version": {
+                      "type": "string"
+                    },
+                    "solver_id": {
+                      "type": "string"
+                    },
+                    "solver_version": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "deterministic_inputs": {
+                  "type": "object"
+                },
+                "result": {
+                  "type": "object"
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS",
+              "ASYNCHRONOUS"
+            ],
+            "idempotent": false
+          },
+          {
+            "operation_name": "get_solver_health",
+            "description": "Query the health status of a registered solver.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "solver_id"
+              ],
+              "properties": {
+                "solver_id": {
+                  "type": "string"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "solver_id": {
+                  "type": "string"
+                },
+                "health_status": {
+                  "type": "string",
+                  "enum": [
+                    "ENABLED",
+                    "DISABLED",
+                    "UNKNOWN"
+                  ]
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": true
+          }
+        ],
+        "execution_modes": [
+          "SYNCHRONOUS",
+          "ASYNCHRONOUS"
+        ],
+        "determinism_guarantees": {
+          "deterministic_execution": true,
+          "deterministic_selection": true,
+          "deterministic_evidence": true,
+          "note": "Given identical inputs and solver seed, results are identical. Selection ranking is deterministic."
+        },
+        "replay_guarantees": {
+          "replay_safe": true,
+          "replay_metadata_captured": true,
+          "replay_fields": [
+            "trace_id",
+            "replay_id",
+            "deterministic_inputs",
+            "provenance"
+          ],
+          "note": "Every execution produces a replay-safe evidence package containing all state necessary for exact reconstruction."
+        },
+        "trust_requirements": {
+          "authentication": "TANTRA_SERVICE_IDENTITY",
+          "authorization": "CAPABILITY_REGISTRY_REGISTERED",
+          "encryption": "TLS_1_3_RECOMMENDED",
+          "integrity": "SHA256_EVIDENCE_CHAIN"
+        },
+        "evidence_guarantees": {
+          "evidence_per_execution": true,
+          "evidence_chain": true,
+          "evidence_format": "JSON",
+          "tamper_detection": "SHA256_HASH_CHAIN",
+          "note": "Every execution generates a signed evidence package chained to the previous execution."
+        },
+        "runtime_dependencies": [
+          {
+            "name": "solver_registry",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "solver_selection_engine",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "execution_adapter",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "solver_contract_schema",
+            "version": "1.0.0",
+            "type": "SCHEMA"
+          }
+        ],
+        "version_compatibility": {
+          "compatible": [
+            "1.0.0"
+          ],
+          "deprecated": [],
+          "unsupported": [],
+          "minimum_consumer_version": "1.0.0"
+        },
+        "security_requirements": {
+          "network_policy": "INTERNAL_ONLY",
+          "data_classification": "INTERNAL",
+          "audit_logging": true,
+          "evidence_retention_days": 90
+        },
+        "resource_requirements": {
+          "memory_mb_min": 512,
+          "cpu_cores_min": 1,
+          "disk_mb_min": 100,
+          "network": "INTERNAL_TCP"
+        }
+      }
+    },
+    {
+      "platform_service_id": "TANTRA-PSR-QCG-001",
+      "capability_id": "d9b2c3e4-f5a6-5789-abcd-ef0123456789",
+      "service_name": "QCG_TRUST_VERIFICATION",
+      "version": "1.0.0",
+      "provider": "TANTRA Platform Engineering",
+      "owner": {
+        "team": "TANTRA Sovereign Core",
+        "contact": "qcg-trust@tantra.internal"
+      },
+      "runtime_type": "PROCESS",
+      "service_classification": "PLATFORM_SERVICE",
+      "capability_category": "VERIFICATION",
+      "status": "ACTIVE",
+      "description": "QCG Trust Verification \u00e2\u20ac\u201d Hybrid Quantum Communication Gateway providing replay verification, trust validation, deterministic execution, and Byzantine consensus as a canonical platform capability.",
+      "tags": [
+        "verification",
+        "trust",
+        "replay",
+        "consensus",
+        "quantum",
+        "deterministic"
+      ],
+      "endpoints": {
+        "execution": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001",
+        "health": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/health",
+        "readiness": "http://127.0.0.1:9010/platform/v1/readiness",
+        "metrics": "http://127.0.0.1:9010/platform/v1/metrics",
+        "evidence": "http://127.0.0.1:9010/platform/v1/evidence",
+        "version": "http://127.0.0.1:9010/platform/v1/version",
+        "capability": "http://127.0.0.1:9010/platform/v1/services/TANTRA-PSR-QCG-001/metadata"
+      },
+      "manifest": {
+        "manifest_id": "QCG-MANIFEST-001",
+        "supported_operations": [
+          {
+            "operation_name": "verify_replay",
+            "description": "Verify that a message has not been replayed (duplicate/stale detection) and assign a monotonic sequence number.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "message_id",
+                "issued_at"
+              ],
+              "properties": {
+                "message_id": {
+                  "type": "string",
+                  "description": "Unique message/artifact ID to check"
+                },
+                "issued_at": {
+                  "type": "number",
+                  "description": "Unix timestamp of when the message was issued"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "is_valid": {
+                  "type": "boolean"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": [
+                    "ACCEPTED",
+                    "REJECTED_DUPLICATE",
+                    "REJECTED_STALE"
+                  ]
+                },
+                "sequence_number": {
+                  "type": "integer"
+                },
+                "verification_hash": {
+                  "type": "string"
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": true
+          },
+          {
+            "operation_name": "verify_trust",
+            "description": "Validate producer identity, ECDSA signature, and authorization against the trust registry.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "contract"
+              ],
+              "properties": {
+                "contract": {
+                  "type": "object",
+                  "description": "ComputationExecutionContract as dict"
+                },
+                "producer_public_key": {
+                  "type": "string"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "passed": {
+                  "type": "boolean"
+                },
+                "halt_signal": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": true
+          },
+          {
+            "operation_name": "execute_deterministic",
+            "description": "Execute a contract through the blind runtime core producing a deterministic ACK and runtime hash.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "contract"
+              ],
+              "properties": {
+                "contract": {
+                  "type": "object",
+                  "description": "ComputationExecutionContract as dict"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "contract_trace_id": {
+                  "type": "string"
+                },
+                "producer_type": {
+                  "type": "string"
+                },
+                "ack": {
+                  "type": "string"
+                },
+                "confidence": {
+                  "type": "number"
+                },
+                "runtime_hash": {
+                  "type": "string"
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": false
+          },
+          {
+            "operation_name": "verify_consensus",
+            "description": "Run Byzantine consensus across multiple nodes to verify execution validity.",
+            "input_contract": {
+              "type": "object",
+              "required": [
+                "contract",
+                "producer_public_key"
+              ],
+              "properties": {
+                "contract": {
+                  "type": "object"
+                },
+                "producer_public_key": {
+                  "type": "string"
+                }
+              }
+            },
+            "output_contract": {
+              "type": "object",
+              "properties": {
+                "consensus_reached": {
+                  "type": "boolean"
+                },
+                "agreement_percentage": {
+                  "type": "number"
+                },
+                "final_hash": {
+                  "type": "string"
+                }
+              }
+            },
+            "execution_modes": [
+              "SYNCHRONOUS"
+            ],
+            "idempotent": false
+          }
+        ],
+        "execution_modes": [
+          "SYNCHRONOUS"
+        ],
+        "determinism_guarantees": {
+          "deterministic_execution": true,
+          "deterministic_ack": true,
+          "deterministic_hash": true,
+          "note": "RuntimeCore processes every contract through an identical code path. Given identical inputs, the ACK and runtime_hash are identical."
+        },
+        "replay_guarantees": {
+          "replay_safe": true,
+          "replay_authority": "CanonicalReplayAuthority",
+          "replay_detection": [
+            "DUPLICATE",
+            "STALE"
+          ],
+          "replay_fields": [
+            "sequence_number",
+            "verification_hash",
+            "lineage_record"
+          ],
+          "note": "CanonicalReplayAuthority is the sole replay authority. All replay state is persisted and deterministic."
+        },
+        "trust_requirements": {
+          "authentication": "ECDSA_SIGNATURE",
+          "authorization": "PRODUCER_REGISTRY",
+          "identity_verification": "ProducerVerificationLayer",
+          "key_management": "NODE_IDENTITY"
+        },
+        "evidence_guarantees": {
+          "evidence_per_execution": true,
+          "evidence_chain": true,
+          "evidence_format": "JSON",
+          "tamper_detection": "MERKLE_TREE",
+          "ledger_type": "EvidenceLedger"
+        },
+        "runtime_dependencies": [
+          {
+            "name": "canonical_replay_authority",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "runtime_core",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "producer_verification",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "consensus_simulation",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "evidence_ledger",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          },
+          {
+            "name": "governance_layer",
+            "version": "1.0.0",
+            "type": "INTERNAL"
+          }
+        ],
+        "version_compatibility": {
+          "compatible": [
+            "1.0.0"
+          ],
+          "deprecated": [],
+          "unsupported": [],
+          "minimum_consumer_version": "1.0.0"
+        },
+        "security_requirements": {
+          "network_policy": "INTERNAL_ONLY",
+          "data_classification": "SOVEREIGN",
+          "audit_logging": true,
+          "evidence_retention_days": 365,
+          "byzantine_fault_tolerance": true,
+          "consensus_quorum_threshold": 0.66
+        },
+        "resource_requirements": {
+          "memory_mb_min": 256,
+          "cpu_cores_min": 1,
+          "disk_mb_min": 50,
+          "network": "INTERNAL_TCP",
+          "consensus_nodes_min": 3
+        }
+      }
+    }
+  ]
+}

@@ -1,5 +1,3 @@
-{"process_id": 9144, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-07-15T11:23:36Z"}
-{"process_id": 9144, "role": "EXECUTION", "event": "replay_check", "message_id": "proc-trace-001", "sequence_number": 1, "status": "VALID", "timestamp": "2026-07-15T11:23:37Z"}
-{"process_id": 9144, "role": "EXECUTION", "event": "executed", "message_id": "proc-trace-001", "sequence_number": 1, "status": "ACK:OK", "timestamp": "2026-07-15T11:23:37Z", "runtime_hash": "f2deef2332911cee"}
-{"process_id": 9144, "role": "EXECUTION", "event": "received DONE, shutting down", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-07-15T11:23:37Z"}
-{"process_id": 9144, "role": "EXECUTION", "event": "finished", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-07-15T11:23:37Z"}
+{"process_id": 15160, "role": "EXECUTION", "event": "started", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-07-18T07:42:09Z"}
+{"process_id": 15160, "role": "EXECUTION", "event": "simulated crash", "message_id": "", "sequence_number": 0, "status": "", "timestamp": "2026-07-18T07:42:09Z"}
+{"pid": 15160, "role": "execution_process", "event": "process_exit", "code": 1, "ts": "2026-07-18T07:42:09Z"}

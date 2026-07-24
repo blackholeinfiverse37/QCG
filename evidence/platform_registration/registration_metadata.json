@@ -1,0 +1,15 @@
+{
+  "run_started": "2026-07-24T08:51:56.593501+00:00",
+  "run_completed": "2026-07-24T08:51:57.254079+00:00",
+  "services_registered": [
+    "TANTRA-PSR-USF-001",
+    "TANTRA-PSR-QCG-001"
+  ],
+  "discovery_server_url": "http://127.0.0.1:9010",
+  "capability_registry_url": "http://127.0.0.1:9000",
+  "evidence_chain_length": 12,
+  "evidence_chain_valid": true,
+  "lifecycle_chain_valid": true,
+  "platform_registry_version": "1.0.0",
+  "discovery_server_version": "1.0.0"
+}
